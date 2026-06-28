@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{font-family:'Archivo','Helvetica Neue',Arial,sans-serif;background:#ffffff;color:#0c0c0d;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;}
+  [data-row]{scrollbar-width:none;-ms-overflow-style:none;}
+  [data-row]::-webkit-scrollbar{display:none;}
+  ::selection{background:#c79a4b;color:#000;}
+</style>
+</helmet>
+
+<div style="width:100%;overflow-x:hidden;background:#ffffff;">
+
+  <sc-if value="{{ showAnnouncement }}" hint-placeholder-val="{{ true }}">
+    <div style="background:#0c0c0d;color:#c79a4b;text-align:center;font-size:11px;font-weight:700;letter-spacing:0.28em;text-transform:uppercase;padding:9px 16px;">Free Standard Shipping Over LKR 20,000 · Easy 14-Day Returns</div>
+  </sc-if>
+
+  <header onMouseLeave="{{ closeMenu }}" style="position:sticky;top:0;z-index:50;background:#0c0c0d;color:#ffffff;">
+    <div style="max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:18px 32px;">
+      <a href="#" style="display:flex;align-items:center;gap:9px;text-decoration:none;color:#fff;">
+        <span style="width:9px;height:9px;background:#c79a4b;transform:rotate(45deg);display:inline-block;"></span>
+        <span style="font-weight:900;font-size:22px;letter-spacing:0.2em;text-transform:uppercase;">GOLDEN EGAL</span>
+      </a>
+      <nav style="display:flex;gap:36px;">
+        <a href="#" onMouseEnter="{{ openWomen }}" style="text-decoration:none;color:#fff;font-weight:700;font-size:14px;letter-spacing:0.14em;padding:4px 0;border-bottom:2px solid transparent;" style-hover="color:#c79a4b;border-bottom:2px solid #c79a4b;">WOMEN</a>
+        <a href="#" onMouseEnter="{{ openMen }}" style="text-decoration:none;color:#fff;font-weight:700;font-size:14px;letter-spacing:0.14em;padding:4px 0;border-bottom:2px solid transparent;" style-hover="color:#c79a4b;border-bottom:2px solid #c79a4b;">MEN</a>
+        <a href="#" style="text-decoration:none;color:#fff;font-weight:700;font-size:14px;letter-spacing:0.14em;padding:4px 0;border-bottom:2px solid transparent;" style-hover="color:#c79a4b;border-bottom:2px solid #c79a4b;">ACCESSORIES</a>
+        <a href="#" style="text-decoration:none;color:#fff;font-weight:700;font-size:14px;letter-spacing:0.14em;padding:4px 0;border-bottom:2px solid transparent;" style-hover="color:#c79a4b;border-bottom:2px solid #c79a4b;">GIFT CARDS</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:22px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" style="cursor:pointer;"><circle cx="11" cy="11" r="7"></circle><line x1="16.5" y1="16.5" x2="21" y2="21"></line></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" style="cursor:pointer;"><circle cx="12" cy="8" r="4"></circle><path d="M5 21c0-4 3.5-6 7-6s7 2 7 6"></path></svg>
+        <div style="position:relative;cursor:pointer;" onClick="{{ addToCart }}">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M6 8h12l-1 12H7L6 8z"></path><path d="M9 8V6a3 3 0 0 1 6 0v2"></path></svg>
+          <span style="position:absolute;top:-8px;right:-9px;background:#c79a4b;color:#0c0c0d;font-size:10px;font-weight:900;min-width:17px;height:17px;border-radius:9px;display:flex;align-items:center;justify-content:center;padding:0 4px;">{{ cart }}</span>
+        </div>
+      </div>
+    </div>
+    <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+      <div style="position:absolute;left:0;top:100%;width:100%;background:#fff;color:#0c0c0d;box-shadow:0 28px 50px rgba(0,0,0,0.22);">
+        <div style="max-width:1400px;margin:0 auto;display:grid;grid-template-columns:0.9fr 0.9fr 1.4fr 1.4fr;gap:34px;padding:40px 32px 48px;">
+          <div>
+            <div style="font-weight:800;font-size:13px;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:18px;">Featured</div>
+            <div style="display:flex;flex-direction:column;gap:14px;">
+              <a href="#" style="text-decoration:none;color:#0c0c0d;font-size:15px;" style-hover="color:#c79a4b;">New Arrivals</a>
+              <a href="#" style="text-decoration:none;color:#0c0c0d;font-size:15px;" style-hover="color:#c79a4b;">Best Sellers</a>
+              <a href="#" style="text-decoration:none;color:#0c0c0d;font-size:15px;" style-hover="color:#c79a4b;">Essentials</a>
+              <a href="#" style="text-decoration:none;color:#0c0c0d;font-size:15px;" style-hover="color:#c79a4b;">Premium Collection</a>
+              <a href="#" style="text-decoration:none;color:#0c0c0d;font-size:15px;" style-hover="color:#c79a4b;">Oversize Collection</a>
+            </div>
+          </div>
+          <div>
+            <div style="font-weight:800;font-size:13px;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:18px;">Explore</div>
+            <div style="display:flex;flex-direction:column;gap:14px;">
+              <a href="Golden Egal Product.dc.html" style="text-decoration:none;color:#0c0c0d;font-size:15px;" style-hover="color:#c79a4b;">T-Shirts</a>
+              <a href="#" style="text-decoration:none;color:#0c0c0d;font-size:15px;" style-hover="color:#c79a4b;">Oversized Tees</a>
+              <a href="#" style="text-decoration:none;color:#0c0c0d;font-size:15px;" style-hover="color:#c79a4b;">Jerseys</a>
+              <a href="#" style="text-decoration:none;color:#0c0c0d;font-size:15px;" style-hover="color:#c79a4b;">Tanks</a>
+              <a href="#" style="text-decoration:none;color:#0c0c0d;font-size:15px;" style-hover="color:#c79a4b;">Shorts</a>
+              <a href="#" style="text-decoration:none;color:#0c0c0d;font-size:15px;" style-hover="color:#c79a4b;">Hoodies & Jackets</a>
+              <a href="#" style="text-decoration:none;color:#0c0c0d;font-size:15px;" style-hover="color:#c79a4b;">Joggers & Pants</a>
+            </div>
+          </div>
+          <a href="#" style="position:relative;aspect-ratio:16/10;overflow:hidden;text-decoration:none;background:radial-gradient(120% 120% at 60% 30%,#2c2c30,#0d0d0f);">
+            <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(48deg,rgba(255,255,255,0.022) 0 2px,transparent 2px 24px);"></div>
+            <div style="position:absolute;left:18px;top:14px;font-family:monospace;font-size:9.5px;letter-spacing:0.12em;color:rgba(255,255,255,0.3);">PROMO · CAMPAIGN</div>
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:18px;letter-spacing:0.12em;text-transform:uppercase;">Recommended For You</div>
+          </a>
+          <a href="#" style="position:relative;aspect-ratio:16/10;overflow:hidden;text-decoration:none;background:radial-gradient(120% 120% at 40% 30%,#2f3338,#101315);">
+            <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(48deg,rgba(255,255,255,0.022) 0 2px,transparent 2px 24px);"></div>
+            <div style="position:absolute;left:18px;top:14px;font-family:monospace;font-size:9.5px;letter-spacing:0.12em;color:rgba(255,255,255,0.3);">PROMO · ACCESSORIES</div>
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:18px;letter-spacing:0.12em;text-transform:uppercase;">Bags</div>
+          </a>
+        </div>
+      </div>
+    </sc-if>
+  </header>
+
+  <sc-if value="{{ isCinematic }}" hint-placeholder-val="{{ true }}">
+    <section style="position:relative;min-height:86vh;display:flex;align-items:flex-end;overflow:hidden;background:radial-gradient(130% 110% at 68% 18%,#34343a 0%,#1b1b1e 52%,#0a0a0b 100%);">
+      <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(48deg,rgba(255,255,255,0.022) 0 2px,transparent 2px 26px);"></div>
+      <div style="position:absolute;left:24px;bottom:18px;font-family:monospace;font-size:11px;letter-spacing:0.16em;color:rgba(255,255,255,0.32);">HERO VIDEO · ATHLETE IN MOTION (REPLACE)</div>
+      <div style="position:relative;max-width:1400px;width:100%;margin:0 auto;padding:0 32px 70px;">
+        <h1 style="margin:0;color:#fff;font-style:italic;font-weight:900;text-transform:uppercase;font-size:clamp(46px,9.5vw,150px);line-height:0.9;letter-spacing:-0.015em;">Be Better<br>Everyday</h1>
+        <p style="color:rgba(255,255,255,0.82);font-size:clamp(15px,1.4vw,20px);margin:20px 0 26px;letter-spacing:0.02em;">Explore the Golden Egal collection.</p>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;">
+          <a href="#" style="background:#fff;color:#0c0c0d;text-decoration:none;font-weight:800;font-size:13px;letter-spacing:0.14em;padding:17px 38px;text-transform:uppercase;" style-hover="background:#c79a4b;">Shop Mens</a>
+          <a href="#" style="background:transparent;color:#fff;text-decoration:none;font-weight:800;font-size:13px;letter-spacing:0.14em;padding:17px 38px;text-transform:uppercase;border:1.5px solid rgba(255,255,255,0.7);" style-hover="background:#fff;color:#0c0c0d;">Shop Womens</a>
+        </div>
+      </div>
+    </section>
+  </sc-if>
+
+  <sc-if value="{{ isStudio }}" hint-placeholder-val="{{ false }}">
+    <section style="position:relative;min-height:80vh;display:flex;align-items:center;overflow:hidden;background:linear-gradient(135deg,#f0eff1 0%,#e6e5e8 55%,#dcdbdf 100%);">
+      <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(45deg,rgba(0,0,0,0.014) 0 2px,transparent 2px 24px);"></div>
+      <div style="position:absolute;left:24px;bottom:18px;font-family:monospace;font-size:11px;letter-spacing:0.16em;color:rgba(0,0,0,0.3);">HERO IMAGE · STUDIO MODEL PAIR (REPLACE)</div>
+      <div style="position:relative;max-width:1400px;width:100%;margin:0 auto;padding:0 32px;">
+        <h1 style="margin:0;color:#0c0c0d;font-style:italic;font-weight:900;text-transform:uppercase;font-size:clamp(46px,9.5vw,150px);line-height:0.9;letter-spacing:-0.015em;">Be Better<br>Everyday</h1>
+        <p style="color:rgba(12,12,13,0.7);font-size:clamp(15px,1.4vw,20px);margin:20px 0 26px;letter-spacing:0.02em;">Explore the Golden Egal collection.</p>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;">
+          <a href="#" style="background:#0c0c0d;color:#fff;text-decoration:none;font-weight:800;font-size:13px;letter-spacing:0.14em;padding:17px 38px;text-transform:uppercase;" style-hover="background:#c79a4b;color:#0c0c0d;">Shop Mens</a>
+          <a href="#" style="background:transparent;color:#0c0c0d;text-decoration:none;font-weight:800;font-size:13px;letter-spacing:0.14em;padding:17px 38px;text-transform:uppercase;border:1.5px solid rgba(0,0,0,0.6);" style-hover="background:#0c0c0d;color:#fff;">Shop Womens</a>
+        </div>
+      </div>
+    </section>
+  </sc-if>
+
+  <section style="max-width:1400px;margin:0 auto;padding:64px 32px 24px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:28px;">
+      <h2 style="margin:0;font-style:italic;font-weight:800;text-transform:uppercase;font-size:clamp(26px,4vw,46px);letter-spacing:-0.01em;">Shop The Latest Styles</h2>
+      <div style="display:flex;align-items:center;gap:18px;">
+        <a href="#" style="text-decoration:none;color:#0c0c0d;font-weight:800;font-size:13px;letter-spacing:0.14em;text-transform:uppercase;border-bottom:2px solid #0c0c0d;padding-bottom:3px;">Shop All</a>
+        <div style="display:flex;gap:10px;">
+          <button onClick="{{ latestPrev }}" style="width:46px;height:46px;border-radius:50%;border:1.5px solid #d7d6d9;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;" style-hover="border-color:#0c0c0d;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0c0c0d" stroke-width="2.4"><path d="M15 5l-7 7 7 7"></path></svg></button>
+          <button onClick="{{ latestNext }}" style="width:46px;height:46px;border-radius:50%;border:1.5px solid #0c0c0d;background:#0c0c0d;cursor:pointer;display:flex;align-items:center;justify-content:center;" style-hover="background:#c79a4b;border-color:#c79a4b;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4"><path d="M9 5l7 7-7 7"></path></svg></button>
+        </div>
+      </div>
+    </div>
+    <div data-row ref="{{ setLatestRow }}" style="display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:8px;">
+      <sc-for list="{{ latest }}" as="item" hint-placeholder-count="5">
+        <div style="flex:0 0 auto;width:clamp(238px,25vw,300px);scroll-snap-align:start;">
+          <div style="position:relative;aspect-ratio:3/4;overflow:hidden;background:linear-gradient(155deg,#eeedef 0%,#e5e4e7 52%,#d8d7db 100%);">
+            <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(45deg,rgba(0,0,0,0.015) 0 2px,transparent 2px 22px);"></div>
+            <div style="position:absolute;left:13px;bottom:13px;font-family:monospace;font-size:9.5px;letter-spacing:0.1em;color:rgba(0,0,0,0.34);">{{ item.label }}</div>
+            <button onClick="{{ addToCart }}" style="position:absolute;left:13px;right:13px;bottom:13px;background:#0c0c0d;color:#fff;border:none;font-family:'Archivo';font-weight:800;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;padding:13px;cursor:pointer;opacity:0;transition:opacity .2s;" style-hover="background:#c79a4b;color:#0c0c0d;">+ Quick Add</button>
+          </div>
+          <div style="display:flex;gap:7px;margin:13px 0 9px;">
+            <sc-for list="{{ item.swatches }}" as="sw" hint-placeholder-count="3">
+              <div style="width:14px;height:14px;border-radius:50%;border:1px solid rgba(0,0,0,0.18);background:{{ sw }};"></div>
+            </sc-for>
+          </div>
+          <a href="Golden Egal Product.dc.html" style="text-decoration:none;color:inherit;font-weight:700;font-size:15px;display:block;" style-hover="color:#c79a4b;">{{ item.name }}</a>
+          <div style="color:#8a8a8e;font-size:13px;margin:2px 0 6px;">{{ item.sub }}</div>
+          <div style="font-weight:800;font-size:14px;">{{ item.price }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="position:relative;margin:48px 0;min-height:62vh;display:flex;align-items:center;overflow:hidden;background:radial-gradient(120% 130% at 30% 30%,#2c2c30 0%,#19191c 55%,#0a0a0b 100%);">
+    <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(48deg,rgba(255,255,255,0.02) 0 2px,transparent 2px 26px);"></div>
+    <div style="position:absolute;right:24px;bottom:18px;font-family:monospace;font-size:11px;letter-spacing:0.16em;color:rgba(255,255,255,0.3);">FULL-BLEED CAMPAIGN IMAGE (REPLACE)</div>
+    <div style="position:relative;max-width:1400px;width:100%;margin:0 auto;padding:64px 32px;">
+      <div style="color:#c79a4b;font-weight:800;font-size:12px;letter-spacing:0.3em;text-transform:uppercase;margin-bottom:14px;">New Drop</div>
+      <h2 style="margin:0;color:#fff;font-style:italic;font-weight:900;text-transform:uppercase;font-size:clamp(38px,6.5vw,92px);line-height:0.92;letter-spacing:-0.015em;">Built From<br>The Ground Up</h2>
+      <p style="color:rgba(255,255,255,0.78);font-size:16px;margin:18px 0 26px;max-width:460px;">Heavyweight tees engineered for everyday wear. Built for comfort, styled for every day.</p>
+      <a href="#" style="background:#fff;color:#0c0c0d;text-decoration:none;font-weight:800;font-size:13px;letter-spacing:0.14em;padding:17px 40px;text-transform:uppercase;display:inline-block;" style-hover="background:#c79a4b;">Shop Now</a>
+    </div>
+  </section>
+
+  <section style="max-width:1400px;margin:0 auto;padding:24px 32px 16px;">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:26px;">
+      <div>
+        <div style="font-weight:700;font-size:12px;letter-spacing:0.24em;text-transform:uppercase;color:#8a8a8e;margin-bottom:6px;">Build Your Style</div>
+        <h2 style="margin:0;font-style:italic;font-weight:800;text-transform:uppercase;font-size:clamp(26px,4vw,46px);letter-spacing:-0.01em;">Shop By Category</h2>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;">
+      <a href="#" style="position:relative;aspect-ratio:3/4;overflow:hidden;text-decoration:none;background:radial-gradient(120% 120% at 40% 30%,#2a2a2e,#101012);">
+        <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(45deg,rgba(255,255,255,0.022) 0 2px,transparent 2px 24px);"></div>
+        <div style="position:absolute;left:20px;bottom:18px;color:#fff;font-style:italic;font-weight:900;text-transform:uppercase;font-size:clamp(22px,2.4vw,34px);">T-Shirts</div>
+        <div style="position:absolute;left:20px;top:16px;font-family:monospace;font-size:9.5px;letter-spacing:0.12em;color:rgba(255,255,255,0.32);">CATEGORY · TEES</div>
+      </a>
+      <a href="#" style="position:relative;aspect-ratio:3/4;overflow:hidden;text-decoration:none;background:linear-gradient(150deg,#edecef,#dcdbdf);">
+        <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(45deg,rgba(0,0,0,0.015) 0 2px,transparent 2px 22px);"></div>
+        <div style="position:absolute;left:20px;bottom:18px;color:#0c0c0d;font-style:italic;font-weight:900;text-transform:uppercase;font-size:clamp(22px,2.4vw,34px);">Oversized</div>
+        <div style="position:absolute;left:20px;top:16px;font-family:monospace;font-size:9.5px;letter-spacing:0.12em;color:rgba(0,0,0,0.3);">CATEGORY · OVERSIZED</div>
+      </a>
+      <a href="#" style="position:relative;aspect-ratio:3/4;overflow:hidden;text-decoration:none;background:linear-gradient(150deg,#ece9e1,#dad6c9);">
+        <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(45deg,rgba(0,0,0,0.015) 0 2px,transparent 2px 22px);"></div>
+        <div style="position:absolute;left:20px;bottom:18px;color:#0c0c0d;font-style:italic;font-weight:900;text-transform:uppercase;font-size:clamp(22px,2.4vw,34px);">Jerseys</div>
+        <div style="position:absolute;left:20px;top:16px;font-family:monospace;font-size:9.5px;letter-spacing:0.12em;color:rgba(0,0,0,0.3);">CATEGORY · JERSEYS</div>
+      </a>
+      <a href="#" style="position:relative;aspect-ratio:3/4;overflow:hidden;text-decoration:none;background:radial-gradient(120% 120% at 60% 30%,#26262a,#0d0d0f);">
+        <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(45deg,rgba(255,255,255,0.022) 0 2px,transparent 2px 24px);"></div>
+        <div style="position:absolute;left:20px;bottom:18px;color:#fff;font-style:italic;font-weight:900;text-transform:uppercase;font-size:clamp(22px,2.4vw,34px);">Tanks</div>
+        <div style="position:absolute;left:20px;top:16px;font-family:monospace;font-size:9.5px;letter-spacing:0.12em;color:rgba(255,255,255,0.32);">CATEGORY · TANKS</div>
+      </a>
+    </div>
+  </section>
+
+  <sc-if value="{{ showActivity }}" hint-placeholder-val="{{ true }}">
+    <section style="max-width:1400px;margin:0 auto;padding:56px 32px 24px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:26px;">
+        <h2 style="margin:0;font-style:italic;font-weight:800;text-transform:uppercase;font-size:clamp(26px,4vw,46px);letter-spacing:-0.01em;">Train In Golden Egal</h2>
+        <div style="display:flex;border:1.5px solid #0c0c0d;border-radius:40px;overflow:hidden;">
+          <button onClick="{{ showMens }}" style="border:none;cursor:pointer;font-family:'Archivo';font-weight:800;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;padding:11px 26px;background:{{ mensBg }};color:{{ mensFg }};">Mens</button>
+          <button onClick="{{ showWomens }}" style="border:none;cursor:pointer;font-family:'Archivo';font-weight:800;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;padding:11px 26px;background:{{ womensBg }};color:{{ womensFg }};">Womens</button>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+        <a href="#" style="position:relative;aspect-ratio:4/5;overflow:hidden;text-decoration:none;background:radial-gradient(120% 120% at 35% 25%,#33332f,#121210);">
+          <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(45deg,rgba(255,255,255,0.022) 0 2px,transparent 2px 24px);"></div>
+          <div style="position:absolute;left:22px;bottom:20px;color:#fff;font-style:italic;font-weight:900;text-transform:uppercase;font-size:clamp(24px,2.6vw,40px);">Running</div>
+        </a>
+        <a href="#" style="position:relative;aspect-ratio:4/5;overflow:hidden;text-decoration:none;background:radial-gradient(120% 120% at 60% 30%,#3a3128,#161210);">
+          <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(45deg,rgba(255,255,255,0.022) 0 2px,transparent 2px 24px);"></div>
+          <div style="position:absolute;left:22px;bottom:20px;color:#fff;font-style:italic;font-weight:900;text-transform:uppercase;font-size:clamp(24px,2.6vw,40px);">Rest Day</div>
+        </a>
+        <a href="#" style="position:relative;aspect-ratio:4/5;overflow:hidden;text-decoration:none;background:radial-gradient(120% 120% at 45% 30%,#2f3338,#101315);">
+          <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(45deg,rgba(255,255,255,0.022) 0 2px,transparent 2px 24px);"></div>
+          <div style="position:absolute;left:22px;bottom:20px;color:#fff;font-style:italic;font-weight:900;text-transform:uppercase;font-size:clamp(24px,2.6vw,40px);">Studio</div>
+        </a>
+      </div>
+    </section>
+  </sc-if>
+
+  <section style="max-width:1400px;margin:0 auto;padding:56px 32px 24px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:28px;">
+      <h2 style="margin:0;font-style:italic;font-weight:800;text-transform:uppercase;font-size:clamp(26px,4vw,46px);letter-spacing:-0.01em;">Accessories</h2>
+      <div style="display:flex;align-items:center;gap:18px;">
+        <a href="#" style="text-decoration:none;color:#0c0c0d;font-weight:800;font-size:13px;letter-spacing:0.14em;text-transform:uppercase;border-bottom:2px solid #0c0c0d;padding-bottom:3px;">Shop All</a>
+        <div style="display:flex;gap:10px;">
+          <button onClick="{{ accPrev }}" style="width:46px;height:46px;border-radius:50%;border:1.5px solid #d7d6d9;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;" style-hover="border-color:#0c0c0d;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0c0c0d" stroke-width="2.4"><path d="M15 5l-7 7 7 7"></path></svg></button>
+          <button onClick="{{ accNext }}" style="width:46px;height:46px;border-radius:50%;border:1.5px solid #0c0c0d;background:#0c0c0d;cursor:pointer;display:flex;align-items:center;justify-content:center;" style-hover="background:#c79a4b;border-color:#c79a4b;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4"><path d="M9 5l7 7-7 7"></path></svg></button>
+        </div>
+      </div>
+    </div>
+    <div data-row ref="{{ setAccRow }}" style="display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:8px;">
+      <sc-for list="{{ accessories }}" as="item" hint-placeholder-count="4">
+        <div style="flex:0 0 auto;width:clamp(238px,25vw,300px);scroll-snap-align:start;">
+          <div style="position:relative;aspect-ratio:1/1;overflow:hidden;background:linear-gradient(155deg,#eeedef 0%,#e4e3e6 52%,#d6d5d9 100%);">
+            <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(45deg,rgba(0,0,0,0.015) 0 2px,transparent 2px 22px);"></div>
+            <div style="position:absolute;left:13px;bottom:13px;font-family:monospace;font-size:9.5px;letter-spacing:0.1em;color:rgba(0,0,0,0.34);">{{ item.label }}</div>
+          </div>
+          <div style="display:flex;gap:7px;margin:13px 0 9px;">
+            <sc-for list="{{ item.swatches }}" as="sw" hint-placeholder-count="2">
+              <div style="width:14px;height:14px;border-radius:50%;border:1px solid rgba(0,0,0,0.18);background:{{ sw }};"></div>
+            </sc-for>
+          </div>
+          <a href="Golden Egal Product.dc.html" style="text-decoration:none;color:inherit;font-weight:700;font-size:15px;display:block;" style-hover="color:#c79a4b;">{{ item.name }}</a>
+          <div style="color:#8a8a8e;font-size:13px;margin:2px 0 6px;">{{ item.sub }}</div>
+          <div style="font-weight:800;font-size:14px;">{{ item.price }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="max-width:1400px;margin:0 auto;padding:64px 32px;">
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:28px;border-top:1px solid #e7e6e9;border-bottom:1px solid #e7e6e9;padding:44px 0;">
+      <div style="text-align:center;">
+        <div style="font-style:italic;font-weight:900;text-transform:uppercase;font-size:22px;margin-bottom:6px;">Free Shipping</div>
+        <div style="color:#8a8a8e;font-size:14px;">On all orders over LKR 20,000 island-wide.</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-style:italic;font-weight:900;text-transform:uppercase;font-size:22px;margin-bottom:6px;">Easy Returns</div>
+        <div style="color:#8a8a8e;font-size:14px;">14-day free and easy returns, no questions asked.</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-style:italic;font-weight:900;text-transform:uppercase;font-size:22px;margin-bottom:6px;">Pay Your Way</div>
+        <div style="color:#8a8a8e;font-size:14px;">3 interest-free installments at checkout.</div>
+      </div>
+    </div>
+  </section>
+
+  <footer style="background:#0c0c0d;color:#fff;padding:64px 32px 36px;">
+    <div style="max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1.6fr 1fr 1fr 1.4fr;gap:40px;">
+      <div>
+        <div style="display:flex;align-items:center;gap:9px;margin-bottom:16px;">
+          <span style="width:9px;height:9px;background:#c79a4b;transform:rotate(45deg);display:inline-block;"></span>
+          <span style="font-weight:900;font-size:20px;letter-spacing:0.2em;text-transform:uppercase;">GOLDEN EGAL</span>
+        </div>
+        <p style="color:rgba(255,255,255,0.6);font-size:14px;max-width:300px;line-height:1.6;">Premium tees for men and women. Built from the ground up — be better everyday.</p>
+      </div>
+      <div>
+        <div style="font-weight:800;font-size:13px;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:16px;">Shop</div>
+        <div style="display:flex;flex-direction:column;gap:11px;">
+          <a href="#" style="color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px;" style-hover="color:#c79a4b;">Men</a>
+          <a href="#" style="color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px;" style-hover="color:#c79a4b;">Women</a>
+          <a href="#" style="color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px;" style-hover="color:#c79a4b;">Accessories</a>
+          <a href="#" style="color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px;" style-hover="color:#c79a4b;">Gift Cards</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-weight:800;font-size:13px;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:16px;">Help</div>
+        <div style="display:flex;flex-direction:column;gap:11px;">
+          <a href="#" style="color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px;" style-hover="color:#c79a4b;">Track Order</a>
+          <a href="#" style="color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px;" style-hover="color:#c79a4b;">Returns</a>
+          <a href="#" style="color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px;" style-hover="color:#c79a4b;">Size Guide</a>
+          <a href="#" style="color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px;" style-hover="color:#c79a4b;">Contact</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-weight:800;font-size:13px;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:16px;">Join The Club</div>
+        <p style="color:rgba(255,255,255,0.6);font-size:14px;margin:0 0 14px;">Get early access to drops and 10% off your first order.</p>
+        <div style="display:flex;border:1px solid rgba(255,255,255,0.25);">
+          <input placeholder="Email address" style="flex:1;background:transparent;border:none;outline:none;color:#fff;font-family:'Archivo';font-size:14px;padding:13px 14px;">
+          <button style="background:#c79a4b;color:#0c0c0d;border:none;font-family:'Archivo';font-weight:800;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;padding:0 20px;cursor:pointer;">Join</button>
+        </div>
+      </div>
+    </div>
+    <div style="max-width:1400px;margin:44px auto 0;padding-top:24px;border-top:1px solid rgba(255,255,255,0.12);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;color:rgba(255,255,255,0.45);font-size:13px;">
+      <span>© 2026 Golden Egal. All rights reserved.</span>
+      <span style="letter-spacing:0.06em;">Privacy · Terms · Sitemap</span>
+    </div>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1400,&quot;height&quot;:2400},&quot;showAnnouncement&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;showActivity&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;heroVariant&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;Cinematic&quot;,&quot;options&quot;:[&quot;Cinematic&quot;,&quot;Studio&quot;],&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = { cart: 2, activity: 'womens', openMenu: null };
+  rows = {};
+
+  setRow(name) {
+    return (el) => { if (el) this.rows[name] = el; };
+  }
+
+  scroll(name, dir) {
+    const el = this.rows[name];
+    if (el) el.scrollBy({ left: dir * Math.min(el.clientWidth * 0.9, 720), behavior: 'smooth' });
+  }
+
+  renderVals() {
+    const p = this.props;
+    const variant = p.heroVariant ?? 'Cinematic';
+    const mens = this.state.activity === 'mens';
+
+    const latest = [
+      { name: 'Essential Oversized Tee', sub: 'Jet Black', price: 'LKR 4,500.00', label: 'MODEL · ESSENTIAL TEE', swatches: ['#111111', '#f3f1ea', '#1c2a44', '#c79a4b', '#7a1f2b'] },
+      { name: 'Varsity Box Fit Jersey', sub: 'Antique White', price: 'LKR 5,450.00', label: 'MODEL · VARSITY JERSEY', swatches: ['#f3f1ea', '#111111', '#1c2a44'] },
+      { name: 'Heavyweight Crew Tee', sub: 'Bone', price: 'LKR 4,950.00', label: 'MODEL · CREW TEE', swatches: ['#e9e4d8', '#111111', '#6b6f5e'] },
+      { name: 'Mesh Training Tee', sub: 'Slate Grey', price: 'LKR 4,250.00', label: 'MODEL · MESH TEE', swatches: ['#8a8d92', '#111111', '#1c2a44'] },
+      { name: 'Prime Graphic Tee', sub: 'Washed Olive', price: 'LKR 4,650.00', label: 'MODEL · GRAPHIC TEE', swatches: ['#5f6347', '#111111', '#f3f1ea'] },
+    ];
+
+    const accessories = [
+      { name: 'Logo Cap', sub: 'Jet Black', price: 'LKR 2,500.00', label: 'PRODUCT · CAP', swatches: ['#111111', '#f3f1ea'] },
+      { name: 'Essence Tote Bag', sub: 'Jet Black', price: 'LKR 9,500.00', label: 'PRODUCT · TOTE', swatches: ['#111111'] },
+      { name: 'Classic No Show Sock', sub: 'Sheer White', price: 'LKR 1,250.00', label: 'PRODUCT · SOCK', swatches: ['#f3f1ea', '#111111'] },
+      { name: 'Staple Ankle Sock', sub: 'Sheer White', price: 'LKR 1,450.00', label: 'PRODUCT · SOCK', swatches: ['#f3f1ea', '#111111', '#8a8d92'] },
+      { name: 'Beanie', sub: 'Charcoal', price: 'LKR 2,950.00', label: 'PRODUCT · BEANIE', swatches: ['#2c2c2e', '#111111'] },
+    ];
+
+    return {
+      showAnnouncement: p.showAnnouncement ?? true,
+      showActivity: p.showActivity ?? true,
+      isCinematic: variant === 'Cinematic',
+      isStudio: variant !== 'Cinematic',
+      cart: this.state.cart,
+      addToCart: () => this.setState((s) => ({ cart: s.cart + 1 })),
+      menuOpen: !!this.state.openMenu,
+      openMen: () => this.setState({ openMenu: 'men' }),
+      openWomen: () => this.setState({ openMenu: 'women' }),
+      closeMenu: () => this.setState({ openMenu: null }),
+      showMens: () => this.setState({ activity: 'mens' }),
+      showWomens: () => this.setState({ activity: 'womens' }),
+      mensBg: mens ? '#0c0c0d' : 'transparent',
+      mensFg: mens ? '#ffffff' : '#0c0c0d',
+      womensBg: mens ? 'transparent' : '#0c0c0d',
+      womensFg: mens ? '#0c0c0d' : '#ffffff',
+      latestPrev: () => this.scroll('latest', -1),
+      latestNext: () => this.scroll('latest', 1),
+      accPrev: () => this.scroll('acc', -1),
+      accNext: () => this.scroll('acc', 1),
+      setLatestRow: this.setRow('latest'),
+      setAccRow: this.setRow('acc'),
+      latest,
+      accessories,
+    };
+  }
+}
+</script>
+</body>
+</html>

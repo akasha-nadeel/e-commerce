@@ -1,26 +1,112 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
+/* ------------------------------------------------------------------ */
+/* Golden Egal design tokens — Carnage-style premium athleisure        */
+/* ------------------------------------------------------------------ */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-ink: #0c0c0d; /* near-black brand base   */
+  --color-gold: #c79a4b; /* signature gold accent  */
+  --color-bone: #f3f1ea;
+  --color-muted: #8a8a8e; /* secondary text         */
+  --color-line: #e7e6e9; /* hairline borders       */
+  --color-line-strong: #d7d6d9;
+  --color-surface: #f5f5f6; /* light info panels      */
+
+  /* Apple typography — San Francisco (SF Pro) on Apple devices, Inter as the
+     cross-platform fallback, then Helvetica/Arial. Matches apple.com's stack. */
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+    "SF Pro Text", var(--font-inter), "Helvetica Neue", Helvetica, Arial,
+    sans-serif;
+  --font-display: var(--font-sans);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  background: #ffffff;
+  color: #0c0c0d;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  line-height: 1.5;
+}
+
+::selection {
+  background: #c79a4b;
+  color: #000;
+}
+
+/* ------------------------------------------------------------------ */
+/* Modern type scale — Title Case headings with a subtle negative       */
+/* tracking, the clean VELORA-style look.                               */
+/* ------------------------------------------------------------------ */
+h1,
+h2,
+h3 {
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.display-tight {
+  letter-spacing: -0.025em;
+}
+
+/* Hide scrollbars on horizontal product rows while keeping scroll */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Infinite brand marquee — the track holds two identical halves and slides
+   exactly one half-width, so the loop is seamless. */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee {
+  animation: marquee 32s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
+  }
+}
+
+/* Faint diagonal hairline texture used across placeholder media tiles */
+.tile-texture-dark::before,
+.tile-texture-light::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.tile-texture-light::before {
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(0, 0, 0, 0.015) 0 2px,
+    transparent 2px 22px
+  );
+}
+.tile-texture-dark::before {
+  background-image: repeating-linear-gradient(
+    48deg,
+    rgba(255, 255, 255, 0.022) 0 2px,
+    transparent 2px 24px
+  );
 }

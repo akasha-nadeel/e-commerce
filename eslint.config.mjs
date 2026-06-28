@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Design-tool prototype + build scripts are not part of the app source.
+    "docs/**",
+    "scripts/**",
   ]),
 ]);
 

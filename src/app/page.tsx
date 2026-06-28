@@ -1,65 +1,277 @@
 import Image from "next/image";
+import Link from "next/link";
+import { CarouselRow } from "@/components/carousel-row";
+import { ProductCard } from "@/components/product-card";
+import { ActivitySwitch } from "@/components/activity-switch";
+import { LogoMarquee } from "@/components/logo-marquee";
+import { accessories, latestStyles } from "@/lib/catalog";
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
+    <div className="w-full bg-white">
+      {/* ---------------------------------------------------------------- */}
+      {/* Hero — full-screen studio image; nav overlays it transparently.   */}
+      {/* Kept OUTSIDE the overflow-x-hidden wrapper so its negative top     */}
+      {/* margin can slide under the transparent nav without being clipped.  */}
+      {/* ---------------------------------------------------------------- */}
+      <section className="relative -mt-[74px] flex min-h-screen items-end overflow-hidden bg-[#ededee] pt-[74px] lg:items-center">
         <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
+          src="/hero-v4.jpg"
+          alt="Golden Egal model seated on a skateboard in studio"
+          fill
           priority
+          sizes="100vw"
+          className="object-cover object-[70%_center] lg:object-[38%_center]"
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+        {/* Soft light scrim for text legibility (stronger at the bottom on mobile) */}
+        <div className="absolute inset-0 bg-gradient-to-t from-white/75 via-white/10 to-transparent lg:bg-gradient-to-r lg:from-white/50 lg:via-transparent lg:to-transparent" />
+
+        <div className="relative mx-auto w-full max-w-[1400px] px-5 pb-14 sm:px-8 lg:pb-0">
+          <div className="max-w-[540px]">
+            <p className="mb-4 text-[12px] font-semibold uppercase tracking-[0.3em] text-[#0c0c0d]/55">
+              New Collection
+            </p>
+            <h1 className="display-tight m-0 text-[clamp(44px,7vw,104px)] font-semibold leading-[0.95] text-[#0c0c0d]">
+              Be Better
+              <br />
+              Everyday
+            </h1>
+            <p className="mb-8 mt-5 text-[clamp(15px,1.4vw,20px)] text-[#0c0c0d]/70">
+              Explore the Golden Egal collection.
+            </p>
+            <div className="flex flex-wrap gap-3.5">
+              <Link
+                href="/collections/men"
+                className="rounded-full bg-[#0c0c0d] px-9 py-4 text-[13px] font-semibold text-white no-underline transition-colors hover:bg-[#c79a4b] hover:text-[#0c0c0d]"
+              >
+                Shop Men
+              </Link>
+              <Link
+                href="/collections/women"
+                className="rounded-full border border-[#0c0c0d] bg-transparent px-9 py-4 text-[13px] font-semibold text-[#0c0c0d] no-underline transition-colors hover:bg-[#0c0c0d] hover:text-white"
+              >
+                Shop Women
+              </Link>
+            </div>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      {/* Everything below the hero keeps the horizontal-overflow guard. */}
+      <div className="overflow-x-hidden">
+      {/* Brand marquee */}
+      <LogoMarquee />
+      {/* ---------------------------------------------------------------- */}
+      {/* Shop the latest styles                                           */}
+      {/* ---------------------------------------------------------------- */}
+      <div className="pb-6 pt-16">
+        <CarouselRow title="Shop The Latest Styles" shopAllHref="/collections/all">
+          {latestStyles.map((p) => (
+            <ProductCard key={p.slug} product={p} quickAdd />
+          ))}
+        </CarouselRow>
+      </div>
+
+      {/* ---------------------------------------------------------------- */}
+      {/* Campaign banner                                                  */}
+      {/* ---------------------------------------------------------------- */}
+      <div className="my-12 px-5 sm:px-8">
+      <section className="relative mx-auto flex min-h-[58vh] max-w-[1280px] items-center overflow-hidden rounded-3xl bg-[#f4f4f5]">
+        <Image
+          src="/campaign-v2.jpg"
+          alt="Golden Egal campaign — model in the graphic tee on a studio plinth"
+          fill
+          sizes="(max-width: 1280px) 100vw, 1280px"
+          className="object-cover object-[75%_20%]"
+        />
+        {/* Left-anchored white scrim keeps the dark copy legible — strong on
+            mobile (where the model fills the frame), barely-there on desktop. */}
+        <div className="absolute inset-0 bg-gradient-to-r from-white/85 via-white/40 to-transparent lg:from-white/35 lg:via-white/5 lg:to-transparent" />
+        <div className="relative w-full px-8 py-16 sm:px-12">
+          <div className="max-w-[480px]">
+            <div className="mb-3.5 text-[12px] font-semibold uppercase tracking-[0.3em] text-[#0c0c0d]">
+              New Drop
+            </div>
+            <h2 className="display-tight m-0 text-[clamp(34px,5vw,64px)] font-semibold leading-[1.02] text-[#0c0c0d]">
+              <span className="block whitespace-nowrap">Built From</span>
+              <span className="block whitespace-nowrap">The Ground Up</span>
+            </h2>
+            <p className="mb-[26px] mt-[18px] max-w-[440px] text-[16px] text-[#0c0c0d]/75">
+              Heavyweight tees engineered for everyday wear. Built for comfort,
+              styled for every day.
+            </p>
+            <Link
+              href="/collections/new"
+              className="inline-block rounded-full bg-[#0c0c0d] px-10 py-[17px] text-[13px] font-semibold text-white no-underline transition-colors hover:bg-white hover:text-[#0c0c0d]"
+            >
+              Shop Now
+            </Link>
+          </div>
         </div>
-      </main>
+      </section>
+      </div>
+
+      {/* ---------------------------------------------------------------- */}
+      {/* Shop by category                                                 */}
+      {/* ---------------------------------------------------------------- */}
+      <section className="mx-auto max-w-[1400px] px-5 pb-4 pt-6 sm:px-8">
+        <div className="mb-[26px]">
+          <div className="mb-1.5 text-[12px] font-bold uppercase tracking-[0.24em] text-[#8a8a8e]">
+            Build Your Style
+          </div>
+          <h2 className="m-0 text-[clamp(26px,4vw,46px)] font-semibold tracking-[-0.01em]">
+            Shop By Category
+          </h2>
+        </div>
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+          <CategoryTile
+            name="T-Shirts"
+            caption="CATEGORY · TEES"
+            href="/collections/men"
+            dark
+            bg="radial-gradient(120% 120% at 40% 30%,#2a2a2e,#101012)"
+          />
+          <CategoryTile
+            name="Oversized"
+            caption="CATEGORY · OVERSIZED"
+            href="/collections/all"
+            bg="linear-gradient(150deg,#edecef,#dcdbdf)"
+          />
+          <CategoryTile
+            name="Jerseys"
+            caption="CATEGORY · JERSEYS"
+            href="/collections/all"
+            bg="linear-gradient(150deg,#ece9e1,#dad6c9)"
+          />
+          <CategoryTile
+            name="Tanks"
+            caption="CATEGORY · TANKS"
+            href="/collections/women"
+            dark
+            bg="radial-gradient(120% 120% at 60% 30%,#26262a,#0d0d0f)"
+          />
+        </div>
+      </section>
+
+      {/* ---------------------------------------------------------------- */}
+      {/* Train in Golden Egal                                             */}
+      {/* ---------------------------------------------------------------- */}
+      <section className="mx-auto max-w-[1400px] px-5 pb-6 pt-14 sm:px-8">
+        <div className="mb-[26px] flex items-center justify-between gap-4">
+          <h2 className="m-0 text-[clamp(26px,4vw,46px)] font-semibold tracking-[-0.01em]">
+            Train In Golden Egal
+          </h2>
+          <ActivitySwitch />
+        </div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <ActivityTile
+            name="Running"
+            href="/collections/all"
+            bg="radial-gradient(120% 120% at 35% 25%,#33332f,#121210)"
+          />
+          <ActivityTile
+            name="Rest Day"
+            href="/collections/all"
+            bg="radial-gradient(120% 120% at 60% 30%,#3a3128,#161210)"
+          />
+          <ActivityTile
+            name="Studio"
+            href="/collections/all"
+            bg="radial-gradient(120% 120% at 45% 30%,#2f3338,#101315)"
+          />
+        </div>
+      </section>
+
+      {/* ---------------------------------------------------------------- */}
+      {/* Accessories                                                      */}
+      {/* ---------------------------------------------------------------- */}
+      <div id="accessories" className="scroll-mt-24 pb-6 pt-14">
+        <CarouselRow title="Accessories" shopAllHref="/collections/accessories">
+          {accessories.map((p) => (
+            <ProductCard key={p.slug} product={p} quickAdd />
+          ))}
+        </CarouselRow>
+      </div>
+
+      {/* ---------------------------------------------------------------- */}
+      {/* Perks                                                            */}
+      {/* ---------------------------------------------------------------- */}
+      <section className="mx-auto max-w-[1400px] px-5 py-16 sm:px-8">
+        <div className="grid grid-cols-1 gap-7 border-y border-[#e7e6e9] py-11 sm:grid-cols-3">
+          <Perk title="Free Shipping" copy="On all orders over LKR 20,000 island-wide." />
+          <Perk title="Easy Returns" copy="14-day free and easy returns, no questions asked." />
+          <Perk title="Pay Your Way" copy="3 interest-free installments at checkout." />
+        </div>
+      </section>
+      </div>
+    </div>
+  );
+}
+
+function CategoryTile({
+  name,
+  caption,
+  bg,
+  href,
+  dark = false,
+}: {
+  name: string;
+  caption: string;
+  bg: string;
+  href: string;
+  dark?: boolean;
+}) {
+  return (
+    <Link
+      href={href}
+      className={`relative aspect-[3/4] overflow-hidden no-underline ${
+        dark ? "tile-texture-dark" : "tile-texture-light"
+      }`}
+      style={{ background: bg }}
+    >
+      <span
+        className="absolute left-5 top-4 z-10 font-mono text-[9.5px] tracking-[0.12em]"
+        style={{ color: dark ? "rgba(255,255,255,0.32)" : "rgba(0,0,0,0.3)" }}
+      >
+        {caption}
+      </span>
+      <span
+        className="absolute bottom-[18px] left-5 z-10 text-[clamp(22px,2.4vw,34px)] font-semibold"
+        style={{ color: dark ? "#fff" : "#0c0c0d" }}
+      >
+        {name}
+      </span>
+    </Link>
+  );
+}
+
+function ActivityTile({
+  name,
+  bg,
+  href,
+}: {
+  name: string;
+  bg: string;
+  href: string;
+}) {
+  return (
+    <Link
+      href={href}
+      className="tile-texture-dark relative aspect-[4/5] overflow-hidden no-underline"
+      style={{ background: bg }}
+    >
+      <span className="absolute bottom-5 left-[22px] z-10 text-[clamp(24px,2.6vw,40px)] font-semibold text-white">
+        {name}
+      </span>
+    </Link>
+  );
+}
+
+function Perk({ title, copy }: { title: string; copy: string }) {
+  return (
+    <div className="text-center">
+      <div className="mb-1.5 text-[22px] font-semibold">{title}</div>
+      <div className="text-[14px] text-[#8a8a8e]">{copy}</div>
     </div>
   );
 }
