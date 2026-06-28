@@ -69,8 +69,8 @@ export function SiteHeader() {
         transparent ? "bg-transparent" : "border-b border-[#e7e6e9] bg-white"
       }`}
     >
-      <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-4 px-5 py-[10px] sm:px-8">
-        {/* Left: mobile hamburger + logo */}
+      <div className="relative mx-auto flex max-w-[1400px] items-center justify-between gap-4 px-5 py-[10px] sm:px-8">
+        {/* Left: mobile hamburger + logo (logo centres on mobile, sits left on desktop) */}
         <div className="flex items-center gap-3">
           <button
             type="button"
@@ -94,7 +94,9 @@ export function SiteHeader() {
               )}
             </svg>
           </button>
-          <Logo variant="onLight" showText={false} markHeight={54} />
+          <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 md:static md:translate-x-0 md:translate-y-0">
+            <Logo variant="onLight" showText={false} markHeight={54} />
+          </span>
         </div>
 
         {/* Center: desktop nav */}
