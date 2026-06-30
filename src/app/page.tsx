@@ -88,16 +88,22 @@ export default function HomePage() {
           <DepartmentPanel
             eyebrow="Women's Collection"
             title="Shop Women"
-            caption="Tees, tanks and athleisure designed to move with you."
             href="/collections/women"
-            bg="radial-gradient(130% 130% at 35% 20%,#3a3030,#140f11)"
+            image="/dept-women.jpg"
+            align="top"
+            bg="#a374cf"
+            buttonHoverOnly
+            ctaClassName="bg-[#4f2c7c] text-white hover:bg-[#3d2161]"
           />
           <DepartmentPanel
             eyebrow="Men's Collection"
             title="Shop Men"
-            caption="Heavyweight tees and jerseys, built from the ground up."
             href="/collections/men"
-            bg="radial-gradient(130% 130% at 60% 20%,#24272d,#0c0d0f)"
+            image="/dept-men-v2.png"
+            align="top"
+            bg="#0c0d0f"
+            buttonHoverOnly
+            ctaClassName="bg-[#cc1007] text-white hover:bg-[#a30c04]"
           />
         </div>
       </section>
@@ -293,44 +299,92 @@ function DepartmentPanel({
   caption,
   bg,
   href,
+  image,
+  align = "bottom",
+  center = false,
+  buttonHoverOnly = false,
+  ctaClassName = "bg-white text-[#0c0c0d] group-hover:bg-[#eec449]",
 }: {
   eyebrow: string;
   title: string;
-  caption: string;
+  caption?: string;
   bg: string;
   href: string;
+  image?: string;
+  align?: "top" | "bottom";
+  center?: boolean;
+  buttonHoverOnly?: boolean;
+  ctaClassName?: string;
 }) {
+  const top = align === "top";
+  // When buttonHoverOnly is set, the CTA reacts to its own hover (not the whole
+  // card); the arrow then follows the button's group instead of the card's.
+  const arrowHover = buttonHoverOnly
+    ? "group-hover/btn:translate-x-1"
+    : "group-hover:translate-x-1";
   return (
     <Link
       href={href}
-      className="tile-texture-dark group relative flex min-h-[360px] flex-col justify-end overflow-hidden p-7 no-underline sm:min-h-[440px] sm:p-9 lg:min-h-[540px]"
+      className={`tile-texture-dark group relative flex min-h-[360px] flex-col overflow-hidden p-7 no-underline sm:min-h-[440px] sm:p-9 lg:min-h-[540px] ${
+        top ? "justify-start" : "justify-end"
+      }`}
       style={{ background: bg }}
     >
-      <span className="absolute left-7 top-6 font-mono text-[10px] uppercase tracking-[0.18em] text-white/40 sm:left-9 sm:top-7">
-        {eyebrow}
-      </span>
-      <h3 className="m-0 text-[clamp(30px,3.6vw,52px)] font-semibold leading-none text-white">
-        {title}
-      </h3>
-      <p className="mt-3.5 max-w-[300px] text-[14px] leading-relaxed text-white/65">
-        {caption}
-      </p>
-      <span className="mt-6 inline-flex w-fit items-center gap-2 bg-white px-6 py-3 text-[13px] font-semibold text-[#0c0c0d] transition-colors group-hover:bg-[#eec449]">
-        Shop Now
-        <svg
-          width="15"
-          height="15"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={2.2}
-          aria-hidden
-          className="transition-transform duration-200 group-hover:translate-x-1"
+      {image && (
+        <Image
+          src={image}
+          alt=""
+          fill
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 700px"
+          className="object-cover object-center"
+        />
+      )}
+      {/* Eyebrow pins to the top for bottom-aligned cards; for top-aligned cards
+          it stacks with the title + CTA in the content block below. */}
+      {!top && (
+        <span className="absolute left-7 top-6 z-10 font-mono text-[10px] uppercase tracking-[0.18em] text-white/45 sm:left-9 sm:top-7">
+          {eyebrow}
+        </span>
+      )}
+      <div
+        className={`relative z-10 ${
+          center ? "flex flex-col items-center text-center" : ""
+        }`}
+      >
+        {top && (
+          <span className="mb-3 block font-mono text-[10px] uppercase tracking-[0.18em] text-white/55">
+            {eyebrow}
+          </span>
+        )}
+        <h3 className="m-0 text-[clamp(26px,3.1vw,44px)] font-semibold leading-none text-white">
+          {title}
+        </h3>
+        {caption && (
+          <p className="mt-3.5 max-w-[300px] text-[14px] leading-relaxed text-white/65">
+            {caption}
+          </p>
+        )}
+        <span
+          className={`mt-6 inline-flex w-fit items-center gap-2 px-6 py-3 text-[13px] font-semibold transition-colors ${
+            buttonHoverOnly ? "group/btn" : ""
+          } ${ctaClassName}`}
         >
-          <path d="M5 12h14" />
-          <path d="M13 6l6 6-6 6" />
-        </svg>
-      </span>
+          Shop Now
+          <svg
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2.2}
+            aria-hidden
+            className={`transition-transform duration-200 ${arrowHover}`}
+          >
+            <path d="M5 12h14" />
+            <path d="M13 6l6 6-6 6" />
+          </svg>
+        </span>
+      </div>
     </Link>
   );
 }
