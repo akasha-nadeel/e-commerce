@@ -16,7 +16,7 @@ export function Logo({
   showText = true,
   markHeight,
 }: {
-  variant?: "onDark" | "onLight";
+  variant?: "onDark" | "onLight" | "gold";
   size?: number;
   href?: string;
   /** Show the "Golden Egal" wordmark next to the eagle. */
@@ -25,9 +25,14 @@ export function Logo({
   markHeight?: number;
 }) {
   const onDark = variant === "onDark";
+  const isGold = variant === "gold";
   // Versioned filenames + unoptimized to defeat any stale browser / image-CDN
-  // cache when the master art changes.
-  const mark = onDark ? "/logo-eagle-light-v2.png" : "/logo-eagle-dark-v2.png";
+  // cache when the master art changes. The gold mark is used over the dark hero.
+  const mark = isGold
+    ? "/logo-eagle-gold-v2.png"
+    : onDark
+      ? "/logo-eagle-light-v2.png"
+      : "/logo-eagle-dark-v2.png";
   const h = markHeight ?? Math.round(size * 1.15);
 
   return (
@@ -35,7 +40,7 @@ export function Logo({
       href={href}
       aria-label="Golden Egal — home"
       className="flex items-center gap-2.5 no-underline"
-      style={{ color: onDark ? "#fff" : "#0c0c0d" }}
+      style={{ color: isGold ? "#c79a4b" : onDark ? "#fff" : "#0c0c0d" }}
     >
       <Image
         src={mark}

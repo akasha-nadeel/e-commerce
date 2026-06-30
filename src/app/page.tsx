@@ -16,41 +16,42 @@ export default function HomePage() {
       {/* Kept OUTSIDE the overflow-x-hidden wrapper so its negative top     */}
       {/* margin can slide under the transparent nav without being clipped.  */}
       {/* ---------------------------------------------------------------- */}
-      <section className="relative -mt-[74px] flex min-h-screen items-end overflow-hidden bg-[#ededee] pt-[74px] lg:items-center">
+      <section className="relative -mt-[74px] flex min-h-screen items-end overflow-hidden bg-[#17120f] pt-[74px] lg:items-center">
         <Image
-          src="/hero-v4.jpg"
-          alt="Golden Egal model seated on a skateboard in studio"
+          src="/hero-golden-eagle.jpg"
+          alt="Golden Eagle black hoodie with gold eagle embroidery on a dark studio backdrop"
           fill
           priority
           sizes="100vw"
-          className="object-cover object-[70%_center] lg:object-[38%_center]"
+          className="object-cover object-[62%_center] lg:object-center"
         />
-        {/* Soft light scrim for text legibility (stronger at the bottom on mobile) */}
-        <div className="absolute inset-0 bg-gradient-to-t from-white/75 via-white/10 to-transparent lg:bg-gradient-to-r lg:from-white/50 lg:via-transparent lg:to-transparent" />
+        {/* Dark scrim for text legibility (stronger at the bottom on mobile, on
+            the left on desktop where the headline sits) */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent lg:bg-gradient-to-r lg:from-black/70 lg:via-black/15 lg:to-transparent" />
 
         <div className="relative mx-auto w-full max-w-[1400px] px-5 pb-14 sm:px-8 lg:pb-0">
           <div className="max-w-[540px]">
-            <p className="mb-4 text-[12px] font-semibold uppercase tracking-[0.3em] text-[#0c0c0d]/55">
+            <p className="mb-4 text-[12px] font-semibold uppercase tracking-[0.3em] text-white/60">
               New Collection
             </p>
-            <h1 className="display-tight m-0 text-[clamp(44px,7vw,104px)] font-semibold leading-[0.95] text-[#0c0c0d]">
+            <h1 className="display-tight m-0 text-[clamp(44px,7vw,104px)] font-semibold leading-[0.95] text-white">
               Be Better
               <br />
               Everyday
             </h1>
-            <p className="mb-8 mt-5 text-[clamp(15px,1.4vw,20px)] text-[#0c0c0d]/70">
+            <p className="mb-8 mt-5 text-[clamp(15px,1.4vw,20px)] text-white/75">
               Explore the Golden Egal collection.
             </p>
             <div className="flex flex-wrap gap-3.5">
               <Link
                 href="/collections/men"
-                className="rounded-none bg-[#0c0c0d] px-9 py-4 text-[13px] font-semibold text-white no-underline transition-colors hover:bg-[#c79a4b] hover:text-[#0c0c0d]"
+                className="rounded-none bg-[#c79a4b] px-9 py-4 text-[13px] font-semibold text-[#0c0c0d] no-underline transition-colors hover:bg-[#b3863a] hover:text-[#0c0c0d]"
               >
                 Shop Men
               </Link>
               <Link
                 href="/collections/women"
-                className="rounded-none border border-[#0c0c0d] bg-transparent px-9 py-4 text-[13px] font-semibold text-[#0c0c0d] no-underline transition-colors hover:bg-[#0c0c0d] hover:text-white"
+                className="rounded-none border border-white bg-transparent px-9 py-4 text-[13px] font-semibold text-white no-underline transition-colors hover:bg-white hover:text-[#0c0c0d]"
               >
                 Shop Women
               </Link>

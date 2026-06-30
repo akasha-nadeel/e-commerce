@@ -52,16 +52,17 @@ export function SiteHeader() {
     return () => window.removeEventListener("scroll", onScroll);
   }, [isHome]);
 
-  // The homepage hero is a light studio image, so the nav text/logo stay dark
-  // throughout; only the background switches from transparent (over the hero) to
-  // solid white once scrolled or when a menu is open.
+  // The homepage hero is a dark studio image, so while the nav overlays it
+  // (transparent) the text/logo/icons render light; once scrolled or a menu
+  // opens the nav gains a solid white background and switches back to dark.
   const transparent = isHome && !scrolled && !megaOpen && !mobileOpen;
 
   // Nav links highlight with a solid ink box on hover; the active route keeps it.
   const navLinkBase =
     "rounded-none px-3 py-2 text-[13px] font-medium tracking-[0.03em] no-underline transition-colors hover:bg-[#0c0c0d] hover:text-white";
-  const iconCls =
-    "cursor-pointer transition-colors text-[#0c0c0d] hover:text-[#c79a4b]";
+  const iconCls = `cursor-pointer transition-colors hover:text-[#c79a4b] ${
+    transparent ? "text-white" : "text-[#0c0c0d]"
+  }`;
 
   return (
     <header
@@ -96,7 +97,7 @@ export function SiteHeader() {
             </svg>
           </button>
           <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 md:static md:translate-x-0 md:translate-y-0">
-            <Logo variant="onLight" showText={false} markHeight={54} />
+            <Logo variant={transparent ? "gold" : "onLight"} showText={false} markHeight={54} />
           </span>
         </div>
 
@@ -115,7 +116,9 @@ export function SiteHeader() {
                 className={`${navLinkBase} ${
                   active && !transparent
                     ? "bg-[#0c0c0d] text-white"
-                    : "text-[#0c0c0d]"
+                    : transparent
+                      ? "text-white"
+                      : "text-[#0c0c0d]"
                 }`}
               >
                 {item.label}
