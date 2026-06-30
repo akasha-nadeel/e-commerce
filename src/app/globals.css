@@ -5,7 +5,7 @@
 /* ------------------------------------------------------------------ */
 @theme inline {
   --color-ink: #0c0c0d; /* near-black brand base   */
-  --color-gold: #c79a4b; /* signature gold accent  */
+  --color-gold: #eec449; /* signature gold accent  */
   --color-bone: #f3f1ea;
   --color-muted: #8a8a8e; /* secondary text         */
   --color-line: #e7e6e9; /* hairline borders       */
@@ -41,7 +41,7 @@ body {
 }
 
 ::selection {
-  background: #c79a4b;
+  background: #eec449;
   color: #000;
 }
 

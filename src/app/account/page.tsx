@@ -125,7 +125,7 @@ function BackorderRow({
           </div>
         </div>
         <div className="flex items-center gap-2.5">
-          <span className="bg-[#c79a4b]/15 px-2 py-1 text-[12px] font-bold text-[#9a7322]">
+          <span className="bg-[#eec449]/15 px-2 py-1 text-[12px] font-bold text-[#9a7322]">
             #{position} in queue
           </span>
           <StatusPill status={status} />
@@ -162,7 +162,7 @@ function BackorderRow({
 function StatusPill({ status }: { status: BackorderStatus }) {
   const styles: Record<BackorderStatus, string> = {
     Queued: "bg-[#f1f1f3] text-[#6a6a6e]",
-    Allocated: "bg-[#c79a4b]/20 text-[#9a7322]",
+    Allocated: "bg-[#eec449]/20 text-[#9a7322]",
     Shipping: "bg-[#0c0c0d] text-white",
   };
   return (

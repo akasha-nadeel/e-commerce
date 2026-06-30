@@ -40,7 +40,7 @@ export function Logo({
       href={href}
       aria-label="Golden Egal — home"
       className="flex items-center gap-2.5 no-underline"
-      style={{ color: isGold ? "#c79a4b" : onDark ? "#fff" : "#0c0c0d" }}
+      style={{ color: isGold ? "#eec449" : onDark ? "#fff" : "#0c0c0d" }}
     >
       <Image
         src={mark}

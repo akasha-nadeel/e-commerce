@@ -85,7 +85,7 @@ export function LoginForm() {
         </AuthCheckbox>
         <Link
           href="/login"
-          className="shrink-0 text-[13px] font-medium text-[#c79a4b] no-underline hover:underline"
+          className="shrink-0 text-[13px] font-medium text-[#eec449] no-underline hover:underline"
         >
           Forgot password?
         </Link>

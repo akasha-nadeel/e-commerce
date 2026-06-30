@@ -60,7 +60,7 @@ export function SiteHeader() {
   // Nav links highlight with a solid ink box on hover; the active route keeps it.
   const navLinkBase =
     "rounded-none px-3 py-2 text-[13px] font-medium tracking-[0.03em] no-underline transition-colors hover:bg-[#0c0c0d] hover:text-white";
-  const iconCls = `cursor-pointer transition-colors hover:text-[#c79a4b] ${
+  const iconCls = `cursor-pointer transition-colors hover:text-[#eec449] ${
     transparent ? "text-white" : "text-[#0c0c0d]"
   }`;
 
@@ -151,7 +151,7 @@ export function SiteHeader() {
               <path d="M6 8h12l-1 12H7L6 8z" />
               <path d="M9 8V6a3 3 0 0 1 6 0v2" />
             </svg>
-            <span className="absolute -right-[9px] -top-2 flex h-[17px] min-w-[17px] items-center justify-center rounded-[9px] bg-[#c79a4b] px-1 text-[10px] font-semibold text-[#0c0c0d]">
+            <span className="absolute -right-[9px] -top-2 flex h-[17px] min-w-[17px] items-center justify-center rounded-[9px] bg-[#eec449] px-1 text-[10px] font-semibold text-[#0c0c0d]">
               {count}
             </span>
           </button>
@@ -168,7 +168,7 @@ export function SiteHeader() {
               </div>
               <div className="flex flex-col gap-3.5">
                 {FEATURED.map((f) => (
-                  <Link key={f.label} href={f.href} className="text-[15px] text-[#0c0c0d] no-underline transition-colors hover:text-[#c79a4b]">
+                  <Link key={f.label} href={f.href} className="text-[15px] text-[#0c0c0d] no-underline transition-colors hover:text-[#eec449]">
                     {f.label}
                   </Link>
                 ))}
@@ -180,7 +180,7 @@ export function SiteHeader() {
               </div>
               <div className="flex flex-col gap-3.5">
                 {EXPLORE.map((e) => (
-                  <Link key={e.label} href={e.href} className="text-[15px] text-[#0c0c0d] no-underline transition-colors hover:text-[#c79a4b]">
+                  <Link key={e.label} href={e.href} className="text-[15px] text-[#0c0c0d] no-underline transition-colors hover:text-[#eec449]">
                     {e.label}
                   </Link>
                 ))}

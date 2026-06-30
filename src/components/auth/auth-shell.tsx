@@ -174,7 +174,7 @@ export function TextField({
     <div className="flex flex-col gap-1.5">
       <label htmlFor={id} className="text-[13px] font-semibold text-[#0c0c0d]">
         {label}
-        {required && <span className="text-[#c79a4b]"> *</span>}
+        {required && <span className="text-[#eec449]"> *</span>}
       </label>
       <input
         id={id}
@@ -222,7 +222,7 @@ export function PasswordField({
     <div className="flex flex-col gap-1.5">
       <label htmlFor={id} className="text-[13px] font-semibold text-[#0c0c0d]">
         {label}
-        {required && <span className="text-[#c79a4b]"> *</span>}
+        {required && <span className="text-[#eec449]"> *</span>}
       </label>
       <div className="relative">
         <input
@@ -295,7 +295,7 @@ export function AuthSubmit({ children }: { children: React.ReactNode }) {
   return (
     <button
       type="submit"
-      className="mt-1 w-full cursor-pointer rounded-none bg-[#0c0c0d] px-5 py-4 text-[14px] font-semibold text-white transition-colors hover:bg-[#c79a4b] hover:text-[#0c0c0d]"
+      className="mt-1 w-full cursor-pointer rounded-none bg-[#0c0c0d] px-5 py-4 text-[14px] font-semibold text-white transition-colors hover:bg-[#eec449] hover:text-[#0c0c0d]"
     >
       {children}
     </button>
@@ -316,7 +316,7 @@ export function AuthAltLink({
       {prompt}{" "}
       <Link
         href={href}
-        className="font-semibold text-[#c79a4b] no-underline hover:underline"
+        className="font-semibold text-[#eec449] no-underline hover:underline"
       >
         {cta}
       </Link>
@@ -342,7 +342,7 @@ export function AuthSuccess({
       </p>
       <Link
         href="/"
-        className="mt-7 rounded-none bg-[#0c0c0d] px-8 py-3.5 text-[13px] font-semibold text-white no-underline transition-colors hover:bg-[#c79a4b] hover:text-[#0c0c0d]"
+        className="mt-7 rounded-none bg-[#0c0c0d] px-8 py-3.5 text-[13px] font-semibold text-white no-underline transition-colors hover:bg-[#eec449] hover:text-[#0c0c0d]"
       >
         Continue Shopping
       </Link>

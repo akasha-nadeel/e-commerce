@@ -41,7 +41,7 @@ export function ProductCard({
 
       <Link
         href={href}
-        className="mt-3.5 block text-[15px] font-semibold uppercase leading-tight tracking-[0.01em] text-[#0c0c0d] no-underline transition-colors hover:text-[#c79a4b]"
+        className="mt-3.5 block text-[15px] font-semibold uppercase leading-tight tracking-[0.01em] text-[#0c0c0d] no-underline transition-colors hover:text-[#eec449]"
       >
         {product.name}
       </Link>

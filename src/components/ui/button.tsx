@@ -11,7 +11,7 @@ const SIZES: Record<Size, string> = {
 };
 
 const VARIANTS: Record<Variant, string> = {
-  solid: "bg-[#0c0c0d] text-white hover:bg-[#c79a4b] hover:text-[#0c0c0d]",
+  solid: "bg-[#0c0c0d] text-white hover:bg-[#eec449] hover:text-[#0c0c0d]",
   outline:
     "border border-[#0c0c0d] text-[#0c0c0d] hover:bg-[#0c0c0d] hover:text-white",
 };

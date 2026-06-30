@@ -75,7 +75,7 @@ function ArrowButton({
       onClick={onClick}
       className={`flex h-[46px] w-[46px] cursor-pointer items-center justify-center rounded-full border-[1.5px] transition-colors ${
         next
-          ? "border-[#0c0c0d] bg-[#0c0c0d] hover:border-[#c79a4b] hover:bg-[#c79a4b]"
+          ? "border-[#0c0c0d] bg-[#0c0c0d] hover:border-[#eec449] hover:bg-[#eec449]"
           : "border-[#d7d6d9] bg-white hover:border-[#0c0c0d]"
       }`}
     >

@@ -42,7 +42,7 @@ export function CartDrawer() {
             type="button"
             aria-label="Close bag"
             onClick={close}
-            className="flex h-9 w-9 cursor-pointer items-center justify-center text-[#0c0c0d] transition-colors hover:text-[#c79a4b]"
+            className="flex h-9 w-9 cursor-pointer items-center justify-center text-[#0c0c0d] transition-colors hover:text-[#eec449]"
           >
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
               <line x1="6" y1="6" x2="18" y2="18" />
@@ -62,7 +62,7 @@ export function CartDrawer() {
             <Link
               href="/collections/all"
               onClick={close}
-              className="rounded-none bg-[#0c0c0d] px-8 py-4 text-[13px] font-semibold text-white no-underline transition-colors hover:bg-[#c79a4b] hover:text-[#0c0c0d]"
+              className="rounded-none bg-[#0c0c0d] px-8 py-4 text-[13px] font-semibold text-white no-underline transition-colors hover:bg-[#eec449] hover:text-[#0c0c0d]"
             >
               Continue Shopping
             </Link>
@@ -79,21 +79,21 @@ export function CartDrawer() {
                     from free standard shipping.
                   </>
                 ) : (
-                  <span className="font-semibold text-[#c79a4b]">
+                  <span className="font-semibold text-[#eec449]">
                     You&apos;ve unlocked free standard shipping.
                   </span>
                 )}
               </p>
               <div className="h-1.5 w-full overflow-hidden rounded-full bg-[#eeedef]">
                 <div
-                  className="h-full rounded-full bg-[#c79a4b] transition-[width] duration-500"
+                  className="h-full rounded-full bg-[#eec449] transition-[width] duration-500"
                   style={{ width: `${progress}%` }}
                 />
               </div>
             </div>
 
             {lines.some((l) => l.backorder) && (
-              <div className="border-b border-[#f0eff1] bg-[#c79a4b]/10 px-6 py-2.5 text-[12px] leading-snug text-[#0c0c0d]">
+              <div className="border-b border-[#f0eff1] bg-[#eec449]/10 px-6 py-2.5 text-[12px] leading-snug text-[#0c0c0d]">
                 Some items are on <span className="font-semibold">backorder</span>{" "}
                 and ship separately when back in stock.
               </div>
@@ -117,7 +117,7 @@ export function CartDrawer() {
                       <Link
                         href={`/products/${l.slug}`}
                         onClick={close}
-                        className="text-[14px] font-bold text-[#0c0c0d] no-underline hover:text-[#c79a4b]"
+                        className="text-[14px] font-bold text-[#0c0c0d] no-underline hover:text-[#eec449]"
                       >
                         {l.name}
                       </Link>
@@ -139,7 +139,7 @@ export function CartDrawer() {
                     </div>
                     {l.backorder && (
                       <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1">
-                        <span className="bg-[#c79a4b]/15 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-[#9a7322]">
+                        <span className="bg-[#eec449]/15 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-[#9a7322]">
                           Backorder
                         </span>
                         <span className="text-[11px] text-[#8a8a8e]">
@@ -154,7 +154,7 @@ export function CartDrawer() {
                           type="button"
                           aria-label="Decrease quantity"
                           onClick={() => setQty(l.id, l.qty - 1)}
-                          className="flex h-8 w-8 cursor-pointer items-center justify-center text-[16px] leading-none hover:text-[#c79a4b]"
+                          className="flex h-8 w-8 cursor-pointer items-center justify-center text-[16px] leading-none hover:text-[#eec449]"
                         >
                           −
                         </button>
@@ -163,7 +163,7 @@ export function CartDrawer() {
                           type="button"
                           aria-label="Increase quantity"
                           onClick={() => setQty(l.id, l.qty + 1)}
-                          className="flex h-8 w-8 cursor-pointer items-center justify-center text-[16px] leading-none hover:text-[#c79a4b]"
+                          className="flex h-8 w-8 cursor-pointer items-center justify-center text-[16px] leading-none hover:text-[#eec449]"
                         >
                           +
                         </button>
@@ -189,7 +189,7 @@ export function CartDrawer() {
               <Link
                 href="/checkout"
                 onClick={close}
-                className="flex w-full items-center justify-center rounded-none bg-[#0c0c0d] px-5 py-[18px] text-[14px] font-semibold uppercase tracking-[0.12em] text-white no-underline transition-colors hover:bg-[#c79a4b] hover:text-[#0c0c0d]"
+                className="flex w-full items-center justify-center rounded-none bg-[#0c0c0d] px-5 py-[18px] text-[14px] font-semibold uppercase tracking-[0.12em] text-white no-underline transition-colors hover:bg-[#eec449] hover:text-[#0c0c0d]"
               >
                 Checkout
               </Link>

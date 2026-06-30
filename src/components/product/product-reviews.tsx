@@ -102,7 +102,7 @@ function Stars({ value, size = 16 }: { value: number; size?: number }) {
                 className="absolute left-0 top-0 overflow-hidden"
                 style={{ width: `${fill * 100}%`, height: size }}
               >
-                <StarIcon size={size} color="#c79a4b" />
+                <StarIcon size={size} color="#eec449" />
               </span>
             )}
           </span>
@@ -251,7 +251,7 @@ export function ProductReviews({
                   onClick={() => setStars(i + 1)}
                   className="cursor-pointer p-0.5"
                 >
-                  <StarIcon size={26} color={i < stars ? "#c79a4b" : "#d7d6d9"} />
+                  <StarIcon size={26} color={i < stars ? "#eec449" : "#d7d6d9"} />
                 </button>
               ))}
             </div>

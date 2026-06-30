@@ -126,7 +126,7 @@ export function PurchasePanel({ product }: { product: Product }) {
             </div>
             <Link
               href="/account#size-guide"
-              className="flex items-center gap-1.5 text-[13px] font-medium text-[#0c0c0d] no-underline hover:text-[#c79a4b]"
+              className="flex items-center gap-1.5 text-[13px] font-medium text-[#0c0c0d] no-underline hover:text-[#eec449]"
             >
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
                 <path d="M3 7l4-4 14 14-4 4z" />
@@ -157,7 +157,7 @@ export function PurchasePanel({ product }: { product: Product }) {
                   {oos && (
                     <span
                       aria-hidden
-                      className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-[#c79a4b]"
+                      className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-[#eec449]"
                     />
                   )}
                 </button>
@@ -169,13 +169,13 @@ export function PurchasePanel({ product }: { product: Product }) {
 
       {/* Backorder notice */}
       {backorder && (
-        <div className="mt-6 flex items-start gap-2.5 border border-[#c79a4b]/45 bg-[#c79a4b]/10 px-3.5 py-3 text-[13px] leading-snug text-[#0c0c0d]">
+        <div className="mt-6 flex items-start gap-2.5 border border-[#eec449]/45 bg-[#eec449]/10 px-3.5 py-3 text-[13px] leading-snug text-[#0c0c0d]">
           <svg
             width="17"
             height="17"
             viewBox="0 0 24 24"
             fill="none"
-            stroke="#c79a4b"
+            stroke="#eec449"
             strokeWidth={1.9}
             className="mt-px shrink-0"
           >
@@ -198,8 +198,8 @@ export function PurchasePanel({ product }: { product: Product }) {
           onClick={addToCart}
           className={`flex flex-1 cursor-pointer items-center justify-center gap-2.5 rounded-none px-6 py-[18px] text-[15px] font-semibold transition-colors ${
             backorder
-              ? "bg-[#c79a4b] text-[#0c0c0d] hover:bg-[#b3863a] hover:text-white"
-              : "bg-[#0c0c0d] text-white hover:bg-[#c79a4b] hover:text-[#0c0c0d]"
+              ? "bg-[#eec449] text-[#0c0c0d] hover:bg-[#b3863a] hover:text-white"
+              : "bg-[#0c0c0d] text-white hover:bg-[#eec449] hover:text-[#0c0c0d]"
           }`}
         >
           {backorder ? (
@@ -230,8 +230,8 @@ export function PurchasePanel({ product }: { product: Product }) {
         >
           <svg
             width="22" height="22" viewBox="0 0 24 24"
-            fill={wished ? "#c79a4b" : "none"}
-            stroke={wished ? "#c79a4b" : "#0c0c0d"}
+            fill={wished ? "#eec449" : "none"}
+            stroke={wished ? "#eec449" : "#0c0c0d"}
             strokeWidth={1.8}
           >
             <path d="M12 21s-7-4.5-9.5-9A5 5 0 0 1 12 6a5 5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9z" />

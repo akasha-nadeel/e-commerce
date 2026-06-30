@@ -1,46 +1,32 @@
+import Image from "next/image";
 import Link from "next/link";
-import { Logo } from "./logo";
 import { NewsletterForm } from "./newsletter-form";
 
 type FooterLink = { label: string; href: string };
 
-// Three-column information architecture mirroring the apparel-footer convention:
-// site/info, shop-by-department, and a curated product shortlist. Every href
-// resolves to a real route (collections, products, account anchors, mailto).
-const MAIN_MENU: FooterLink[] = [
-  { label: "Home", href: "/" },
-  { label: "Shop All", href: "/collections/all" },
-  { label: "About", href: "/about" },
-  { label: "Track Order", href: "/account#track" },
-  { label: "Contact", href: "mailto:hello@goldenegal.com" },
-];
-
-const QUICK_MENU: FooterLink[] = [
+// Shop-by-department + site information, the two link columns in the footer.
+// Every href resolves to a real route (collections, account anchors, mailto).
+const SHOP: FooterLink[] = [
   { label: "New In", href: "/collections/new" },
   { label: "Men", href: "/collections/men" },
   { label: "Women", href: "/collections/women" },
   { label: "Accessories", href: "/collections/accessories" },
+  { label: "Shop All", href: "/collections/all" },
+];
+
+const INFORMATION: FooterLink[] = [
+  { label: "About", href: "/about" },
+  { label: "Track Order", href: "/account#track" },
+  { label: "Returns & Exchanges", href: "/account#returns" },
+  { label: "Size Guide", href: "/account#size-guide" },
   { label: "Search", href: "/search" },
-];
-
-const TOP_COLLECTION: FooterLink[] = [
-  { label: "Oversized Tees", href: "/products/essential-oversized-tee" },
-  { label: "Varsity Jerseys", href: "/products/varsity-box-fit-jersey" },
-  { label: "Crew Tees", href: "/products/heavyweight-crew-tee" },
-  { label: "Logo Caps", href: "/products/logo-cap" },
-  { label: "Tote Bags", href: "/products/essence-tote-bag" },
-];
-
-// Placeholder contact + social handles — swap for the brand's real details.
-const PHONES: FooterLink[] = [
-  { label: "+94 11 234 5678 (Online Orders)", href: "tel:+94112345678" },
-  { label: "+94 77 123 4567 (Flagship Store)", href: "tel:+94771234567" },
+  { label: "Contact Us", href: "mailto:hello@goldenegal.com" },
 ];
 
 const SOCIALS: { label: string; href: string; icon: React.ReactNode }[] = [
-  { label: "Facebook", href: "https://facebook.com/goldenegal", icon: <FacebookIcon /> },
   { label: "Instagram", href: "https://instagram.com/goldenegal", icon: <InstagramIcon /> },
   { label: "YouTube", href: "https://youtube.com/@goldenegal", icon: <YouTubeIcon /> },
+  { label: "Facebook", href: "https://facebook.com/goldenegal", icon: <FacebookIcon /> },
   { label: "TikTok", href: "https://tiktok.com/@goldenegal", icon: <TikTokIcon /> },
 ];
 
@@ -48,78 +34,59 @@ export function SiteFooter() {
   return (
     <footer className="bg-[#0c0c0d] text-white">
       <div className="mx-auto max-w-[1400px] px-5 pb-10 pt-16 sm:px-8 lg:pt-20">
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.35fr_1px_1.9fr] lg:gap-0">
-          {/* Brand block */}
-          <div className="lg:pr-16">
-            <Logo variant="onDark" showText markHeight={44} size={16} />
+        {/* Oversized brand logo */}
+        <Image
+          src="/golden-eagle-logo-hd.png"
+          alt="Golden Eagle"
+          width={2806}
+          height={947}
+          quality={95}
+          sizes="(max-width: 1400px) 100vw, 1400px"
+          className="h-auto w-full select-none"
+        />
 
-            <div className="mt-7">
-              <NewsletterForm />
-            </div>
-
-            <p className="mt-7 max-w-[440px] text-[14px] leading-[1.7] text-white/55">
-              Explore the craft and strength of Golden Egal. Our premium tees,
-              jerseys and athleisure blend elegance with performance — engineered
-              for world-class movement and built from the ground up. Be better
-              everyday.
+        {/* Sign up · Shop · Information */}
+        <div className="mt-12 flex flex-col gap-12 lg:mt-16 lg:flex-row lg:gap-20 xl:gap-28">
+          <div className="lg:w-[36%]">
+            <h2 className="text-[22px] font-bold italic">Sign up now</h2>
+            <p className="mt-2 text-[15px] text-white/55">
+              Notifications you won&apos;t want to ignore.
             </p>
-
             <div className="mt-8">
-              <p className="text-[14px] font-semibold text-white">Contact Us :</p>
-              <ul className="mt-4 flex flex-col gap-3">
-                {PHONES.map((p) => (
-                  <li key={p.href} className="flex items-start gap-2.5">
-                    <span
-                      aria-hidden
-                      className="mt-[7px] h-[3px] w-[3px] shrink-0 rounded-full bg-white/45"
-                    />
-                    <a
-                      href={p.href}
-                      className="text-[14px] text-white/60 no-underline transition-colors hover:text-[#c79a4b]"
-                    >
-                      {p.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="mt-9 flex items-center gap-6">
-              {SOCIALS.map((s) => (
-                <a
-                  key={s.label}
-                  href={s.href}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  aria-label={s.label}
-                  className="text-white/80 transition-colors hover:text-[#c79a4b] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#c79a4b]"
-                >
-                  {s.icon}
-                </a>
-              ))}
+              <NewsletterForm />
             </div>
           </div>
 
-          {/* Vertical divider (desktop) */}
-          <div className="hidden bg-white/10 lg:block" aria-hidden />
-
-          {/* Menu columns */}
-          <div className="grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-3 lg:pl-16">
-            <FooterCol title="Main Menu" links={MAIN_MENU} />
-            <FooterCol title="Quick Menu" links={QUICK_MENU} />
-            <FooterCol title="Top Collection" links={TOP_COLLECTION} />
+          <div className="flex gap-16 sm:gap-24 lg:gap-28">
+            <FooterCol title="Shop" links={SHOP} />
+            <FooterCol title="Information" links={INFORMATION} />
           </div>
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-14 flex flex-col gap-3 border-t border-white/[0.12] pt-6 text-[13px] text-white/45 sm:flex-row sm:items-center sm:justify-between">
-          <p>
-            © 2026 Golden Egal.{" "}
-            <span className="underline decoration-white/30 underline-offset-2">
-              All Rights Reserved
-            </span>
+        <div className="mt-16 grid grid-cols-1 items-center gap-6 border-t border-white/[0.12] pt-7 sm:grid-cols-3 lg:mt-24">
+          <div className="flex justify-center gap-5 sm:justify-start">
+            {SOCIALS.map((s) => (
+              <a
+                key={s.label}
+                href={s.href}
+                target="_blank"
+                rel="noreferrer noopener"
+                aria-label={s.label}
+                className="text-white/70 transition-colors hover:text-[#eec449] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#eec449]"
+              >
+                {s.icon}
+              </a>
+            ))}
+          </div>
+
+          <p className="text-center text-[15px] font-bold italic tracking-[0.04em] text-white">
+            BE BETTER EVERYDAY
           </p>
-          <p className="tracking-[0.06em]">Made in Sri Lanka · Prices in LKR</p>
+
+          <p className="text-center text-[13px] text-white/45 sm:text-right">
+            © 2026 Golden Egal — Made in Sri Lanka
+          </p>
         </div>
       </div>
     </footer>
@@ -129,14 +96,12 @@ export function SiteFooter() {
 function FooterCol({ title, links }: { title: string; links: FooterLink[] }) {
   return (
     <nav aria-label={title}>
-      <h3 className="text-[15px] font-bold uppercase tracking-[0.08em] text-white">
-        {title}
-      </h3>
+      <h3 className="text-[15px] font-semibold text-white/45">{title}</h3>
       <ul className="mt-6 flex flex-col gap-[14px]">
         {links.map((l) => {
           const external = /^(https?:|mailto:|tel:)/.test(l.href);
           const cls =
-            "text-[13.5px] uppercase tracking-[0.05em] text-white/60 no-underline transition-colors hover:text-[#c79a4b]";
+            "text-[15px] text-white/85 no-underline transition-colors hover:text-[#eec449]";
           return (
             <li key={l.label}>
               {external ? (

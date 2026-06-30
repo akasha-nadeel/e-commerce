@@ -102,7 +102,7 @@ export function SearchClient({ products }: { products: Product[] }) {
           </p>
           <Link
             href="/collections/all"
-            className="mt-2 rounded-none bg-[#0c0c0d] px-8 py-3.5 text-[13px] font-semibold text-white no-underline transition-colors hover:bg-[#c79a4b] hover:text-[#0c0c0d]"
+            className="mt-2 rounded-none bg-[#0c0c0d] px-8 py-3.5 text-[13px] font-semibold text-white no-underline transition-colors hover:bg-[#eec449] hover:text-[#0c0c0d]"
           >
             Browse All
           </Link>

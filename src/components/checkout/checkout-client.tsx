@@ -129,7 +129,7 @@ export function CheckoutClient() {
           </p>
           <Link
             href="/collections/all"
-            className="mt-7 inline-block rounded-none bg-[#0c0c0d] px-9 py-4 text-[13px] font-semibold text-white no-underline transition-colors hover:bg-[#c79a4b] hover:text-[#0c0c0d]"
+            className="mt-7 inline-block rounded-none bg-[#0c0c0d] px-9 py-4 text-[13px] font-semibold text-white no-underline transition-colors hover:bg-[#eec449] hover:text-[#0c0c0d]"
           >
             Continue Shopping
           </Link>
@@ -144,7 +144,7 @@ export function CheckoutClient() {
     return (
       <Shell>
         <div className="mx-auto max-w-[560px] px-5 py-24 text-center">
-          <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[#c79a4b]">
+          <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[#eec449]">
             <CheckIcon />
           </div>
           <h1 className="m-0 text-[clamp(28px,4vw,44px)] font-semibold">
@@ -157,7 +157,7 @@ export function CheckoutClient() {
           </p>
 
           {backorderLines.length > 0 && (
-            <div className="mt-8 border border-[#c79a4b]/45 bg-[#c79a4b]/10 p-5 text-left">
+            <div className="mt-8 border border-[#eec449]/45 bg-[#eec449]/10 p-5 text-left">
               <div className="flex items-center gap-2 text-[13px] font-bold uppercase tracking-[0.08em] text-[#9a7322]">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                   <circle cx="12" cy="12" r="9" />
@@ -190,7 +190,7 @@ export function CheckoutClient() {
 
           <Link
             href="/"
-            className="mt-7 inline-block rounded-none bg-[#0c0c0d] px-9 py-4 text-[13px] font-semibold text-white no-underline transition-colors hover:bg-[#c79a4b] hover:text-[#0c0c0d]"
+            className="mt-7 inline-block rounded-none bg-[#0c0c0d] px-9 py-4 text-[13px] font-semibold text-white no-underline transition-colors hover:bg-[#eec449] hover:text-[#0c0c0d]"
           >
             Back To Home
           </Link>
@@ -234,7 +234,7 @@ export function CheckoutClient() {
               </span>
               <Link
                 href="/login"
-                className="text-[13px] font-semibold text-[#c79a4b] no-underline hover:underline"
+                className="text-[13px] font-semibold text-[#eec449] no-underline hover:underline"
               >
                 Log in
               </Link>
@@ -373,7 +373,7 @@ export function CheckoutClient() {
           <button
             type="button"
             onClick={() => setPlaced(true)}
-            className="mt-2 flex w-full items-center justify-center gap-2.5 rounded-none bg-[#0c0c0d] px-5 py-[19px] text-[15px] font-semibold text-white transition-colors hover:bg-[#c79a4b] hover:text-[#0c0c0d]"
+            className="mt-2 flex w-full items-center justify-center gap-2.5 rounded-none bg-[#0c0c0d] px-5 py-[19px] text-[15px] font-semibold text-white transition-colors hover:bg-[#eec449] hover:text-[#0c0c0d]"
           >
             <LockIcon />
             {effectivePayment === "cod"
@@ -480,7 +480,7 @@ function OrderSummary({
                 {l.size !== "OS" ? ` · ${l.size}` : ""}
               </span>
               {l.backorder && (
-                <span className="mt-1 w-fit bg-[#c79a4b]/15 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-[#9a7322]">
+                <span className="mt-1 w-fit bg-[#eec449]/15 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-[#9a7322]">
                   Backorder
                 </span>
               )}
@@ -495,7 +495,7 @@ function OrderSummary({
       {/* Discount code */}
       <div className="mt-5 border-t border-[#e7e6e9] pt-5">
         {applied ? (
-          <div className="flex items-center justify-between rounded-lg border border-dashed border-[#c79a4b] bg-[#c79a4b]/10 px-3 py-2.5">
+          <div className="flex items-center justify-between rounded-lg border border-dashed border-[#eec449] bg-[#eec449]/10 px-3 py-2.5">
             <span className="flex items-center gap-2 text-[13px] font-semibold text-[#0c0c0d]">
               <TagIcon />
               {applied}
@@ -788,7 +788,7 @@ function Row({
   return (
     <div className="flex items-center justify-between">
       <span className="text-[#6a6a6e]">{label}</span>
-      <span className={`font-semibold ${accent ? "text-[#c79a4b]" : ""}`}>
+      <span className={`font-semibold ${accent ? "text-[#eec449]" : ""}`}>
         {value}
       </span>
     </div>
@@ -902,14 +902,14 @@ function TagIcon() {
       height="15"
       viewBox="0 0 24 24"
       fill="none"
-      stroke="#c79a4b"
+      stroke="#eec449"
       strokeWidth={2}
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
     >
       <path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0l-7.2-7.2A2 2 0 0 1 3 12V4a1 1 0 0 1 1-1h8a2 2 0 0 1 1.4.6l7.2 7.2a2 2 0 0 1 0 2.6Z" />
-      <circle cx="7.5" cy="7.5" r="1.5" fill="#c79a4b" />
+      <circle cx="7.5" cy="7.5" r="1.5" fill="#eec449" />
     </svg>
   );
 }

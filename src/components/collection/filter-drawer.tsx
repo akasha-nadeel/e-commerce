@@ -74,7 +74,7 @@ export function FilterDrawer({
             type="button"
             aria-label="Close filters"
             onClick={onClose}
-            className="flex h-9 w-9 cursor-pointer items-center justify-center text-[#0c0c0d] transition-colors hover:text-[#c79a4b]"
+            className="flex h-9 w-9 cursor-pointer items-center justify-center text-[#0c0c0d] transition-colors hover:text-[#eec449]"
           >
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
               <line x1="6" y1="6" x2="18" y2="18" />
@@ -201,7 +201,7 @@ export function FilterDrawer({
           <button
             type="button"
             onClick={onClose}
-            className="flex-[1.4] cursor-pointer rounded-none bg-[#0c0c0d] py-3.5 text-[13px] font-semibold uppercase tracking-[0.12em] text-white transition-colors hover:bg-[#c79a4b] hover:text-[#0c0c0d]"
+            className="flex-[1.4] cursor-pointer rounded-none bg-[#0c0c0d] py-3.5 text-[13px] font-semibold uppercase tracking-[0.12em] text-white transition-colors hover:bg-[#eec449] hover:text-[#0c0c0d]"
           >
             Show {resultCount} {resultCount === 1 ? "Result" : "Results"}
           </button>

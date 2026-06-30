@@ -20,7 +20,7 @@ export default function AboutPage() {
         }}
       >
         <div className="relative mx-auto w-full max-w-[1400px] px-5 pb-16 sm:px-8">
-          <div className="mb-3.5 text-[12px] font-semibold uppercase tracking-[0.3em] text-[#c79a4b]">
+          <div className="mb-3.5 text-[12px] font-semibold uppercase tracking-[0.3em] text-[#eec449]">
             Our Story
           </div>
           <h1 className="display-tight m-0 max-w-[14ch] text-[clamp(40px,7vw,104px)] font-semibold leading-[0.92] text-white">
@@ -74,7 +74,7 @@ export default function AboutPage() {
         </p>
         <Link
           href="/collections/all"
-          className="mt-7 inline-block rounded-none bg-[#0c0c0d] px-10 py-[18px] text-[13px] font-semibold text-white no-underline transition-colors hover:bg-[#c79a4b] hover:text-[#0c0c0d]"
+          className="mt-7 inline-block rounded-none bg-[#0c0c0d] px-10 py-[18px] text-[13px] font-semibold text-white no-underline transition-colors hover:bg-[#eec449] hover:text-[#0c0c0d]"
         >
           Shop All
         </Link>

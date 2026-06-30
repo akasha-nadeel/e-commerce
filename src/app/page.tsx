@@ -31,9 +31,6 @@ export default function HomePage() {
 
         <div className="relative mx-auto w-full max-w-[1400px] px-5 pb-14 sm:px-8 lg:pb-0">
           <div className="max-w-[540px]">
-            <p className="mb-4 text-[12px] font-semibold uppercase tracking-[0.3em] text-white/60">
-              New Collection
-            </p>
             <h1 className="display-tight m-0 text-[clamp(44px,7vw,104px)] font-semibold leading-[0.95] text-white">
               Be Better
               <br />
@@ -45,7 +42,7 @@ export default function HomePage() {
             <div className="flex flex-wrap gap-3.5">
               <Link
                 href="/collections/men"
-                className="rounded-none bg-[#c79a4b] px-9 py-4 text-[13px] font-semibold text-[#0c0c0d] no-underline transition-colors hover:bg-[#b3863a] hover:text-[#0c0c0d]"
+                className="rounded-none bg-[#eec449] px-9 py-4 text-[13px] font-semibold text-[#0c0c0d] no-underline transition-colors hover:bg-[#b3863a] hover:text-[#0c0c0d]"
               >
                 Shop Men
               </Link>
@@ -74,6 +71,36 @@ export default function HomePage() {
           ))}
         </CarouselRow>
       </div>
+
+      {/* ---------------------------------------------------------------- */}
+      {/* Shop by department — Women / Men                                 */}
+      {/* ---------------------------------------------------------------- */}
+      <section className="mx-auto max-w-[1400px] px-5 pb-4 pt-16 sm:px-8">
+        <div className="mb-[26px]">
+          <div className="mb-1.5 text-[12px] font-bold uppercase tracking-[0.24em] text-[#8a8a8e]">
+            Find Your Fit
+          </div>
+          <h2 className="m-0 text-[clamp(26px,4vw,46px)] font-semibold tracking-[-0.01em]">
+            Shop By Department
+          </h2>
+        </div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <DepartmentPanel
+            eyebrow="Women's Collection"
+            title="Shop Women"
+            caption="Tees, tanks and athleisure designed to move with you."
+            href="/collections/women"
+            bg="radial-gradient(130% 130% at 35% 20%,#3a3030,#140f11)"
+          />
+          <DepartmentPanel
+            eyebrow="Men's Collection"
+            title="Shop Men"
+            caption="Heavyweight tees and jerseys, built from the ground up."
+            href="/collections/men"
+            bg="radial-gradient(130% 130% at 60% 20%,#24272d,#0c0d0f)"
+          />
+        </div>
+      </section>
 
       {/* ---------------------------------------------------------------- */}
       {/* First-order discount banner                                      */}
@@ -189,9 +216,6 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-r from-white/85 via-white/40 to-transparent lg:from-white/35 lg:via-white/5 lg:to-transparent" />
         <div className="relative w-full px-8 py-16 sm:px-12">
           <div className="max-w-[480px]">
-            <div className="mb-3.5 text-[12px] font-semibold uppercase tracking-[0.3em] text-[#0c0c0d]">
-              New Drop
-            </div>
             <h2 className="display-tight m-0 text-[clamp(34px,5vw,64px)] font-semibold leading-[1.02] text-[#0c0c0d]">
               <span className="block whitespace-nowrap">Built From</span>
               <span className="block whitespace-nowrap">The Ground Up</span>
@@ -258,6 +282,54 @@ function CategoryTile({
         style={{ color: dark ? "#fff" : "#0c0c0d" }}
       >
         {name}
+      </span>
+    </Link>
+  );
+}
+
+function DepartmentPanel({
+  eyebrow,
+  title,
+  caption,
+  bg,
+  href,
+}: {
+  eyebrow: string;
+  title: string;
+  caption: string;
+  bg: string;
+  href: string;
+}) {
+  return (
+    <Link
+      href={href}
+      className="tile-texture-dark group relative flex min-h-[360px] flex-col justify-end overflow-hidden p-7 no-underline sm:min-h-[440px] sm:p-9 lg:min-h-[540px]"
+      style={{ background: bg }}
+    >
+      <span className="absolute left-7 top-6 font-mono text-[10px] uppercase tracking-[0.18em] text-white/40 sm:left-9 sm:top-7">
+        {eyebrow}
+      </span>
+      <h3 className="m-0 text-[clamp(30px,3.6vw,52px)] font-semibold leading-none text-white">
+        {title}
+      </h3>
+      <p className="mt-3.5 max-w-[300px] text-[14px] leading-relaxed text-white/65">
+        {caption}
+      </p>
+      <span className="mt-6 inline-flex w-fit items-center gap-2 bg-white px-6 py-3 text-[13px] font-semibold text-[#0c0c0d] transition-colors group-hover:bg-[#eec449]">
+        Shop Now
+        <svg
+          width="15"
+          height="15"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={2.2}
+          aria-hidden
+          className="transition-transform duration-200 group-hover:translate-x-1"
+        >
+          <path d="M5 12h14" />
+          <path d="M13 6l6 6-6 6" />
+        </svg>
       </span>
     </Link>
   );
