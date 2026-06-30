@@ -90,6 +90,7 @@ export default function HomePage() {
             title="Shop Women"
             href="/collections/women"
             image="/dept-women.jpg"
+            imageClassName="object-cover object-center scale-[1.3] origin-top-left sm:scale-100 sm:origin-center"
             align="top"
             bg="#a374cf"
             buttonHoverOnly
@@ -300,6 +301,7 @@ function DepartmentPanel({
   bg,
   href,
   image,
+  imageClassName = "object-cover object-center",
   align = "bottom",
   center = false,
   buttonHoverOnly = false,
@@ -311,6 +313,7 @@ function DepartmentPanel({
   bg: string;
   href: string;
   image?: string;
+  imageClassName?: string;
   align?: "top" | "bottom";
   center?: boolean;
   buttonHoverOnly?: boolean;
@@ -336,7 +339,7 @@ function DepartmentPanel({
           alt=""
           fill
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 700px"
-          className="object-cover object-center"
+          className={imageClassName}
         />
       )}
       {/* Eyebrow pins to the top for bottom-aligned cards; for top-aligned cards
@@ -365,7 +368,7 @@ function DepartmentPanel({
           </p>
         )}
         <span
-          className={`mt-6 inline-flex w-fit items-center gap-2 px-6 py-3 text-[13px] font-semibold transition-colors ${
+          className={`mt-6 inline-flex w-fit items-center gap-1.5 px-4 py-2.5 text-[12px] font-semibold transition-colors sm:gap-2 sm:px-6 sm:py-3 sm:text-[13px] ${
             buttonHoverOnly ? "group/btn" : ""
           } ${ctaClassName}`}
         >
