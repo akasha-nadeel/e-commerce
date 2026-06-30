@@ -89,10 +89,10 @@ export default function HomePage() {
             eyebrow="Women's Collection"
             title="Shop Women"
             href="/collections/women"
-            image="/dept-women.jpg"
-            imageClassName="object-cover object-center scale-[1.3] origin-top-left sm:scale-100 sm:origin-center"
+            image="/dept-women-wide-v2.jpg"
+            imageClassName="object-cover object-center origin-bottom scale-[1.2] translate-x-[15%] translate-y-[21%] sm:scale-[1.3] sm:translate-x-[12%] sm:translate-y-[21%]"
             align="top"
-            bg="#a374cf"
+            bg="#875ea0"
             buttonHoverOnly
             ctaClassName="bg-[#4f2c7c] text-white hover:bg-[#3d2161]"
           />
@@ -100,7 +100,8 @@ export default function HomePage() {
             eyebrow="Men's Collection"
             title="Shop Men"
             href="/collections/men"
-            image="/dept-men-v2.png"
+            image="/dept-men-wide.png"
+            imageClassName="object-cover object-center translate-x-[8%] sm:translate-x-0"
             align="top"
             bg="#0c0d0f"
             buttonHoverOnly
@@ -328,7 +329,7 @@ function DepartmentPanel({
   return (
     <Link
       href={href}
-      className={`tile-texture-dark group relative flex min-h-[360px] flex-col overflow-hidden p-7 no-underline sm:min-h-[440px] sm:p-9 lg:min-h-[540px] ${
+      className={`tile-texture-dark group relative flex aspect-[4/3] flex-col overflow-hidden p-7 no-underline sm:p-9 ${
         top ? "justify-start" : "justify-end"
       }`}
       style={{ background: bg }}

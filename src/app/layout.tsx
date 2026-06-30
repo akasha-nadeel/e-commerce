@@ -61,7 +61,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} h-full`}>
-      <body className="min-h-full flex flex-col bg-white">
+      <body className="min-h-full flex flex-col overflow-x-clip bg-white">
         <CartProvider>
           <ChromeGate>
             <SiteHeader />
