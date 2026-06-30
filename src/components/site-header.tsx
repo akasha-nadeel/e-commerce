@@ -135,7 +135,7 @@ export function SiteHeader() {
               <line x1="16.5" y1="16.5" x2="21" y2="21" />
             </svg>
           </Link>
-          <Link href="/login" aria-label="Account" className={`hidden sm:block ${iconCls}`}>
+          <Link href="/login" aria-label="Account" className={iconCls}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
               <circle cx="12" cy="8" r="4" />
               <path d="M5 21c0-4 3.5-6 7-6s7 2 7 6" />

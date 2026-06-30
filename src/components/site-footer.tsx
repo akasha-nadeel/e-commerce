@@ -40,7 +40,7 @@ export function SiteFooter() {
           alt="Golden Eagle"
           width={2806}
           height={947}
-          quality={95}
+          quality={100}
           sizes="(max-width: 1400px) 100vw, 1400px"
           className="h-auto w-full select-none"
         />

@@ -60,7 +60,7 @@ export function CarouselRow({
   );
 }
 
-function ArrowButton({
+export function ArrowButton({
   dir,
   onClick,
 }: {

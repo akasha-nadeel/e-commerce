@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { CarouselRow } from "@/components/carousel-row";
+import { TileCarousel } from "@/components/tile-carousel";
 import { ProductCard } from "@/components/product-card";
 import { ActivitySwitch } from "@/components/activity-switch";
 import { LogoMarquee } from "@/components/logo-marquee";
@@ -23,7 +24,7 @@ export default function HomePage() {
           fill
           priority
           sizes="100vw"
-          className="object-cover object-[62%_center] lg:object-center"
+          className="object-cover object-right lg:object-center"
         />
         {/* Dark scrim for text legibility (stronger at the bottom on mobile, on
             the left on desktop where the headline sits) */}
@@ -118,45 +119,55 @@ export default function HomePage() {
       {/* ---------------------------------------------------------------- */}
       {/* Shop by category                                                 */}
       {/* ---------------------------------------------------------------- */}
-      <section className="mx-auto max-w-[1400px] px-5 pb-4 pt-6 sm:px-8">
-        <div className="mb-[26px] flex items-end justify-between gap-4">
-          <div>
-            <div className="mb-1.5 text-[12px] font-bold uppercase tracking-[0.24em] text-[#8a8a8e]">
-              Build Your Style
-            </div>
-            <h2 className="m-0 text-[clamp(26px,4vw,46px)] font-semibold tracking-[-0.01em]">
-              Shop By Category
-            </h2>
-          </div>
-          <Button
-            href="/collections/all"
-            size="sm"
-            arrow
-            className="hidden shrink-0 sm:inline-flex"
-          >
+      <TileCarousel
+        eyebrow="Build Your Style"
+        title="Shop By Category"
+        control={
+          <Button href="/collections/all" size="sm" arrow>
             View All
           </Button>
-        </div>
-        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        }
+      >
+        <div className="w-[60%] shrink-0 snap-start sm:w-[42%] lg:w-[23.5%]">
           <CategoryTile
             name="T-Shirts"
-            caption="CATEGORY · TEES"
+            caption="Everyday Essentials"
             href="/collections/men"
             dark
+            image="/category-tshirt-v2.png"
+            imageClassName="object-cover object-bottom origin-bottom scale-[1.3]"
+            nameTop
+            nameColor="#fcb710"
             bg="radial-gradient(120% 120% at 40% 30%,#2a2a2e,#101012)"
           />
+        </div>
+        <div className="w-[60%] shrink-0 snap-start sm:w-[42%] lg:w-[23.5%]">
           <CategoryTile
-            name="Oversized"
-            caption="CATEGORY · OVERSIZED"
+            name="Polo"
+            caption="Smart Casual"
             href="/collections/all"
-            bg="linear-gradient(150deg,#edecef,#dcdbdf)"
+            dark
+            image="/category-polo.jpg"
+            imageClassName="object-cover object-top scale-[1.35]"
+            nameTop
+            nameColor="#fcb710"
+            bg="#1b3f3b"
           />
+        </div>
+        <div className="w-[60%] shrink-0 snap-start sm:w-[42%] lg:w-[23.5%]">
           <CategoryTile
-            name="Jerseys"
-            caption="CATEGORY · JERSEYS"
+            name="Hoody"
+            caption="Cozy Layers"
             href="/collections/all"
-            bg="linear-gradient(150deg,#ece9e1,#dad6c9)"
+            dark
+            image="/category-hoody.png"
+            imageClassName="object-cover object-center"
+            nameTop
+            nameColor="#f97316"
+            bg="#2c2a2a"
           />
+        </div>
+        <div className="w-[60%] shrink-0 snap-start sm:w-[42%] lg:w-[23.5%]">
           <CategoryTile
             name="Tanks"
             caption="CATEGORY · TANKS"
@@ -165,36 +176,34 @@ export default function HomePage() {
             bg="radial-gradient(120% 120% at 60% 30%,#26262a,#0d0d0f)"
           />
         </div>
-      </section>
+      </TileCarousel>
 
       {/* ---------------------------------------------------------------- */}
       {/* Train in Golden Egal                                             */}
       {/* ---------------------------------------------------------------- */}
-      <section className="mx-auto max-w-[1400px] px-5 pb-6 pt-14 sm:px-8">
-        <div className="mb-[26px] flex items-center justify-between gap-4">
-          <h2 className="m-0 text-[clamp(26px,4vw,46px)] font-semibold tracking-[-0.01em]">
-            Train In Golden Egal
-          </h2>
-          <ActivitySwitch />
-        </div>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+      <TileCarousel title="Train In Golden Egal" control={<ActivitySwitch />}>
+        <div className="w-[78%] shrink-0 snap-start sm:w-[48%] lg:w-[32%]">
           <ActivityTile
             name="Running"
             href="/collections/all"
             bg="radial-gradient(120% 120% at 35% 25%,#33332f,#121210)"
           />
+        </div>
+        <div className="w-[78%] shrink-0 snap-start sm:w-[48%] lg:w-[32%]">
           <ActivityTile
             name="Rest Day"
             href="/collections/all"
             bg="radial-gradient(120% 120% at 60% 30%,#3a3128,#161210)"
           />
+        </div>
+        <div className="w-[78%] shrink-0 snap-start sm:w-[48%] lg:w-[32%]">
           <ActivityTile
             name="Studio"
             href="/collections/all"
             bg="radial-gradient(120% 120% at 45% 30%,#2f3338,#101315)"
           />
         </div>
-      </section>
+      </TileCarousel>
 
       {/* ---------------------------------------------------------------- */}
       {/* Accessories                                                      */}
@@ -211,30 +220,30 @@ export default function HomePage() {
       {/* Campaign banner — closing CTA above the footer                   */}
       {/* ---------------------------------------------------------------- */}
       <div className="mb-2 mt-12 px-5 sm:px-8">
-      <section className="relative mx-auto flex min-h-[58vh] max-w-[1280px] items-center overflow-hidden rounded-3xl bg-[#f4f4f5]">
+      <section className="relative mx-auto flex min-h-[58vh] max-w-[1280px] items-start overflow-hidden rounded-3xl bg-[#b4d0eb] lg:items-center">
         <Image
           src="/campaign-v2.png"
           alt="Golden Egal campaign — model in the graphic tee on a studio plinth"
           fill
+          quality={100}
           sizes="(max-width: 1280px) 100vw, 1280px"
-          className="object-cover object-[75%_0%]"
+          className="object-cover object-[75%_top] translate-y-[42%] lg:translate-y-0"
         />
-        {/* Left-anchored white scrim keeps the dark copy legible — strong on
-            mobile (where the model fills the frame), barely-there on desktop. */}
-        <div className="absolute inset-0 bg-gradient-to-r from-white/85 via-white/40 to-transparent lg:from-white/35 lg:via-white/5 lg:to-transparent" />
-        <div className="relative w-full px-8 py-16 sm:px-12">
-          <div className="max-w-[480px]">
+        {/* White scrim only on desktop, where the dark copy sits over the photo;
+            on mobile the copy sits up top over the empty sky, no overlay. */}
+        <div className="absolute inset-0 hidden bg-gradient-to-r from-white/35 via-white/5 to-transparent lg:block" />
+        <div className="relative w-full px-8 py-10 sm:px-12 lg:py-16">
+          <div className="mx-auto flex max-w-[480px] flex-col items-center text-center lg:mx-0 lg:items-start lg:text-left">
             <h2 className="display-tight m-0 text-[clamp(34px,5vw,64px)] font-semibold leading-[1.02] text-[#0c0c0d]">
               <span className="block whitespace-nowrap">Built From</span>
               <span className="block whitespace-nowrap">The Ground Up</span>
             </h2>
             <p className="mb-[26px] mt-[18px] max-w-[440px] text-[16px] text-[#0c0c0d]/75">
-              Heavyweight tees engineered for everyday wear. Built for comfort,
-              styled for every day.
+              Heavyweight everyday essentials.
             </p>
             <Link
               href="/collections/new"
-              className="inline-block rounded-none bg-[#0c0c0d] px-10 py-[17px] text-[13px] font-semibold text-white no-underline transition-colors hover:bg-white hover:text-[#0c0c0d]"
+              className="inline-block rounded-none bg-[#1d1da8] px-6 py-3 text-[12px] font-semibold text-white no-underline transition-colors hover:bg-[#15158c] lg:px-10 lg:py-[17px] lg:text-[13px]"
             >
               Shop Now
             </Link>
@@ -264,33 +273,69 @@ function CategoryTile({
   bg,
   href,
   dark = false,
+  image,
+  imageClassName = "object-cover object-center",
+  nameTop = false,
+  nameColor,
 }: {
   name: string;
   caption: string;
   bg: string;
   href: string;
   dark?: boolean;
+  image?: string;
+  imageClassName?: string;
+  nameTop?: boolean;
+  nameColor?: string;
 }) {
+  const captionColor = dark ? "rgba(255,255,255,0.32)" : "rgba(0,0,0,0.3)";
+  const resolvedNameColor = nameColor ?? (dark ? "#fff" : "#0c0c0d");
   return (
     <Link
       href={href}
-      className={`relative aspect-[3/4] overflow-hidden no-underline ${
+      className={`block aspect-[3/4] w-full overflow-hidden no-underline relative ${
         dark ? "tile-texture-dark" : "tile-texture-light"
       }`}
       style={{ background: bg }}
     >
-      <span
-        className="absolute left-5 top-4 z-10 font-mono text-[9.5px] tracking-[0.12em]"
-        style={{ color: dark ? "rgba(255,255,255,0.32)" : "rgba(0,0,0,0.3)" }}
-      >
-        {caption}
-      </span>
-      <span
-        className="absolute bottom-[18px] left-5 z-10 text-[clamp(22px,2.4vw,34px)] font-semibold"
-        style={{ color: dark ? "#fff" : "#0c0c0d" }}
-      >
-        {name}
-      </span>
+      {image && (
+        <Image
+          src={image}
+          alt=""
+          fill
+          quality={100}
+          sizes="(max-width: 1024px) 50vw, 420px"
+          className={imageClassName}
+        />
+      )}
+      {nameTop ? (
+        <div className="absolute left-5 right-5 top-5 z-10">
+          <span className="block text-[10px] font-semibold uppercase tracking-[0.14em] text-white/85 sm:text-[12px]">
+            {caption}
+          </span>
+          <span
+            className="mt-2.5 block text-[clamp(22px,2.4vw,34px)] font-semibold leading-none"
+            style={{ color: resolvedNameColor }}
+          >
+            {name}
+          </span>
+        </div>
+      ) : (
+        <>
+          <span
+            className="absolute left-5 top-4 z-10 font-mono text-[9.5px] tracking-[0.12em]"
+            style={{ color: captionColor }}
+          >
+            {caption}
+          </span>
+          <span
+            className="absolute bottom-[18px] left-5 z-10 text-[clamp(22px,2.4vw,34px)] font-semibold"
+            style={{ color: resolvedNameColor }}
+          >
+            {name}
+          </span>
+        </>
+      )}
     </Link>
   );
 }
@@ -339,7 +384,8 @@ function DepartmentPanel({
           src={image}
           alt=""
           fill
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 700px"
+          quality={100}
+          sizes="100vw"
           className={imageClassName}
         />
       )}
@@ -405,7 +451,7 @@ function ActivityTile({
   return (
     <Link
       href={href}
-      className="tile-texture-dark relative aspect-[4/5] overflow-hidden no-underline"
+      className="tile-texture-dark relative block aspect-[4/5] w-full overflow-hidden no-underline"
       style={{ background: bg }}
     >
       <span className="absolute bottom-5 left-[22px] z-10 text-[clamp(24px,2.6vw,40px)] font-semibold text-white">
