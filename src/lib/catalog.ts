@@ -347,6 +347,17 @@ for (const p of PRODUCTS) {
   if (disc) p.compareAtLKR = Math.round((p.priceLKR / (1 - disc)) / 50) * 50;
 }
 
+// Mock inventory: a size is out of stock when `available` is false, and those
+// variants stay orderable as backorders. One product is marked fully out of
+// stock so the backorder flow has an end-to-end demo. Real inventory + the
+// FCFS queue come from Shopify (inventory policy CONTINUE) once wired in.
+const FULLY_OUT_OF_STOCK = new Set(["heavyweight-crew-tee"]);
+for (const p of PRODUCTS) {
+  if (FULLY_OUT_OF_STOCK.has(p.slug)) {
+    p.sizes = p.sizes.map((s) => ({ ...s, available: false }));
+  }
+}
+
 const BY_SLUG = new Map(PRODUCTS.map((p) => [p.slug, p]));
 
 export function getProduct(slug: string): Product | undefined {
@@ -379,10 +390,40 @@ export const accessories = pick([
   "beanie",
 ]);
 
+/** Home — "You May Also Like" (a varied men/women mix). */
+export const recommended = pick([
+  "varsity-full-sleeve-jersey",
+  "athlex-cross-back-tank",
+  "varsity-air-jersey",
+  "essential-oversized-tee",
+  "prime-graphic-tee",
+  "varsity-box-fit-jersey",
+]);
+
 /** PDP — "You May Also Like". */
 export function relatedTo(slug: string): Product[] {
   return PRODUCTS.filter((p) => p.slug !== slug && p.category !== "Accessories").slice(
     0,
     5,
   );
+}
+
+/* ------------------------------- Backorder ------------------------------- */
+
+export const BACKORDER_RESTOCK = "Ships in ~2–3 weeks";
+
+/** A size label is on backorder when its variant is out of stock. */
+export function isBackorderSize(product: Product, sizeLabel: string): boolean {
+  const s = product.sizes.find((x) => x.label === sizeLabel);
+  return !!s && !s.available;
+}
+
+/** Whole product is out of stock (every size unavailable). */
+export function isOutOfStock(product: Product): boolean {
+  return product.sizes.every((s) => !s.available);
+}
+
+/** Deterministic mock queue position (1–12) for a backordered variant. */
+export function queuePosition(slug: string, sizeLabel: string): number {
+  return (hash(`${slug}:${sizeLabel}`) % 12) + 1;
 }

@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { useRef, type ReactNode } from "react";
+import { Button } from "./ui/button";
 
 /**
  * Section header (italic title + optional "Shop All" + prev/next arrows) wrapping
@@ -36,19 +36,9 @@ export function CarouselRow({
         <h2 className="m-0 text-[clamp(26px,4vw,46px)] font-semibold tracking-[-0.01em]">
           {title}
         </h2>
-        <div className="flex items-center gap-[18px]">
-          {shopAllHref && (
-            <Link
-              href={shopAllHref}
-              className="hidden border-b-2 border-[#0c0c0d] pb-[3px] text-[13px] font-semibold uppercase tracking-[0.14em] text-[#0c0c0d] no-underline sm:inline-block"
-            >
-              Shop All
-            </Link>
-          )}
-          <div className="flex gap-2.5">
-            <ArrowButton dir="prev" onClick={() => scroll(-1)} />
-            <ArrowButton dir="next" onClick={() => scroll(1)} />
-          </div>
+        <div className="flex gap-2.5">
+          <ArrowButton dir="prev" onClick={() => scroll(-1)} />
+          <ArrowButton dir="next" onClick={() => scroll(1)} />
         </div>
       </div>
 
@@ -58,6 +48,14 @@ export function CarouselRow({
       >
         {children}
       </div>
+
+      {shopAllHref && (
+        <div className="mt-9 flex justify-center">
+          <Button href={shopAllHref} arrow>
+            View All
+          </Button>
+        </div>
+      )}
     </section>
   );
 }

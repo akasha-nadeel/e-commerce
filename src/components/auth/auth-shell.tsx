@@ -128,7 +128,7 @@ export function GoogleButton({
     <button
       type="button"
       onClick={onClick}
-      className="flex w-full cursor-pointer items-center justify-center gap-3 rounded-full border border-[#e7e6e9] bg-white px-5 py-3.5 text-[14px] font-semibold text-[#0c0c0d] transition-colors hover:border-[#d7d6d9] hover:bg-[#fafafa]"
+      className="flex w-full cursor-pointer items-center justify-center gap-3 rounded-none border border-[#e7e6e9] bg-white px-5 py-3.5 text-[14px] font-semibold text-[#0c0c0d] transition-colors hover:border-[#d7d6d9] hover:bg-[#fafafa]"
     >
       <GoogleIcon />
       {label}
@@ -295,7 +295,7 @@ export function AuthSubmit({ children }: { children: React.ReactNode }) {
   return (
     <button
       type="submit"
-      className="mt-1 w-full cursor-pointer rounded-full bg-[#0c0c0d] px-5 py-4 text-[14px] font-semibold text-white transition-colors hover:bg-[#c79a4b] hover:text-[#0c0c0d]"
+      className="mt-1 w-full cursor-pointer rounded-none bg-[#0c0c0d] px-5 py-4 text-[14px] font-semibold text-white transition-colors hover:bg-[#c79a4b] hover:text-[#0c0c0d]"
     >
       {children}
     </button>
@@ -342,7 +342,7 @@ export function AuthSuccess({
       </p>
       <Link
         href="/"
-        className="mt-7 rounded-full bg-[#0c0c0d] px-8 py-3.5 text-[13px] font-semibold text-white no-underline transition-colors hover:bg-[#c79a4b] hover:text-[#0c0c0d]"
+        className="mt-7 rounded-none bg-[#0c0c0d] px-8 py-3.5 text-[13px] font-semibold text-white no-underline transition-colors hover:bg-[#c79a4b] hover:text-[#0c0c0d]"
       >
         Continue Shopping
       </Link>

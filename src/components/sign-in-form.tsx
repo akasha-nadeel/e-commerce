@@ -35,7 +35,7 @@ export function SignInForm() {
       />
       <button
         type="submit"
-        className="mt-1 cursor-pointer rounded-full bg-[#0c0c0d] px-5 py-4 text-[14px] font-semibold uppercase tracking-[0.12em] text-white transition-colors hover:bg-[#c79a4b] hover:text-[#0c0c0d]"
+        className="mt-1 cursor-pointer rounded-none bg-[#0c0c0d] px-5 py-4 text-[14px] font-semibold uppercase tracking-[0.12em] text-white transition-colors hover:bg-[#c79a4b] hover:text-[#0c0c0d]"
       >
         Email Me A Sign-In Link
       </button>

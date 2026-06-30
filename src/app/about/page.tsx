@@ -74,7 +74,7 @@ export default function AboutPage() {
         </p>
         <Link
           href="/collections/all"
-          className="mt-7 inline-block rounded-full bg-[#0c0c0d] px-10 py-[18px] text-[13px] font-semibold text-white no-underline transition-colors hover:bg-[#c79a4b] hover:text-[#0c0c0d]"
+          className="mt-7 inline-block rounded-none bg-[#0c0c0d] px-10 py-[18px] text-[13px] font-semibold text-white no-underline transition-colors hover:bg-[#c79a4b] hover:text-[#0c0c0d]"
         >
           Shop All
         </Link>

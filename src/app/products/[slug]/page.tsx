@@ -5,6 +5,7 @@ import { CarouselRow } from "@/components/carousel-row";
 import { ProductCard } from "@/components/product-card";
 import { ProductGallery } from "@/components/product/product-gallery";
 import { PurchasePanel } from "@/components/product/purchase-panel";
+import { ProductReviews } from "@/components/product/product-reviews";
 import { allSlugs, getProduct, relatedTo } from "@/lib/catalog";
 
 export function generateStaticParams() {
@@ -95,6 +96,13 @@ export default async function ProductPage({
         <ProductGallery images={product.images} name={product.name} />
         <PurchasePanel product={product} />
       </section>
+
+      {/* Reviews */}
+      <ProductReviews
+        rating={product.rating ?? 4.8}
+        reviewCount={product.reviewCount ?? 120}
+        seed={product.slug}
+      />
 
       {/* You may also like */}
       {related.length > 0 && (

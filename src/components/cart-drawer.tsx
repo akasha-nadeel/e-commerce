@@ -62,7 +62,7 @@ export function CartDrawer() {
             <Link
               href="/collections/all"
               onClick={close}
-              className="rounded-full bg-[#0c0c0d] px-8 py-4 text-[13px] font-semibold text-white no-underline transition-colors hover:bg-[#c79a4b] hover:text-[#0c0c0d]"
+              className="rounded-none bg-[#0c0c0d] px-8 py-4 text-[13px] font-semibold text-white no-underline transition-colors hover:bg-[#c79a4b] hover:text-[#0c0c0d]"
             >
               Continue Shopping
             </Link>
@@ -91,6 +91,13 @@ export function CartDrawer() {
                 />
               </div>
             </div>
+
+            {lines.some((l) => l.backorder) && (
+              <div className="border-b border-[#f0eff1] bg-[#c79a4b]/10 px-6 py-2.5 text-[12px] leading-snug text-[#0c0c0d]">
+                Some items are on <span className="font-semibold">backorder</span>{" "}
+                and ship separately when back in stock.
+              </div>
+            )}
 
             <div className="flex-1 overflow-y-auto px-6 py-4">
               {lines.map((l) => (
@@ -130,6 +137,16 @@ export function CartDrawer() {
                       {l.colorName}
                       {l.size !== "OS" ? ` · Size ${l.size}` : ""}
                     </div>
+                    {l.backorder && (
+                      <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1">
+                        <span className="bg-[#c79a4b]/15 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-[#9a7322]">
+                          Backorder
+                        </span>
+                        <span className="text-[11px] text-[#8a8a8e]">
+                          Ships in ~2–3 weeks
+                        </span>
+                      </div>
+                    )}
 
                     <div className="mt-auto flex items-center justify-between pt-3">
                       <div className="flex items-center border border-[#d7d6d9]">
@@ -172,7 +189,7 @@ export function CartDrawer() {
               <Link
                 href="/checkout"
                 onClick={close}
-                className="flex w-full items-center justify-center rounded-full bg-[#0c0c0d] px-5 py-[18px] text-[14px] font-semibold uppercase tracking-[0.12em] text-white no-underline transition-colors hover:bg-[#c79a4b] hover:text-[#0c0c0d]"
+                className="flex w-full items-center justify-center rounded-none bg-[#0c0c0d] px-5 py-[18px] text-[14px] font-semibold uppercase tracking-[0.12em] text-white no-underline transition-colors hover:bg-[#c79a4b] hover:text-[#0c0c0d]"
               >
                 Checkout
               </Link>

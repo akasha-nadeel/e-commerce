@@ -39,7 +39,7 @@ export function ProductGallery({
             aria-label={`View image ${i + 1}`}
             aria-pressed={i === active}
             onClick={() => setActive(i)}
-            className="w-[72px] shrink-0 overflow-hidden rounded-xl border-2 transition-colors lg:w-full"
+            className="w-[72px] shrink-0 overflow-hidden rounded-none border-2 transition-colors lg:w-full"
             style={{ borderColor: i === active ? "#0c0c0d" : "#e7e6e9" }}
           >
             <MediaTile src={img.src} alt={`${name} thumbnail ${i + 1}`} aspect="3/4" />
@@ -67,7 +67,7 @@ export function ProductGallery({
           label={current?.label}
           alt={name}
           aspect="4/5"
-          className="rounded-2xl"
+          className="rounded-none"
           priority
         />
         <button

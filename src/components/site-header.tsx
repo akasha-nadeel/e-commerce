@@ -57,8 +57,9 @@ export function SiteHeader() {
   // solid white once scrolled or when a menu is open.
   const transparent = isHome && !scrolled && !megaOpen && !mobileOpen;
 
-  const navLinkCls =
-    "font-medium text-[13px] tracking-[0.03em] py-1 border-b-2 border-transparent transition-colors no-underline text-[#0c0c0d] hover:text-[#c79a4b] hover:border-[#c79a4b]";
+  // Nav links highlight with a solid ink box on hover; the active route keeps it.
+  const navLinkBase =
+    "rounded-none px-3 py-2 text-[13px] font-medium tracking-[0.03em] no-underline transition-colors hover:bg-[#0c0c0d] hover:text-white";
   const iconCls =
     "cursor-pointer transition-colors text-[#0c0c0d] hover:text-[#c79a4b]";
 
@@ -100,17 +101,27 @@ export function SiteHeader() {
         </div>
 
         {/* Center: desktop nav */}
-        <nav className="hidden items-center gap-7 md:flex lg:gap-9">
-          {NAV.map((item) => (
-            <Link
-              key={item.label}
-              href={item.href}
-              className={navLinkCls}
-              onMouseEnter={() => setMegaOpen(item.mega)}
-            >
-              {item.label}
-            </Link>
-          ))}
+        <nav className="hidden items-center gap-2 md:flex lg:gap-3">
+          {NAV.map((item) => {
+            const active =
+              item.href === "/"
+                ? pathname === "/"
+                : pathname.startsWith(item.href);
+            return (
+              <Link
+                key={item.label}
+                href={item.href}
+                onMouseEnter={() => setMegaOpen(item.mega)}
+                className={`${navLinkBase} ${
+                  active && !transparent
+                    ? "bg-[#0c0c0d] text-white"
+                    : "text-[#0c0c0d]"
+                }`}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
         </nav>
 
         {/* Right: utility icons */}

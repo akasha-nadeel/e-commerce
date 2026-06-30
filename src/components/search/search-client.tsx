@@ -90,7 +90,7 @@ export function SearchClient({ products }: { products: Product[] }) {
           </div>
           <div className="grid grid-cols-2 gap-x-4 gap-y-10 sm:grid-cols-3 lg:grid-cols-4">
             {results.map((p) => (
-              <ProductCard key={p.slug} product={p} quickAdd inGrid />
+              <ProductCard key={p.slug} product={p} inGrid />
             ))}
           </div>
         </>
@@ -102,7 +102,7 @@ export function SearchClient({ products }: { products: Product[] }) {
           </p>
           <Link
             href="/collections/all"
-            className="mt-2 rounded-full bg-[#0c0c0d] px-8 py-3.5 text-[13px] font-semibold text-white no-underline transition-colors hover:bg-[#c79a4b] hover:text-[#0c0c0d]"
+            className="mt-2 rounded-none bg-[#0c0c0d] px-8 py-3.5 text-[13px] font-semibold text-white no-underline transition-colors hover:bg-[#c79a4b] hover:text-[#0c0c0d]"
           >
             Browse All
           </Link>

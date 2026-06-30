@@ -19,6 +19,10 @@ export interface CartLine {
   priceLKR: number;
   image?: string;
   qty: number;
+  /** Variant is out of stock and was ordered as a backorder. */
+  backorder?: boolean;
+  /** Mock first-come-first-served queue position for the backordered variant. */
+  queuePosition?: number;
 }
 
 export type NewCartLine = Omit<CartLine, "id" | "qty">;

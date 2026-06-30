@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRef, useState } from "react";
 import type { Product } from "@/lib/catalog";
+import { BACKORDER_RESTOCK, isBackorderSize, queuePosition } from "@/lib/catalog";
 import { discountPercent, formatLKR } from "@/lib/format";
 import { useCart } from "@/components/cart-provider";
 
@@ -23,6 +24,10 @@ export function PurchasePanel({ product }: { product: Product }) {
   const reviews = product.reviewCount ?? 124;
   const onSale = !!product.compareAtLKR && product.compareAtLKR > product.priceLKR;
 
+  const activeSize = hasSizes ? size : product.sizes[0]?.label ?? "OS";
+  const backorder = isBackorderSize(product, activeSize);
+  const queuePos = backorder ? queuePosition(product.slug, activeSize) : 0;
+
   function addToCart() {
     add({
       slug: product.slug,
@@ -31,6 +36,8 @@ export function PurchasePanel({ product }: { product: Product }) {
       size: hasSizes ? size : "OS",
       priceLKR: product.priceLKR,
       image: product.images[0]?.src,
+      backorder,
+      queuePosition: backorder ? queuePos : undefined,
     });
     setAdded(true);
     clearTimeout(addedTimer.current);
@@ -98,17 +105,13 @@ export function PurchasePanel({ product }: { product: Product }) {
               aria-label={c.name}
               aria-pressed={sel}
               onClick={() => setColorIdx(i)}
-              className="flex h-10 w-10 items-center justify-center rounded-full transition-transform"
+              className="h-10 w-10 rounded-[5px] border border-black/15 transition-[outline]"
               style={{
+                background: c.swatch,
                 outline: sel ? "2px solid #0c0c0d" : "2px solid transparent",
                 outlineOffset: 2,
               }}
-            >
-              <span
-                className="h-9 w-9 rounded-full border border-black/10"
-                style={{ background: c.swatch }}
-              />
-            </button>
+            />
           );
         })}
       </div>
@@ -134,24 +137,29 @@ export function PurchasePanel({ product }: { product: Product }) {
           </div>
           <div className="mt-3 grid grid-cols-5 gap-2.5">
             {product.sizes.map((s) => {
-              const sel = s.available && size === s.label;
+              const sel = size === s.label;
+              const oos = !s.available;
               return (
                 <button
                   key={s.label}
                   type="button"
-                  disabled={!s.available}
                   aria-pressed={sel}
-                  onClick={() => s.available && setSize(s.label)}
-                  className="rounded-xl border py-3 text-[14px] font-semibold transition-colors"
+                  title={oos ? "Out of stock — available on backorder" : undefined}
+                  onClick={() => setSize(s.label)}
+                  className="relative cursor-pointer rounded-none border py-3 text-[14px] font-semibold transition-colors"
                   style={{
-                    cursor: s.available ? "pointer" : "not-allowed",
-                    background: !s.available ? "#f7f7f8" : sel ? "#0c0c0d" : "#fff",
-                    color: !s.available ? "#c2c2c6" : sel ? "#fff" : "#0c0c0d",
+                    background: sel ? "#0c0c0d" : "#fff",
+                    color: sel ? "#fff" : oos ? "#9a9a9e" : "#0c0c0d",
                     borderColor: sel ? "#0c0c0d" : "#e2e1e4",
-                    textDecoration: !s.available ? "line-through" : "none",
                   }}
                 >
                   {s.label}
+                  {oos && (
+                    <span
+                      aria-hidden
+                      className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-[#c79a4b]"
+                    />
+                  )}
                 </button>
               );
             })}
@@ -159,25 +167,66 @@ export function PurchasePanel({ product }: { product: Product }) {
         </>
       )}
 
+      {/* Backorder notice */}
+      {backorder && (
+        <div className="mt-6 flex items-start gap-2.5 border border-[#c79a4b]/45 bg-[#c79a4b]/10 px-3.5 py-3 text-[13px] leading-snug text-[#0c0c0d]">
+          <svg
+            width="17"
+            height="17"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#c79a4b"
+            strokeWidth={1.9}
+            className="mt-px shrink-0"
+          >
+            <circle cx="12" cy="12" r="9" />
+            <path d="M12 7v5l3 2" />
+          </svg>
+          <span>
+            <span className="font-semibold">Out of stock — available on backorder.</span>{" "}
+            {BACKORDER_RESTOCK}. You&apos;ll be{" "}
+            <span className="font-semibold">#{queuePos}</span> in the fulfilment
+            queue.
+          </span>
+        </div>
+      )}
+
       {/* Actions */}
       <div className="mt-6 flex items-stretch gap-3">
         <button
           type="button"
           onClick={addToCart}
-          className="flex flex-1 cursor-pointer items-center justify-center gap-2.5 rounded-full bg-[#0c0c0d] px-6 py-[18px] text-[15px] font-semibold text-white transition-colors hover:bg-[#c79a4b] hover:text-[#0c0c0d]"
+          className={`flex flex-1 cursor-pointer items-center justify-center gap-2.5 rounded-none px-6 py-[18px] text-[15px] font-semibold transition-colors ${
+            backorder
+              ? "bg-[#c79a4b] text-[#0c0c0d] hover:bg-[#b3863a] hover:text-white"
+              : "bg-[#0c0c0d] text-white hover:bg-[#c79a4b] hover:text-[#0c0c0d]"
+          }`}
         >
-          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-            <path d="M6 8h12l-1 12H7L6 8z" />
-            <path d="M9 8V6a3 3 0 0 1 6 0v2" />
-          </svg>
-          {added ? "Added to Cart" : "Add to Cart"}
+          {backorder ? (
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+              <circle cx="12" cy="12" r="9" />
+              <path d="M12 7v5l3 2" />
+            </svg>
+          ) : (
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+              <path d="M6 8h12l-1 12H7L6 8z" />
+              <path d="M9 8V6a3 3 0 0 1 6 0v2" />
+            </svg>
+          )}
+          {backorder
+            ? added
+              ? "Added — On Backorder"
+              : "Backorder Now"
+            : added
+              ? "Added to Cart"
+              : "Add to Cart"}
         </button>
         <button
           type="button"
           aria-label={wished ? "Remove from wishlist" : "Add to wishlist"}
           aria-pressed={wished}
           onClick={() => setWished((w) => !w)}
-          className="flex h-[58px] w-[58px] shrink-0 items-center justify-center rounded-2xl border border-[#e2e1e4] transition-colors hover:border-[#0c0c0d]"
+          className="flex h-[58px] w-[58px] shrink-0 items-center justify-center rounded-none border border-[#e2e1e4] transition-colors hover:border-[#0c0c0d]"
         >
           <svg
             width="22" height="22" viewBox="0 0 24 24"

@@ -4,7 +4,9 @@ import { CarouselRow } from "@/components/carousel-row";
 import { ProductCard } from "@/components/product-card";
 import { ActivitySwitch } from "@/components/activity-switch";
 import { LogoMarquee } from "@/components/logo-marquee";
-import { accessories, latestStyles } from "@/lib/catalog";
+import { PromoBanner } from "@/components/promo-banner";
+import { Button } from "@/components/ui/button";
+import { accessories, latestStyles, recommended } from "@/lib/catalog";
 
 export default function HomePage() {
   return (
@@ -42,13 +44,13 @@ export default function HomePage() {
             <div className="flex flex-wrap gap-3.5">
               <Link
                 href="/collections/men"
-                className="rounded-full bg-[#0c0c0d] px-9 py-4 text-[13px] font-semibold text-white no-underline transition-colors hover:bg-[#c79a4b] hover:text-[#0c0c0d]"
+                className="rounded-none bg-[#0c0c0d] px-9 py-4 text-[13px] font-semibold text-white no-underline transition-colors hover:bg-[#c79a4b] hover:text-[#0c0c0d]"
               >
                 Shop Men
               </Link>
               <Link
                 href="/collections/women"
-                className="rounded-full border border-[#0c0c0d] bg-transparent px-9 py-4 text-[13px] font-semibold text-[#0c0c0d] no-underline transition-colors hover:bg-[#0c0c0d] hover:text-white"
+                className="rounded-none border border-[#0c0c0d] bg-transparent px-9 py-4 text-[13px] font-semibold text-[#0c0c0d] no-underline transition-colors hover:bg-[#0c0c0d] hover:text-white"
               >
                 Shop Women
               </Link>
@@ -67,61 +69,37 @@ export default function HomePage() {
       <div className="pb-6 pt-16">
         <CarouselRow title="Shop The Latest Styles" shopAllHref="/collections/all">
           {latestStyles.map((p) => (
-            <ProductCard key={p.slug} product={p} quickAdd />
+            <ProductCard key={p.slug} product={p} />
           ))}
         </CarouselRow>
       </div>
 
       {/* ---------------------------------------------------------------- */}
-      {/* Campaign banner                                                  */}
+      {/* First-order discount banner                                      */}
       {/* ---------------------------------------------------------------- */}
-      <div className="my-12 px-5 sm:px-8">
-      <section className="relative mx-auto flex min-h-[58vh] max-w-[1280px] items-center overflow-hidden rounded-3xl bg-[#f4f4f5]">
-        <Image
-          src="/campaign-v2.jpg"
-          alt="Golden Egal campaign — model in the graphic tee on a studio plinth"
-          fill
-          sizes="(max-width: 1280px) 100vw, 1280px"
-          className="object-cover object-[75%_20%]"
-        />
-        {/* Left-anchored white scrim keeps the dark copy legible — strong on
-            mobile (where the model fills the frame), barely-there on desktop. */}
-        <div className="absolute inset-0 bg-gradient-to-r from-white/85 via-white/40 to-transparent lg:from-white/35 lg:via-white/5 lg:to-transparent" />
-        <div className="relative w-full px-8 py-16 sm:px-12">
-          <div className="max-w-[480px]">
-            <div className="mb-3.5 text-[12px] font-semibold uppercase tracking-[0.3em] text-[#0c0c0d]">
-              New Drop
-            </div>
-            <h2 className="display-tight m-0 text-[clamp(34px,5vw,64px)] font-semibold leading-[1.02] text-[#0c0c0d]">
-              <span className="block whitespace-nowrap">Built From</span>
-              <span className="block whitespace-nowrap">The Ground Up</span>
-            </h2>
-            <p className="mb-[26px] mt-[18px] max-w-[440px] text-[16px] text-[#0c0c0d]/75">
-              Heavyweight tees engineered for everyday wear. Built for comfort,
-              styled for every day.
-            </p>
-            <Link
-              href="/collections/new"
-              className="inline-block rounded-full bg-[#0c0c0d] px-10 py-[17px] text-[13px] font-semibold text-white no-underline transition-colors hover:bg-white hover:text-[#0c0c0d]"
-            >
-              Shop Now
-            </Link>
-          </div>
-        </div>
-      </section>
-      </div>
+      <PromoBanner />
 
       {/* ---------------------------------------------------------------- */}
       {/* Shop by category                                                 */}
       {/* ---------------------------------------------------------------- */}
       <section className="mx-auto max-w-[1400px] px-5 pb-4 pt-6 sm:px-8">
-        <div className="mb-[26px]">
-          <div className="mb-1.5 text-[12px] font-bold uppercase tracking-[0.24em] text-[#8a8a8e]">
-            Build Your Style
+        <div className="mb-[26px] flex items-end justify-between gap-4">
+          <div>
+            <div className="mb-1.5 text-[12px] font-bold uppercase tracking-[0.24em] text-[#8a8a8e]">
+              Build Your Style
+            </div>
+            <h2 className="m-0 text-[clamp(26px,4vw,46px)] font-semibold tracking-[-0.01em]">
+              Shop By Category
+            </h2>
           </div>
-          <h2 className="m-0 text-[clamp(26px,4vw,46px)] font-semibold tracking-[-0.01em]">
-            Shop By Category
-          </h2>
+          <Button
+            href="/collections/all"
+            size="sm"
+            arrow
+            className="hidden shrink-0 sm:inline-flex"
+          >
+            View All
+          </Button>
         </div>
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
           <CategoryTile
@@ -188,21 +166,60 @@ export default function HomePage() {
       <div id="accessories" className="scroll-mt-24 pb-6 pt-14">
         <CarouselRow title="Accessories" shopAllHref="/collections/accessories">
           {accessories.map((p) => (
-            <ProductCard key={p.slug} product={p} quickAdd />
+            <ProductCard key={p.slug} product={p} />
           ))}
         </CarouselRow>
       </div>
 
       {/* ---------------------------------------------------------------- */}
-      {/* Perks                                                            */}
+      {/* Campaign banner — closing CTA above the footer                   */}
       {/* ---------------------------------------------------------------- */}
-      <section className="mx-auto max-w-[1400px] px-5 py-16 sm:px-8">
-        <div className="grid grid-cols-1 gap-7 border-y border-[#e7e6e9] py-11 sm:grid-cols-3">
-          <Perk title="Free Shipping" copy="On all orders over LKR 20,000 island-wide." />
-          <Perk title="Easy Returns" copy="14-day free and easy returns, no questions asked." />
-          <Perk title="Pay Your Way" copy="3 interest-free installments at checkout." />
+      <div className="mb-2 mt-12 px-5 sm:px-8">
+      <section className="relative mx-auto flex min-h-[58vh] max-w-[1280px] items-center overflow-hidden rounded-3xl bg-[#f4f4f5]">
+        <Image
+          src="/campaign-v2.png"
+          alt="Golden Egal campaign — model in the graphic tee on a studio plinth"
+          fill
+          sizes="(max-width: 1280px) 100vw, 1280px"
+          className="object-cover object-[75%_0%]"
+        />
+        {/* Left-anchored white scrim keeps the dark copy legible — strong on
+            mobile (where the model fills the frame), barely-there on desktop. */}
+        <div className="absolute inset-0 bg-gradient-to-r from-white/85 via-white/40 to-transparent lg:from-white/35 lg:via-white/5 lg:to-transparent" />
+        <div className="relative w-full px-8 py-16 sm:px-12">
+          <div className="max-w-[480px]">
+            <div className="mb-3.5 text-[12px] font-semibold uppercase tracking-[0.3em] text-[#0c0c0d]">
+              New Drop
+            </div>
+            <h2 className="display-tight m-0 text-[clamp(34px,5vw,64px)] font-semibold leading-[1.02] text-[#0c0c0d]">
+              <span className="block whitespace-nowrap">Built From</span>
+              <span className="block whitespace-nowrap">The Ground Up</span>
+            </h2>
+            <p className="mb-[26px] mt-[18px] max-w-[440px] text-[16px] text-[#0c0c0d]/75">
+              Heavyweight tees engineered for everyday wear. Built for comfort,
+              styled for every day.
+            </p>
+            <Link
+              href="/collections/new"
+              className="inline-block rounded-none bg-[#0c0c0d] px-10 py-[17px] text-[13px] font-semibold text-white no-underline transition-colors hover:bg-white hover:text-[#0c0c0d]"
+            >
+              Shop Now
+            </Link>
+          </div>
         </div>
       </section>
+      </div>
+
+      {/* ---------------------------------------------------------------- */}
+      {/* You may also like                                                */}
+      {/* ---------------------------------------------------------------- */}
+      <div className="pb-20 pt-10">
+        <CarouselRow title="You May Also Like" shopAllHref="/collections/all">
+          {recommended.map((p) => (
+            <ProductCard key={p.slug} product={p} />
+          ))}
+        </CarouselRow>
+      </div>
       </div>
     </div>
   );
@@ -264,14 +281,5 @@ function ActivityTile({
         {name}
       </span>
     </Link>
-  );
-}
-
-function Perk({ title, copy }: { title: string; copy: string }) {
-  return (
-    <div className="text-center">
-      <div className="mb-1.5 text-[22px] font-semibold">{title}</div>
-      <div className="text-[14px] text-[#8a8a8e]">{copy}</div>
-    </div>
   );
 }

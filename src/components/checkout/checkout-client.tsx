@@ -129,7 +129,7 @@ export function CheckoutClient() {
           </p>
           <Link
             href="/collections/all"
-            className="mt-7 inline-block rounded-full bg-[#0c0c0d] px-9 py-4 text-[13px] font-semibold text-white no-underline transition-colors hover:bg-[#c79a4b] hover:text-[#0c0c0d]"
+            className="mt-7 inline-block rounded-none bg-[#0c0c0d] px-9 py-4 text-[13px] font-semibold text-white no-underline transition-colors hover:bg-[#c79a4b] hover:text-[#0c0c0d]"
           >
             Continue Shopping
           </Link>
@@ -140,6 +140,7 @@ export function CheckoutClient() {
 
   /* --------------------------- order placed ---------------------------- */
   if (placed) {
+    const backorderLines = lines.filter((l) => l.backorder);
     return (
       <Shell>
         <div className="mx-auto max-w-[560px] px-5 py-24 text-center">
@@ -154,9 +155,42 @@ export function CheckoutClient() {
             warehouse has been notified to pack your order
             {effectivePayment === "cod" ? " for cash on delivery" : ""}.
           </p>
+
+          {backorderLines.length > 0 && (
+            <div className="mt-8 border border-[#c79a4b]/45 bg-[#c79a4b]/10 p-5 text-left">
+              <div className="flex items-center gap-2 text-[13px] font-bold uppercase tracking-[0.08em] text-[#9a7322]">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                  <circle cx="12" cy="12" r="9" />
+                  <path d="M12 7v5l3 2" />
+                </svg>
+                On Backorder
+              </div>
+              <p className="mt-2 text-[13px] leading-[1.6] text-[#3a3a3e]">
+                These items ship separately as soon as they&apos;re back in stock.
+                We&apos;ll email you at each step — no action needed.
+              </p>
+              <ul className="mt-3 flex flex-col gap-2">
+                {backorderLines.map((l) => (
+                  <li
+                    key={l.id}
+                    className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-[13px]"
+                  >
+                    <span className="text-[#0c0c0d]">
+                      {l.name}
+                      {l.size !== "OS" ? ` · ${l.size}` : ""}
+                    </span>
+                    <span className="shrink-0 font-semibold text-[#9a7322]">
+                      You&apos;re #{l.queuePosition} in the queue
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           <Link
             href="/"
-            className="mt-7 inline-block rounded-full bg-[#0c0c0d] px-9 py-4 text-[13px] font-semibold text-white no-underline transition-colors hover:bg-[#c79a4b] hover:text-[#0c0c0d]"
+            className="mt-7 inline-block rounded-none bg-[#0c0c0d] px-9 py-4 text-[13px] font-semibold text-white no-underline transition-colors hover:bg-[#c79a4b] hover:text-[#0c0c0d]"
           >
             Back To Home
           </Link>
@@ -339,7 +373,7 @@ export function CheckoutClient() {
           <button
             type="button"
             onClick={() => setPlaced(true)}
-            className="mt-2 flex w-full items-center justify-center gap-2.5 rounded-full bg-[#0c0c0d] px-5 py-[19px] text-[15px] font-semibold text-white transition-colors hover:bg-[#c79a4b] hover:text-[#0c0c0d]"
+            className="mt-2 flex w-full items-center justify-center gap-2.5 rounded-none bg-[#0c0c0d] px-5 py-[19px] text-[15px] font-semibold text-white transition-colors hover:bg-[#c79a4b] hover:text-[#0c0c0d]"
           >
             <LockIcon />
             {effectivePayment === "cod"
@@ -445,6 +479,11 @@ function OrderSummary({
                 {l.colorName}
                 {l.size !== "OS" ? ` · ${l.size}` : ""}
               </span>
+              {l.backorder && (
+                <span className="mt-1 w-fit bg-[#c79a4b]/15 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-[#9a7322]">
+                  Backorder
+                </span>
+              )}
               <span className="mt-auto text-[13px] font-semibold">
                 {formatLKR(l.priceLKR * l.qty)}
               </span>
@@ -483,7 +522,7 @@ function OrderSummary({
               <button
                 type="button"
                 onClick={onApplyCode}
-                className="shrink-0 rounded-xl border border-[#0c0c0d] px-5 text-[13px] font-semibold transition-colors hover:bg-[#0c0c0d] hover:text-white"
+                className="shrink-0 rounded-none border border-[#0c0c0d] px-5 text-[13px] font-semibold transition-colors hover:bg-[#0c0c0d] hover:text-white"
               >
                 Apply
               </button>

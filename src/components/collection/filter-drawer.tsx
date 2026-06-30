@@ -194,14 +194,14 @@ export function FilterDrawer({
             type="button"
             onClick={onClear}
             disabled={count === 0}
-            className="flex-1 cursor-pointer rounded-full border border-[#d7d6d9] py-3.5 text-[13px] font-semibold text-[#0c0c0d] transition-colors hover:border-[#0c0c0d] disabled:cursor-default disabled:opacity-40"
+            className="flex-1 cursor-pointer rounded-none border border-[#d7d6d9] py-3.5 text-[13px] font-semibold text-[#0c0c0d] transition-colors hover:border-[#0c0c0d] disabled:cursor-default disabled:opacity-40"
           >
             Clear All
           </button>
           <button
             type="button"
             onClick={onClose}
-            className="flex-[1.4] cursor-pointer rounded-full bg-[#0c0c0d] py-3.5 text-[13px] font-semibold uppercase tracking-[0.12em] text-white transition-colors hover:bg-[#c79a4b] hover:text-[#0c0c0d]"
+            className="flex-[1.4] cursor-pointer rounded-none bg-[#0c0c0d] py-3.5 text-[13px] font-semibold uppercase tracking-[0.12em] text-white transition-colors hover:bg-[#c79a4b] hover:text-[#0c0c0d]"
           >
             Show {resultCount} {resultCount === 1 ? "Result" : "Results"}
           </button>

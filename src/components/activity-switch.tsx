@@ -7,7 +7,7 @@ export function ActivitySwitch() {
   const [mens, setMens] = useState(false);
 
   return (
-    <div className="flex overflow-hidden rounded-full border-[1.5px] border-[#0c0c0d]">
+    <div className="flex overflow-hidden rounded-none border-[1.5px] border-[#0c0c0d]">
       <button
         type="button"
         onClick={() => setMens(true)}

@@ -125,7 +125,7 @@ export function LogoMarquee() {
               {BRANDS.map((b) => (
                 <div
                   key={b.name}
-                  className="flex h-10 shrink-0 items-center justify-center px-8 grayscale transition-[filter,opacity] duration-300 hover:grayscale-0 sm:px-14 [opacity:0.85] hover:[opacity:1]"
+                  className="flex h-10 shrink-0 items-center justify-center px-8 sm:px-14"
                   title={b.name}
                 >
                   {b.node}
