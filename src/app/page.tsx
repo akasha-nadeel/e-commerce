@@ -91,7 +91,7 @@ export default function HomePage() {
             title="Shop Women"
             href="/collections/women"
             image="/dept-women-wide-v2.jpg"
-            imageClassName="object-cover object-center origin-bottom scale-[1.2] translate-x-[15%] translate-y-[21%] sm:scale-[1.3] sm:translate-x-[12%] sm:translate-y-[21%]"
+            imageClassName="object-cover object-center origin-bottom scale-[1.6] translate-x-[24%] translate-y-[21%] sm:scale-[1.3] sm:translate-x-[12%] sm:translate-y-[21%]"
             align="top"
             bg="#875ea0"
             buttonHoverOnly
@@ -293,20 +293,22 @@ function CategoryTile({
   return (
     <Link
       href={href}
-      className={`block aspect-[3/4] w-full overflow-hidden no-underline relative ${
+      className={`group block aspect-[3/4] w-full overflow-hidden no-underline relative ${
         dark ? "tile-texture-dark" : "tile-texture-light"
       }`}
       style={{ background: bg }}
     >
       {image && (
-        <Image
-          src={image}
-          alt=""
-          fill
-          quality={100}
-          sizes="(max-width: 1024px) 50vw, 420px"
-          className={imageClassName}
-        />
+        <div className="absolute inset-0 transition-transform duration-500 ease-out group-hover:scale-105">
+          <Image
+            src={image}
+            alt=""
+            fill
+            quality={100}
+            sizes="(max-width: 1024px) 50vw, 420px"
+            className={imageClassName}
+          />
+        </div>
       )}
       {nameTop ? (
         <div className="absolute left-5 right-5 top-5 z-10">
@@ -380,14 +382,27 @@ function DepartmentPanel({
       style={{ background: bg }}
     >
       {image && (
-        <Image
-          src={image}
-          alt=""
-          fill
-          quality={100}
-          sizes="100vw"
-          className={imageClassName}
-        />
+        <>
+          {/* Full-frame copy so any edge the positioned image leaves uncovered
+              shows the photo's own background (an exact match), never the card
+              bg colour — the transformed copy on top keeps the tuned framing. */}
+          <Image
+            src={image}
+            alt=""
+            fill
+            quality={100}
+            sizes="100vw"
+            className="object-cover object-center"
+          />
+          <Image
+            src={image}
+            alt=""
+            fill
+            quality={100}
+            sizes="100vw"
+            className={imageClassName}
+          />
+        </>
       )}
       {/* Eyebrow pins to the top for bottom-aligned cards; for top-aligned cards
           it stacks with the title + CTA in the content block below. */}
@@ -402,7 +417,7 @@ function DepartmentPanel({
         }`}
       >
         {top && (
-          <span className="mb-3 block font-mono text-[10px] uppercase tracking-[0.18em] text-white/55">
+          <span className="mb-1.5 block font-mono text-[10px] uppercase tracking-[0.18em] text-white/55 sm:mb-3">
             {eyebrow}
           </span>
         )}
@@ -415,7 +430,7 @@ function DepartmentPanel({
           </p>
         )}
         <span
-          className={`mt-6 inline-flex w-fit items-center gap-1.5 px-4 py-2.5 text-[12px] font-semibold transition-colors sm:gap-2 sm:px-6 sm:py-3 sm:text-[13px] ${
+          className={`mt-3.5 inline-flex w-fit items-center gap-1.5 px-4 py-2.5 text-[12px] font-semibold transition-colors sm:mt-6 sm:gap-2 sm:px-6 sm:py-3 sm:text-[13px] ${
             buttonHoverOnly ? "group/btn" : ""
           } ${ctaClassName}`}
         >
