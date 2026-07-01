@@ -21,16 +21,16 @@ export function ProductCard({
 
   return (
     <div
-      className={`group ${
+      className={`group relative transition-transform duration-300 ease-out hover:z-10 hover:scale-[1.03] ${
         inGrid ? "w-full" : "w-[clamp(238px,25vw,300px)] shrink-0 snap-start"
       }`}
     >
       <MediaTile
         label={product.cardLabel}
         src={product.images[0]?.src}
-        hoverSrc={product.images[1]?.src}
         alt={product.name}
         aspect={product.square ? "1/1" : "3/4"}
+        hoverZoom={false}
       >
         <Link
           href={href}

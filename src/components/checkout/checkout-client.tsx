@@ -409,9 +409,19 @@ function Shell({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-white">
       <header className="border-b border-[#e7e6e9]">
-        <div className="mx-auto flex max-w-[1100px] items-center justify-between px-5 py-4 sm:px-8">
-          <Logo variant="onLight" showText markHeight={26} size={12} />
-          <span className="flex items-center gap-1.5 text-[12px] font-semibold uppercase tracking-[0.14em] text-[#8a8a8e]">
+        <div className="mx-auto grid max-w-[1100px] grid-cols-3 items-center px-5 py-4 sm:px-8">
+          <Link
+            href="/"
+            className="flex items-center gap-1.5 justify-self-start text-[13px] font-medium text-[#8a8a8e] no-underline transition-colors hover:text-[#0c0c0d]"
+          >
+            <span aria-hidden>←</span>
+            <span className="hidden sm:inline">Back to store</span>
+            <span className="sm:hidden">Back</span>
+          </Link>
+          <div className="justify-self-center">
+            <Logo variant="onLight" showText markHeight={26} size={12} />
+          </div>
+          <span className="hidden items-center gap-1.5 justify-self-end text-[12px] font-semibold uppercase tracking-[0.14em] text-[#8a8a8e] sm:flex">
             <LockIcon />
             Secure Checkout
           </span>

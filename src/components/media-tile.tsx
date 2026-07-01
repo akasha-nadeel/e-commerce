@@ -20,6 +20,7 @@ export function MediaTile({
   className = "",
   children,
   priority,
+  hoverZoom = true,
 }: {
   label?: string;
   src?: string;
@@ -29,6 +30,8 @@ export function MediaTile({
   className?: string;
   children?: React.ReactNode;
   priority?: boolean;
+  /** Scale just the image on parent `group` hover. Off when the whole card zooms. */
+  hoverZoom?: boolean;
 }) {
   return (
     <div
@@ -43,7 +46,11 @@ export function MediaTile({
           priority={priority}
           sizes="(max-width: 768px) 50vw, 300px"
           className={`object-cover transition-[opacity,transform] duration-500 ${
-            hoverSrc ? "group-hover:opacity-0" : "group-hover:scale-[1.03]"
+            hoverSrc
+              ? "group-hover:opacity-0"
+              : hoverZoom
+                ? "group-hover:scale-[1.03]"
+                : ""
           }`}
         />
       )}

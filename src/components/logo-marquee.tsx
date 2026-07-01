@@ -73,9 +73,16 @@ const BRANDS: { name: string; node: ReactNode }[] = [
   {
     name: "PayHere",
     node: (
-      <span style={{ fontWeight: 800, fontSize: 22, letterSpacing: "-0.01em" }}>
-        <span style={{ color: "#1AC0E8" }}>Pay</span>
-        <span style={{ color: "#16223C" }}>Here</span>
+      <span
+        style={{
+          fontFamily: "Arial, Helvetica, sans-serif",
+          fontWeight: 800,
+          fontSize: 22,
+          letterSpacing: "-0.02em",
+        }}
+      >
+        <span style={{ color: "#2B50D6" }}>Pay</span>
+        <span style={{ color: "#F5A623" }}>Here</span>
       </span>
     ),
   },
