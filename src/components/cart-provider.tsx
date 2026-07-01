@@ -19,6 +19,8 @@ export interface CartLine {
   priceLKR: number;
   image?: string;
   qty: number;
+  /** Shopify variant GID (merchandiseId), used to build the checkout cart. */
+  variantId?: string;
   /** Variant is out of stock and was ordered as a backorder. */
   backorder?: boolean;
   /** Mock first-come-first-served queue position for the backordered variant. */

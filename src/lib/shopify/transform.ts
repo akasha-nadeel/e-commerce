@@ -8,6 +8,7 @@ import type {
   ProductColor,
   ProductSize,
   ProductImage,
+  ProductVariant,
 } from "@/lib/catalog";
 
 /** The subset of Storefront `Product` fields requested in `queries.ts`. */
@@ -27,6 +28,7 @@ export type ShopifyProduct = {
   variants: {
     edges: {
       node: {
+        id: string;
         availableForSale: boolean;
         selectedOptions: { name: string; value: string }[];
       };
@@ -107,6 +109,12 @@ export function transformProduct(p: ShopifyProduct): Product {
     label: e.node.altText ?? p.title,
   }));
 
+  const variants: ProductVariant[] = p.variants.edges.map((e) => ({
+    id: e.node.id,
+    availableForSale: e.node.availableForSale,
+    selectedOptions: e.node.selectedOptions,
+  }));
+
   const category = p.productType || p.tags[0] || "Men";
   const price = toLKR(p.priceRange.minVariantPrice.amount);
   const compareAt = p.compareAtPriceRange
@@ -131,5 +139,6 @@ export function transformProduct(p: ShopifyProduct): Product {
       ? parseInt(p.reviewCount.value, 10)
       : undefined,
     badge: p.badge?.value || undefined,
+    variants,
   };
 }

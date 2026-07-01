@@ -29,15 +29,28 @@ export function PurchasePanel({ product }: { product: Product }) {
   const queuePos = backorder ? queuePosition(product.slug, activeSize) : 0;
 
   function addToCart() {
+    const colorName = product.colors[colorIdx]?.name ?? "";
+    const sizeLabel = hasSizes ? size : product.sizes[0]?.label ?? "OS";
+    // Match the Shopify variant for the selected Color/Size (undefined in mock mode).
+    const variantId = product.variants?.find((v) =>
+      v.selectedOptions.every((o) => {
+        const n = o.name.toLowerCase();
+        if (n === "color") return o.value === colorName;
+        if (n === "size") return o.value === sizeLabel;
+        return true;
+      }),
+    )?.id;
+
     add({
       slug: product.slug,
       name: product.name,
-      colorName: product.colors[colorIdx].name,
+      colorName,
       size: hasSizes ? size : "OS",
       priceLKR: product.priceLKR,
       image: product.images[0]?.src,
       backorder,
       queuePosition: backorder ? queuePos : undefined,
+      variantId,
     });
     setAdded(true);
     clearTimeout(addedTimer.current);

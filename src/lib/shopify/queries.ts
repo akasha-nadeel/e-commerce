@@ -21,6 +21,7 @@ export const PRODUCT_FRAGMENT = /* GraphQL */ `
     variants(first: 100) {
       edges {
         node {
+          id
           availableForSale
           selectedOptions { name value }
         }
@@ -69,6 +70,16 @@ export const GET_ALL_PRODUCT_HANDLES = /* GraphQL */ `
   query AllHandles($first: Int!) {
     products(first: $first) {
       edges { node { handle } }
+    }
+  }
+`;
+
+/** Create a cart from line items and return its Shopify-hosted checkout URL. */
+export const CART_CREATE = /* GraphQL */ `
+  mutation CartCreate($lines: [CartLineInput!]!) {
+    cartCreate(input: { lines: $lines }) {
+      cart { id checkoutUrl }
+      userErrors { field message }
     }
   }
 `;

@@ -7,6 +7,7 @@
 import type { Product } from "@/lib/catalog";
 import { isShopifyConfigured, shopifyFetch } from "./client";
 import {
+  CART_CREATE,
   GET_ALL_PRODUCT_HANDLES,
   GET_COLLECTION_PRODUCTS,
   GET_PRODUCT_BY_HANDLE,
@@ -77,4 +78,31 @@ export async function fetchAllHandles(first = 250): Promise<string[]> {
     tags: ["products"],
   });
   return data.products.edges.map((e) => e.node.handle);
+}
+
+/**
+ * Create a Shopify cart from line items and return the hosted checkout URL.
+ * Not cached — this is a mutation.
+ */
+export async function createCart(
+  lines: { merchandiseId: string; quantity: number }[],
+): Promise<string> {
+  const data = await shopifyFetch<{
+    cartCreate: {
+      cart: { id: string; checkoutUrl: string } | null;
+      userErrors: { message: string }[];
+    };
+  }>({
+    query: CART_CREATE,
+    variables: { lines },
+    cache: "no-store",
+  });
+  const { cart, userErrors } = data.cartCreate;
+  if (userErrors?.length) {
+    throw new Error(
+      `cartCreate errors: ${userErrors.map((e) => e.message).join("; ")}`,
+    );
+  }
+  if (!cart) throw new Error("cartCreate returned no cart.");
+  return cart.checkoutUrl;
 }

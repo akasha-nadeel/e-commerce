@@ -2,13 +2,37 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useCart } from "./cart-provider";
+import { startCheckout } from "@/lib/actions/checkout";
 import { formatLKR } from "@/lib/format";
 
 const FREE_SHIPPING_THRESHOLD = 20000;
 
 export function CartDrawer() {
   const { isOpen, close, lines, count, subtotal, setQty, remove } = useCart();
+  const router = useRouter();
+  const [checkingOut, setCheckingOut] = useState(false);
+
+  // Shopify-hosted checkout when configured; else the local /checkout page.
+  async function handleCheckout() {
+    setCheckingOut(true);
+    try {
+      const url = await startCheckout(
+        lines.map((l) => ({ variantId: l.variantId, qty: l.qty })),
+      );
+      if (url) {
+        window.location.href = url;
+        return;
+      }
+    } catch {
+      // fall through to the local checkout
+    }
+    setCheckingOut(false);
+    close();
+    router.push("/checkout");
+  }
 
   const remaining = Math.max(0, FREE_SHIPPING_THRESHOLD - subtotal);
   const progress = Math.min(100, (subtotal / FREE_SHIPPING_THRESHOLD) * 100);
@@ -186,13 +210,14 @@ export function CartDrawer() {
               <p className="mb-4 mt-0 text-[12px] text-[#8a8a8e]">
                 Shipping &amp; taxes calculated at checkout.
               </p>
-              <Link
-                href="/checkout"
-                onClick={close}
-                className="flex w-full items-center justify-center rounded-none bg-[#0c0c0d] px-5 py-[18px] text-[14px] font-semibold uppercase tracking-[0.12em] text-white no-underline transition-colors hover:bg-[#eec449] hover:text-[#0c0c0d]"
+              <button
+                type="button"
+                onClick={handleCheckout}
+                disabled={checkingOut}
+                className="flex w-full cursor-pointer items-center justify-center rounded-none bg-[#0c0c0d] px-5 py-[18px] text-[14px] font-semibold uppercase tracking-[0.12em] text-white transition-colors hover:bg-[#eec449] hover:text-[#0c0c0d] disabled:cursor-default disabled:opacity-70"
               >
-                Checkout
-              </Link>
+                {checkingOut ? "Loading…" : "Checkout"}
+              </button>
               <button
                 type="button"
                 onClick={close}

@@ -25,6 +25,13 @@ export interface ProductImage {
   src?: string;
 }
 
+export interface ProductVariant {
+  /** Shopify variant GID (merchandiseId for the cart). Absent in mock mode. */
+  id: string;
+  availableForSale: boolean;
+  selectedOptions: { name: string; value: string }[];
+}
+
 export interface Product {
   slug: string;
   name: string;
@@ -49,6 +56,8 @@ export interface Product {
   reviewCount?: number;
   /** Optional merchandising badge, e.g. "New Arrival" / "Best Seller". */
   badge?: string;
+  /** Shopify variants (id + option values) for cart/checkout. Absent in mock mode. */
+  variants?: ProductVariant[];
 }
 
 const CLOTHING_SIZES: ProductSize[] = [
