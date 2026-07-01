@@ -30,17 +30,22 @@ export async function fetchProductByHandle(
   return data.product ? transformProduct(data.product) : undefined;
 }
 
-/** A page of products, optionally filtered by a Storefront search `query`. */
+/** A page of products, optionally filtered/sorted (Storefront `ProductSortKeys`). */
 export async function fetchProducts(
-  opts: { first?: number; query?: string } = {},
+  opts: {
+    first?: number;
+    query?: string;
+    sortKey?: string;
+    reverse?: boolean;
+  } = {},
 ): Promise<Product[]> {
   const data = await shopifyFetch<{ products: Edges<ShopifyProduct> }>({
     query: GET_PRODUCTS,
     variables: {
       first: opts.first ?? 24,
       query: opts.query ?? null,
-      sortKey: null,
-      reverse: false,
+      sortKey: opts.sortKey ?? null,
+      reverse: opts.reverse ?? false,
     },
     tags: ["products"],
   });

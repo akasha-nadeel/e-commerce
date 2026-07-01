@@ -7,12 +7,17 @@
  */
 import type { Product } from "./catalog";
 import {
+  PRODUCTS as mockProducts,
+  accessories as mockAccessories,
   allSlugs as mockAllSlugs,
   getProduct as mockGetProduct,
+  latestStyles as mockLatestStyles,
+  recommended as mockRecommended,
   relatedTo as mockRelatedTo,
 } from "./catalog";
 import {
   fetchAllHandles,
+  fetchCollectionProducts,
   fetchProductByHandle,
   fetchProducts,
   isShopifyConfigured,
@@ -43,4 +48,56 @@ export async function getRelatedProducts(slug: string): Promise<Product[]> {
       .slice(0, 5);
   }
   return mockRelatedTo(slug);
+}
+
+// Mock-mode category filter for a collection route slug.
+const MOCK_CATEGORY: Record<string, string> = {
+  men: "Men",
+  women: "Women",
+  accessories: "Accessories",
+};
+
+/**
+ * Products for a collection route (`/collections/[slug]`). Live: `men`/`women`/
+ * `accessories` map to Shopify collections; `all` is everything; `new` is newest
+ * first. Mock: filter the mock catalog by category.
+ */
+export async function getCollectionProducts(slug: string): Promise<Product[]> {
+  if (isShopifyConfigured) {
+    if (slug === "all") return fetchProducts({ first: 100 });
+    if (slug === "new")
+      return fetchProducts({
+        first: 50,
+        sortKey: "CREATED_AT",
+        reverse: true,
+      });
+    return fetchCollectionProducts(slug, 100);
+  }
+  const cat = MOCK_CATEGORY[slug];
+  return cat ? mockProducts.filter((p) => p.category === cat) : mockProducts;
+}
+
+/** All products — for the search page's client-side filter. */
+export async function getAllProducts(): Promise<Product[]> {
+  if (isShopifyConfigured) return fetchProducts({ first: 100 });
+  return mockProducts;
+}
+
+/** Home — "Shop The Latest Styles" (newest first). */
+export async function getLatestStyles(first = 6): Promise<Product[]> {
+  if (isShopifyConfigured)
+    return fetchProducts({ first, sortKey: "CREATED_AT", reverse: true });
+  return mockLatestStyles;
+}
+
+/** Home — "Accessories" carousel. */
+export async function getAccessoryProducts(first = 8): Promise<Product[]> {
+  if (isShopifyConfigured) return fetchCollectionProducts("accessories", first);
+  return mockAccessories;
+}
+
+/** Home — "You May Also Like". */
+export async function getRecommendedProducts(first = 6): Promise<Product[]> {
+  if (isShopifyConfigured) return fetchProducts({ first });
+  return mockRecommended;
 }

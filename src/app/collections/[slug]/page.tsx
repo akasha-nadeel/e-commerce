@@ -2,12 +2,11 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { CollectionBrowser } from "@/components/collection/collection-browser";
-import { PRODUCTS, type Product } from "@/lib/catalog";
+import { getCollectionProducts } from "@/lib/products";
 
 type Collection = {
   title: string;
   tagline: string;
-  filter: (p: Product) => boolean;
   /** Mixed collections expose the Category facet. */
   mixed?: boolean;
 };
@@ -16,29 +15,24 @@ const COLLECTIONS: Record<string, Collection> = {
   all: {
     title: "All Products",
     tagline: "The full Golden Egal collection.",
-    filter: () => true,
     mixed: true,
   },
   new: {
     title: "New In",
     tagline: "The latest drops, fresh off the press.",
-    filter: () => true,
     mixed: true,
   },
   men: {
     title: "Men",
     tagline: "Built from the ground up — be better everyday.",
-    filter: (p) => p.category === "Men",
   },
   women: {
     title: "Women",
     tagline: "Premium tees and jerseys, engineered to move.",
-    filter: (p) => p.category === "Women",
   },
   accessories: {
     title: "Accessories",
     tagline: "Caps, totes and the finishing touches.",
-    filter: (p) => p.category === "Accessories",
   },
 };
 
@@ -70,7 +64,7 @@ export default async function CollectionPage({
   const c = COLLECTIONS[slug];
   if (!c) notFound();
 
-  const products = PRODUCTS.filter(c.filter);
+  const products = await getCollectionProducts(slug);
 
   return (
     <div className="w-full bg-white">

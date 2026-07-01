@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { SearchClient } from "@/components/search/search-client";
-import { PRODUCTS } from "@/lib/catalog";
+import { getAllProducts } from "@/lib/products";
 
 export const metadata: Metadata = {
   title: "Search",
@@ -8,10 +8,11 @@ export const metadata: Metadata = {
   robots: { index: false },
 };
 
-export default function SearchPage() {
+export default async function SearchPage() {
+  const products = await getAllProducts();
   return (
     <div className="w-full bg-white">
-      <SearchClient products={PRODUCTS} />
+      <SearchClient products={products} />
     </div>
   );
 }

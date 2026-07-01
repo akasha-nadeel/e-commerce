@@ -7,9 +7,18 @@ import { ActivitySwitch } from "@/components/activity-switch";
 import { LogoMarquee } from "@/components/logo-marquee";
 import { PromoBanner } from "@/components/promo-banner";
 import { Button } from "@/components/ui/button";
-import { accessories, latestStyles, recommended } from "@/lib/catalog";
+import {
+  getAccessoryProducts,
+  getLatestStyles,
+  getRecommendedProducts,
+} from "@/lib/products";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const [latestStyles, accessories, recommended] = await Promise.all([
+    getLatestStyles(),
+    getAccessoryProducts(),
+    getRecommendedProducts(),
+  ]);
   return (
     <div className="w-full bg-white">
       {/* ---------------------------------------------------------------- */}
