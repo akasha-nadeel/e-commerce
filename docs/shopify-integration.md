@@ -43,17 +43,27 @@ The transform maps by convention:
   `reviews.rating_count`, `custom.badge`, `custom.color_swatches`
   (JSON `{"Jet Black":"#111"}`) for exact swatch hexes.
 
-## Remaining wiring (flip mocks → Shopify)
+## Status
 
-1. Point the page/route consumers at the async accessors: make the Server
-   Components `await fetchProducts()` / `fetchProductByHandle(slug)` etc.
-   (they're already `async`), replacing the mock constants
-   (`latestStyles`, `getProduct`, `relatedTo`, …).
-2. `generateStaticParams` → `fetchAllHandles()`.
-3. Cart via the Storefront `Cart` object → redirect to `cart.checkoutUrl`
-   (replaces the in-memory `cart-provider`).
-4. Collection/search filters via Shopify **Search & Discovery** `filters`.
-5. Customer Account API for login + orders.
+**Done** (live Shopify data via `src/lib/products.ts`, mock fallback via
+`isShopifyConfigured`):
+
+- Product detail, home, collections (men/women/accessories/new/all) and search
+  pages consume the async accessors; `generateStaticParams` → `fetchAllHandles`.
+- Cart → **Shopify hosted checkout**: cart lines carry the variant id;
+  `src/lib/actions/checkout.ts` runs `cartCreate` and redirects to
+  `cart.checkoutUrl`. Falls back to the local `/checkout` in mock mode.
+
+**Pending** (backend paused to focus on frontend):
+
+1. **Payments** — connect PayHere (+ COD). Needs the client's Sri Lankan
+   business + bank account; decides the go-live path.
+2. **Conditional COD by country** — payment-customization app in checkout.
+3. **Customer accounts** — wire `/login` `/account` to the Customer Account API.
+4. **Cart persistence** — the cart is in-memory per session; optionally persist
+   the Shopify cart across reloads.
+5. Reviews (metafields), Search & Discovery `filters`, warehouse email,
+   store address → Sri Lanka.
 
 Keep the mock backorder helpers (`isBackorderSize`, `queuePosition`, …) until
 real inventory (policy `CONTINUE`) + the FCFS queue land in Shopify.
