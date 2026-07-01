@@ -141,7 +141,7 @@ export default async function HomePage() {
           <CategoryTile
             name="T-Shirts"
             caption="Everyday Essentials"
-            href="/collections/men"
+            href="/collections/t-shirts"
             dark
             image="/category-tshirt-v2.png"
             imageClassName="object-cover object-bottom origin-bottom scale-[1.3]"
@@ -154,7 +154,7 @@ export default async function HomePage() {
           <CategoryTile
             name="Polo"
             caption="Smart Casual"
-            href="/collections/all"
+            href="/collections/polo"
             dark
             image="/category-polo.jpg"
             imageClassName="object-cover object-top scale-[1.35]"
@@ -167,7 +167,7 @@ export default async function HomePage() {
           <CategoryTile
             name="Hoody"
             caption="Cozy Layers"
-            href="/collections/all"
+            href="/collections/hoody"
             dark
             image="/category-hoody.png"
             imageClassName="object-cover object-center"
@@ -180,7 +180,7 @@ export default async function HomePage() {
           <CategoryTile
             name="Tanks"
             caption="CATEGORY · TANKS"
-            href="/collections/women"
+            href="/collections/tanks"
             dark
             bg="radial-gradient(120% 120% at 60% 30%,#26262a,#0d0d0f)"
           />

@@ -23,7 +23,13 @@ export type ShopifyProduct = {
   compareAtPriceRange?: {
     minVariantPrice: { amount: string; currencyCode: string };
   } | null;
-  options: { name: string; values: string[] }[];
+  options: {
+    name: string;
+    optionValues: {
+      name: string;
+      swatch: { color: string | null } | null;
+    }[];
+  }[];
   images: { edges: { node: { url: string; altText: string | null } }[] };
   variants: {
     edges: {
@@ -42,8 +48,8 @@ export type ShopifyProduct = {
 
 const toLKR = (amount: string): number => Math.round(parseFloat(amount));
 
-// Fallback swatch colours by name. A per-product `custom.color_swatches`
-// metafield (JSON, e.g. {"Jet Black":"#111"}) overrides these when present.
+// Last-resort swatch colours by name, only used when Shopify has no native
+// option-value swatch and no `custom.color_swatches` metafield override.
 const SWATCH_BY_NAME: Record<string, string> = {
   "jet black": "#111111",
   black: "#111111",
@@ -63,17 +69,22 @@ const SWATCH_BY_NAME: Record<string, string> = {
   purple: "#4f2c7c",
 };
 
-function optionValues(p: ShopifyProduct, name: string): string[] {
-  const opt = p.options.find(
-    (o) => o.name.toLowerCase() === name.toLowerCase(),
-  );
-  return opt?.values ?? [];
+function getOption(p: ShopifyProduct, name: string) {
+  return p.options.find((o) => o.name.toLowerCase() === name.toLowerCase());
 }
 
 export function transformProduct(p: ShopifyProduct): Product {
-  const colorNames = optionValues(p, "Color");
-  const sizeLabels = optionValues(p, "Size");
+  const colorOption = getOption(p, "Color");
+  const colorNames = colorOption?.optionValues.map((v) => v.name) ?? [];
+  const sizeLabels = getOption(p, "Size")?.optionValues.map((v) => v.name) ?? [];
 
+  // Real swatch colours set in Shopify (per option value), keyed by name.
+  const shopifySwatch: Record<string, string> = {};
+  for (const v of colorOption?.optionValues ?? []) {
+    if (v.swatch?.color) shopifySwatch[v.name] = v.swatch.color;
+  }
+
+  // Optional per-product JSON override metafield.
   let swatchMap: Record<string, string> = {};
   if (p.swatches?.value) {
     try {
@@ -82,8 +93,12 @@ export function transformProduct(p: ShopifyProduct): Product {
       swatchMap = {};
     }
   }
+  // Priority: metafield override → Shopify native swatch → name map → grey.
   const swatchFor = (name: string): string =>
-    swatchMap[name] ?? SWATCH_BY_NAME[name.toLowerCase()] ?? "#8a8a8e";
+    swatchMap[name] ??
+    shopifySwatch[name] ??
+    SWATCH_BY_NAME[name.toLowerCase()] ??
+    "#8a8a8e";
 
   const colors: ProductColor[] = colorNames.map((name) => ({
     name,

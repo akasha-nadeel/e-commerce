@@ -34,6 +34,29 @@ const COLLECTIONS: Record<string, Collection> = {
     title: "Accessories",
     tagline: "Caps, totes and the finishing touches.",
   },
+  // Garment-type collections (the Shop By Category cards). Populate by creating
+  // Smart collections with these handles in Shopify. `mixed` shows the gender
+  // facet, since a garment type spans men/women.
+  "t-shirts": {
+    title: "T-Shirts",
+    tagline: "Everyday heavyweight essentials.",
+    mixed: true,
+  },
+  polo: {
+    title: "Polo",
+    tagline: "Smart-casual staples, refined.",
+    mixed: true,
+  },
+  hoody: {
+    title: "Hoody",
+    tagline: "Cozy layers for every day.",
+    mixed: true,
+  },
+  tanks: {
+    title: "Tanks",
+    tagline: "Built to move — train in Golden Egal.",
+    mixed: true,
+  },
 };
 
 export function generateStaticParams() {

@@ -31,20 +31,23 @@ type GraphQLResponse<T> = {
 /**
  * POST a GraphQL query to the Storefront API.
  *
- * Catalog reads default to `force-cache` + cache tags, so pages stay static/ISR
- * and can be revalidated on demand from Shopify webhooks via `revalidateTag`.
+ * Catalog reads use time-based ISR (`revalidate`, default 60s) plus cache tags,
+ * so pages stay fast but pick up Shopify changes within a minute — and can also
+ * be revalidated on demand from Shopify webhooks via `revalidateTag`.
  * Pass `cache: "no-store"` for per-request data (e.g. cart mutations).
  */
 export async function shopifyFetch<T>({
   query,
   variables,
   tags,
-  cache = "force-cache",
+  cache,
+  revalidate = 60,
 }: {
   query: string;
   variables?: Record<string, unknown>;
   tags?: string[];
   cache?: RequestCache;
+  revalidate?: number | false;
 }): Promise<T> {
   if (!isShopifyConfigured) {
     throw new Error(
@@ -53,6 +56,11 @@ export async function shopifyFetch<T>({
     );
   }
 
+  // Mutations pass cache: "no-store" (no revalidate/tags); reads use ISR + tags.
+  const nextOpts: { revalidate?: number | false; tags?: string[] } = {};
+  if (cache !== "no-store") nextOpts.revalidate = revalidate;
+  if (tags && tags.length > 0) nextOpts.tags = tags;
+
   const res = await fetch(ENDPOINT, {
     method: "POST",
     headers: {
@@ -60,8 +68,8 @@ export async function shopifyFetch<T>({
       "X-Shopify-Storefront-Access-Token": TOKEN as string,
     },
     body: JSON.stringify({ query, variables }),
-    cache,
-    ...(tags && tags.length > 0 ? { next: { tags } } : {}),
+    ...(cache ? { cache } : {}),
+    ...(Object.keys(nextOpts).length > 0 ? { next: nextOpts } : {}),
   });
 
   if (!res.ok) {

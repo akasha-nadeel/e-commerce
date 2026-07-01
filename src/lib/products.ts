@@ -37,7 +37,10 @@ export async function getAllProductSlugs(): Promise<string[]> {
   return mockAllSlugs();
 }
 
-/** "You May Also Like" — a few non-accessory products other than this one. */
+/**
+ * "You May Also Like" — real, non-accessory products other than this one.
+ * Returns [] when there are no other products yet (the PDP hides the section).
+ */
 export async function getRelatedProducts(slug: string): Promise<Product[]> {
   if (isShopifyConfigured) {
     const all = await fetchProducts({ first: 12 });
