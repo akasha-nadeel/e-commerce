@@ -13,12 +13,31 @@ import { MediaTile } from "@/components/media-tile";
 export function ProductGallery({
   images,
   name,
+  activeColorImage,
+  onImageChange,
 }: {
   images: ProductImage[];
   name: string;
+  /** When set, the gallery jumps to this colour's image on selection. */
+  activeColorImage?: string;
+  /** Called with the image src when the shopper picks an image directly. */
+  onImageChange?: (src: string) => void;
 }) {
   const [active, setActive] = useState(0);
   const [zoom, setZoom] = useState(false);
+
+  // Switch the main image when the selected colour has its own photo. Adjusting
+  // state during render (React's reset-on-prop-change pattern) avoids an effect
+  // and the cascading-render it would cause.
+  const [prevColorImage, setPrevColorImage] = useState(activeColorImage);
+  if (activeColorImage !== prevColorImage) {
+    setPrevColorImage(activeColorImage);
+    if (activeColorImage) {
+      const idx = images.findIndex((img) => img.src === activeColorImage);
+      if (idx >= 0) setActive(idx);
+    }
+  }
+
   const current = images[active] ?? images[0];
 
   useEffect(() => {
@@ -34,11 +53,14 @@ export function ProductGallery({
       <div className="order-2 flex flex-row gap-3 lg:order-1 lg:w-[84px] lg:flex-col">
         {images.map((img, i) => (
           <button
-            key={img.label}
+            key={img.src ?? `img-${i}`}
             type="button"
             aria-label={`View image ${i + 1}`}
             aria-pressed={i === active}
-            onClick={() => setActive(i)}
+            onClick={() => {
+              setActive(i);
+              if (img.src) onImageChange?.(img.src);
+            }}
             className="w-[72px] shrink-0 overflow-hidden rounded-none border-2 transition-colors lg:w-full"
             style={{ borderColor: i === active ? "#0c0c0d" : "#e7e6e9" }}
           >
@@ -50,7 +72,12 @@ export function ProductGallery({
         <button
           type="button"
           aria-label="Next image"
-          onClick={() => setActive((a) => (a + 1) % images.length)}
+          onClick={() => {
+            const next = (active + 1) % images.length;
+            setActive(next);
+            const src = images[next]?.src;
+            if (src) onImageChange?.(src);
+          }}
           className="mx-auto hidden h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-[#d7d6d9] text-[#0c0c0d] transition-colors hover:border-[#0c0c0d] lg:flex"
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>

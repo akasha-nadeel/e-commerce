@@ -29,6 +29,7 @@ export const PRODUCT_FRAGMENT = /* GraphQL */ `
         node {
           id
           availableForSale
+          image { url altText }
           selectedOptions { name value }
         }
       }

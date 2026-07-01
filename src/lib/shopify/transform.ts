@@ -36,6 +36,7 @@ export type ShopifyProduct = {
       node: {
         id: string;
         availableForSale: boolean;
+        image: { url: string; altText: string | null } | null;
         selectedOptions: { name: string; value: string }[];
       };
     }[];
@@ -100,9 +101,22 @@ export function transformProduct(p: ShopifyProduct): Product {
     SWATCH_BY_NAME[name.toLowerCase()] ??
     "#8a8a8e";
 
+  // First variant image seen for each colour, so selecting a colour can switch
+  // the gallery. (Assign a distinct image per colour variant in Shopify.)
+  const colorImage: Record<string, string> = {};
+  for (const e of p.variants.edges) {
+    const url = e.node.image?.url;
+    if (!url) continue;
+    const color = e.node.selectedOptions.find(
+      (o) => o.name.toLowerCase() === "color",
+    )?.value;
+    if (color && !colorImage[color]) colorImage[color] = url;
+  }
+
   const colors: ProductColor[] = colorNames.map((name) => ({
     name,
     swatch: swatchFor(name),
+    image: colorImage[name],
   }));
 
   // A size is available when at least one sellable variant has that size.

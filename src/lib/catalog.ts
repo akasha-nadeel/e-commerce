@@ -11,6 +11,8 @@ export interface ProductColor {
   name: string;
   /** CSS color used for the swatch chip. */
   swatch: string;
+  /** Featured image for this colour (its Shopify variant image); switches the gallery when selected. */
+  image?: string;
 }
 
 export interface ProductSize {

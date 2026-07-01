@@ -42,9 +42,9 @@ export default async function HomePage() {
         <div className="relative mx-auto w-full max-w-[1400px] px-5 pb-14 sm:px-8 lg:pb-0">
           <div className="max-w-[540px]">
             <h1 className="display-tight m-0 text-[clamp(44px,7vw,104px)] font-semibold leading-[0.95] text-white">
-              Be Better
+              Own
               <br />
-              Everyday
+              The Day
             </h1>
             <p className="mb-8 mt-5 text-[clamp(15px,1.4vw,20px)] text-white/75">
               Explore the Golden Egal collection.

@@ -7,12 +7,19 @@ import { BACKORDER_RESTOCK, isBackorderSize, queuePosition } from "@/lib/catalog
 import { discountPercent, formatLKR } from "@/lib/format";
 import { useCart } from "@/components/cart-provider";
 
-export function PurchasePanel({ product }: { product: Product }) {
+export function PurchasePanel({
+  product,
+  colorIdx,
+  onColorChange,
+}: {
+  product: Product;
+  colorIdx: number;
+  onColorChange: (i: number) => void;
+}) {
   const { add } = useCart();
   const firstAvailable =
     product.sizes.find((s) => s.available)?.label ?? product.sizes[0]?.label ?? "";
 
-  const [colorIdx, setColorIdx] = useState(0);
   const [size, setSize] = useState(firstAvailable);
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [wished, setWished] = useState(false);
@@ -47,7 +54,7 @@ export function PurchasePanel({ product }: { product: Product }) {
       colorName,
       size: hasSizes ? size : "OS",
       priceLKR: product.priceLKR,
-      image: product.images[0]?.src,
+      image: product.colors[colorIdx]?.image ?? product.images[0]?.src,
       backorder,
       queuePosition: backorder ? queuePos : undefined,
       variantId,
@@ -117,7 +124,7 @@ export function PurchasePanel({ product }: { product: Product }) {
               type="button"
               aria-label={c.name}
               aria-pressed={sel}
-              onClick={() => setColorIdx(i)}
+              onClick={() => onColorChange(i)}
               className="h-10 w-10 rounded-[5px] border border-black/15 transition-[outline]"
               style={{
                 background: c.swatch,

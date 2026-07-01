@@ -3,8 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CarouselRow } from "@/components/carousel-row";
 import { ProductCard } from "@/components/product-card";
-import { ProductGallery } from "@/components/product/product-gallery";
-import { PurchasePanel } from "@/components/product/purchase-panel";
+import { ProductView } from "@/components/product/product-view";
 import { ProductReviews } from "@/components/product/product-reviews";
 import {
   getAllProductSlugs,
@@ -96,11 +95,8 @@ export default async function ProductPage({
         / <span className="text-[#0c0c0d]">{product.name}</span>
       </div>
 
-      {/* Gallery + purchase */}
-      <section className="mx-auto grid max-w-[1400px] grid-cols-1 items-start gap-10 px-5 pb-16 pt-6 sm:px-8 lg:grid-cols-[1.45fr_1fr] lg:gap-14">
-        <ProductGallery images={product.images} name={product.name} />
-        <PurchasePanel product={product} />
-      </section>
+      {/* Gallery + purchase (shared colour state) */}
+      <ProductView product={product} />
 
       {/* Reviews */}
       <ProductReviews
