@@ -9,6 +9,7 @@ export const PRODUCT_FRAGMENT = /* GraphQL */ `
     handle
     title
     description
+    descriptionHtml
     productType
     tags
     availableForSale
@@ -38,6 +39,8 @@ export const PRODUCT_FRAGMENT = /* GraphQL */ `
     reviewCount: metafield(namespace: "reviews", key: "rating_count") { value }
     badge: metafield(namespace: "custom", key: "badge") { value }
     swatches: metafield(namespace: "custom", key: "color_swatches") { value }
+    fit: metafield(namespace: "custom", key: "fit") { value }
+    fabrication: metafield(namespace: "custom", key: "fabrication") { value }
   }
 `;
 

@@ -16,6 +16,7 @@ export type ShopifyProduct = {
   handle: string;
   title: string;
   description: string;
+  descriptionHtml: string;
   productType: string;
   tags: string[];
   availableForSale: boolean;
@@ -45,6 +46,8 @@ export type ShopifyProduct = {
   reviewCount?: { value: string } | null;
   badge?: { value: string } | null;
   swatches?: { value: string } | null;
+  fit?: { value: string } | null;
+  fabrication?: { value: string } | null;
 };
 
 const toLKR = (amount: string): number => Math.round(parseFloat(amount));
@@ -161,6 +164,7 @@ export function transformProduct(p: ShopifyProduct): Product {
     sizes,
     description: p.description,
     images,
+    descriptionHtml: p.descriptionHtml || undefined,
     cardLabel: p.title.toUpperCase(),
     square: category.toLowerCase() === "accessories",
     rating: p.rating ? parseFloat(p.rating.value) : undefined,
@@ -168,6 +172,8 @@ export function transformProduct(p: ShopifyProduct): Product {
       ? parseInt(p.reviewCount.value, 10)
       : undefined,
     badge: p.badge?.value || undefined,
+    fit: p.fit?.value || undefined,
+    fabrication: p.fabrication?.value || undefined,
     variants,
   };
 }

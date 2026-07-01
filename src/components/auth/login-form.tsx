@@ -5,6 +5,7 @@ import Link from "next/link";
 import {
   AuthHeading,
   GoogleButton,
+  FacebookButton,
   OrDivider,
   TextField,
   PasswordField,
@@ -12,6 +13,8 @@ import {
   AuthSubmit,
   AuthAltLink,
   AuthSuccess,
+  MailIcon,
+  LockKeyIcon,
 } from "./auth-shell";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -46,33 +49,40 @@ export function LoginForm() {
   return (
     <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
       <AuthHeading
-        title="Welcome back"
-        subtitle="Sign in to track orders, manage returns and check out faster."
+        title="Log in to your Account"
+        subtitle="Welcome back! Select method to log in:"
       />
 
-      <GoogleButton label="Log in with Google" />
-      <OrDivider />
+      <div className="grid grid-cols-2 gap-3">
+        <GoogleButton />
+        <FacebookButton />
+      </div>
+      <OrDivider label="or continue with email" />
 
       <TextField
         id="login-email"
         label="Email"
         type="email"
-        placeholder="Enter your email"
+        placeholder="Email"
         value={email}
         onChange={(v) => setEmail(v)}
         error={errors.email}
         autoComplete="email"
         required
+        hideLabel
+        icon={<MailIcon />}
       />
       <PasswordField
         id="login-password"
         label="Password"
-        placeholder="Enter your password"
+        placeholder="Password"
         value={password}
         onChange={(v) => setPassword(v)}
         error={errors.password}
         autoComplete="current-password"
         required
+        hideLabel
+        icon={<LockKeyIcon />}
       />
 
       <div className="flex items-center justify-between">
@@ -91,9 +101,9 @@ export function LoginForm() {
         </Link>
       </div>
 
-      <AuthSubmit>Log In</AuthSubmit>
+      <AuthSubmit>Log in</AuthSubmit>
       <AuthAltLink
-        prompt="New to Golden Egal?"
+        prompt="Don't have an account?"
         href="/signup"
         cta="Create an account"
       />

@@ -19,7 +19,7 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
       {/* LEFT — form column */}
       <div className="flex min-h-screen w-full flex-col px-6 py-7 sm:px-10 lg:w-1/2 lg:px-14 xl:px-20">
         <header className="flex items-center justify-between">
-          <Logo variant="onLight" showText markHeight={28} size={13} />
+          <Logo variant="onLight" showText={false} markHeight={44} />
           <Link
             href="/"
             className="text-[13px] font-medium text-[#8a8a8e] no-underline transition-colors hover:text-[#0c0c0d]"
@@ -50,12 +50,13 @@ function Showcase() {
   return (
     <div className="relative h-full w-full overflow-hidden rounded-[28px] bg-[#ededee]">
       <Image
-        src="/hero-v3.jpg"
-        alt="Golden Egal model wearing the collection in studio"
+        src="/auth-showcase.webp"
+        alt="Golden Egal model in a yellow summer dress holding a sunflower"
         fill
         priority
+        quality={100}
         sizes="50vw"
-        className="object-cover object-[72%_20%]"
+        className="object-cover object-[40%_center]"
       />
       {/* Dark scrim — anchors the white overlay copy at the bottom */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-black/5" />
@@ -65,34 +66,14 @@ function Showcase() {
           Golden Egal
         </p>
         <h2 className="display-tight m-0 max-w-[440px] text-[clamp(28px,3vw,42px)] font-semibold leading-[1.05] text-white">
-          Be Better Everyday
+          Own The Day
         </h2>
         <p className="mt-4 max-w-[420px] text-[15px] leading-relaxed text-white/75">
           Premium heavyweight tees and athleisure — built from the ground up for
           everyday wear, crafted to last.
         </p>
-
-        <div className="mt-7 flex flex-wrap gap-3">
-          <Pill icon={<CheckIcon />}>Island-wide Shipping</Pill>
-          <Pill icon={<ReturnIcon />}>14-Day Easy Returns</Pill>
-        </div>
       </div>
     </div>
-  );
-}
-
-function Pill({
-  icon,
-  children,
-}: {
-  icon: React.ReactNode;
-  children: React.ReactNode;
-}) {
-  return (
-    <span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-2 text-[13px] font-medium text-white backdrop-blur-md">
-      <span className="text-[#e7c98a]">{icon}</span>
-      {children}
-    </span>
   );
 }
 
@@ -117,30 +98,54 @@ export function AuthHeading({
   );
 }
 
-export function GoogleButton({
-  label = "Continue with Google",
+function SocialButton({
+  icon,
+  label,
   onClick,
 }: {
-  label?: string;
+  icon: React.ReactNode;
+  label: string;
   onClick?: () => void;
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className="flex w-full cursor-pointer items-center justify-center gap-3 rounded-none border border-[#e7e6e9] bg-white px-5 py-3.5 text-[14px] font-semibold text-[#0c0c0d] transition-colors hover:border-[#d7d6d9] hover:bg-[#fafafa]"
+      className="flex w-full cursor-pointer items-center justify-center gap-2.5 rounded-xl border border-[#e2e1e4] bg-white px-4 py-3 text-[14px] font-semibold text-[#0c0c0d] transition-colors hover:border-[#0c0c0d] hover:bg-[#fafafa]"
     >
-      <GoogleIcon />
+      {icon}
       {label}
     </button>
   );
 }
 
-export function OrDivider() {
+export function GoogleButton({
+  label = "Google",
+  onClick,
+}: {
+  label?: string;
+  onClick?: () => void;
+}) {
+  return <SocialButton icon={<GoogleIcon />} label={label} onClick={onClick} />;
+}
+
+export function FacebookButton({
+  label = "Facebook",
+  onClick,
+}: {
+  label?: string;
+  onClick?: () => void;
+}) {
+  return <SocialButton icon={<FacebookIcon />} label={label} onClick={onClick} />;
+}
+
+export function OrDivider({ label = "or" }: { label?: string }) {
   return (
     <div className="flex items-center gap-4 py-1">
       <span className="h-px flex-1 bg-[#e7e6e9]" />
-      <span className="text-[12px] font-medium text-[#a3a3a8]">or</span>
+      <span className="whitespace-nowrap text-[12px] font-medium text-[#a3a3a8]">
+        {label}
+      </span>
       <span className="h-px flex-1 bg-[#e7e6e9]" />
     </div>
   );
@@ -159,6 +164,8 @@ export function TextField({
   error,
   autoComplete,
   required,
+  icon,
+  hideLabel,
 }: {
   id: string;
   label: string;
@@ -169,26 +176,38 @@ export function TextField({
   error?: string;
   autoComplete?: string;
   required?: boolean;
+  icon?: React.ReactNode;
+  hideLabel?: boolean;
 }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={id} className="text-[13px] font-semibold text-[#0c0c0d]">
+      <label
+        htmlFor={id}
+        className={hideLabel ? "sr-only" : "text-[13px] font-semibold text-[#0c0c0d]"}
+      >
         {label}
-        {required && <span className="text-[#eec449]"> *</span>}
+        {required && !hideLabel && <span className="text-[#eec449]"> *</span>}
       </label>
-      <input
-        id={id}
-        type={type}
-        value={value}
-        placeholder={placeholder}
-        autoComplete={autoComplete}
-        aria-invalid={!!error}
-        aria-describedby={error ? `${id}-error` : undefined}
-        onChange={(e) => onChange(e.target.value)}
-        className={`${inputBase} ${
-          error ? "border-[#d23b3b]" : "border-transparent focus:border-[#0c0c0d]"
-        }`}
-      />
+      <div className="relative">
+        {icon && (
+          <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#8a8a8e]">
+            {icon}
+          </span>
+        )}
+        <input
+          id={id}
+          type={type}
+          value={value}
+          placeholder={placeholder}
+          autoComplete={autoComplete}
+          aria-invalid={!!error}
+          aria-describedby={error ? `${id}-error` : undefined}
+          onChange={(e) => onChange(e.target.value)}
+          className={`${inputBase} ${icon ? "pl-11" : ""} ${
+            error ? "border-[#d23b3b]" : "border-transparent focus:border-[#0c0c0d]"
+          }`}
+        />
+      </div>
       {error && (
         <span id={`${id}-error`} className="text-[12px] text-[#d23b3b]">
           {error}
@@ -207,6 +226,8 @@ export function PasswordField({
   error,
   autoComplete,
   required,
+  icon,
+  hideLabel,
 }: {
   id: string;
   label: string;
@@ -216,15 +237,25 @@ export function PasswordField({
   error?: string;
   autoComplete?: string;
   required?: boolean;
+  icon?: React.ReactNode;
+  hideLabel?: boolean;
 }) {
   const [show, setShow] = useState(false);
   return (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={id} className="text-[13px] font-semibold text-[#0c0c0d]">
+      <label
+        htmlFor={id}
+        className={hideLabel ? "sr-only" : "text-[13px] font-semibold text-[#0c0c0d]"}
+      >
         {label}
-        {required && <span className="text-[#eec449]"> *</span>}
+        {required && !hideLabel && <span className="text-[#eec449]"> *</span>}
       </label>
       <div className="relative">
+        {icon && (
+          <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#8a8a8e]">
+            {icon}
+          </span>
+        )}
         <input
           id={id}
           type={show ? "text" : "password"}
@@ -234,7 +265,7 @@ export function PasswordField({
           aria-invalid={!!error}
           aria-describedby={error ? `${id}-error` : undefined}
           onChange={(e) => onChange(e.target.value)}
-          className={`${inputBase} pr-12 ${
+          className={`${inputBase} pr-12 ${icon ? "pl-11" : ""} ${
             error
               ? "border-[#d23b3b]"
               : "border-transparent focus:border-[#0c0c0d]"
@@ -295,7 +326,7 @@ export function AuthSubmit({ children }: { children: React.ReactNode }) {
   return (
     <button
       type="submit"
-      className="mt-1 w-full cursor-pointer rounded-none bg-[#0c0c0d] px-5 py-4 text-[14px] font-semibold text-white transition-colors hover:bg-[#eec449] hover:text-[#0c0c0d]"
+      className="mt-1 w-full cursor-pointer rounded-xl bg-[#0c0c0d] px-5 py-4 text-[14px] font-semibold text-white transition-colors hover:bg-[#eec449] hover:text-[#0c0c0d]"
     >
       {children}
     </button>
@@ -376,6 +407,38 @@ function GoogleIcon() {
   );
 }
 
+function FacebookIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="#1877F2" aria-hidden="true">
+      <path d="M24 12a12 12 0 1 0-13.88 11.85v-8.38H7.08V12h3.04V9.36c0-3 1.79-4.67 4.53-4.67 1.31 0 2.68.24 2.68.24v2.95h-1.51c-1.49 0-1.95.93-1.95 1.87V12h3.32l-.53 3.47h-2.79v8.38A12 12 0 0 0 24 12Z" />
+    </svg>
+  );
+}
+
+export function MailIcon() {
+  return (
+    <svg
+      width="18" height="18" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"
+    >
+      <rect x="3" y="5" width="18" height="14" rx="2" />
+      <path d="m3 7 9 6 9-6" />
+    </svg>
+  );
+}
+
+export function LockKeyIcon() {
+  return (
+    <svg
+      width="18" height="18" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"
+    >
+      <rect x="4" y="11" width="16" height="10" rx="2" />
+      <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+    </svg>
+  );
+}
+
 function CheckIcon({ size = 14 }: { size?: number }) {
   return (
     <svg
@@ -390,25 +453,6 @@ function CheckIcon({ size = 14 }: { size?: number }) {
       aria-hidden="true"
     >
       <path d="M20 6 9 17l-5-5" />
-    </svg>
-  );
-}
-
-function ReturnIcon() {
-  return (
-    <svg
-      width="14"
-      height="14"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={2}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M3 7v6h6" />
-      <path d="M3 13a9 9 0 1 0 3-7.7L3 8" />
     </svg>
   );
 }

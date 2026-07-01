@@ -58,6 +58,12 @@ export interface Product {
   reviewCount?: number;
   /** Optional merchandising badge, e.g. "New Arrival" / "Best Seller". */
   badge?: string;
+  /** Rich HTML description (Shopify `descriptionHtml`); PDP renders this when set. */
+  descriptionHtml?: string;
+  /** Fit notes (Shopify `custom.fit` metafield); PDP falls back to default copy. */
+  fit?: string;
+  /** Fabric & care notes (Shopify `custom.fabrication` metafield); PDP falls back. */
+  fabrication?: string;
   /** Shopify variants (id + option values) for cart/checkout. Absent in mock mode. */
   variants?: ProductVariant[];
 }

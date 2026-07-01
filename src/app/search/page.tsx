@@ -8,11 +8,16 @@ export const metadata: Metadata = {
   robots: { index: false },
 };
 
-export default async function SearchPage() {
+export default async function SearchPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string }>;
+}) {
+  const { q } = await searchParams;
   const products = await getAllProducts();
   return (
     <div className="w-full bg-white">
-      <SearchClient products={products} />
+      <SearchClient products={products} initialQuery={q ?? ""} />
     </div>
   );
 }

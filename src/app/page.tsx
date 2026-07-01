@@ -28,17 +28,16 @@ export default async function HomePage() {
       {/* ---------------------------------------------------------------- */}
       <section className="relative -mt-[74px] flex min-h-screen items-end overflow-hidden bg-[#17120f] pt-[74px] lg:items-center">
         <Image
-          src="/hero-golden-eagle.jpg"
+          src="/hero-golden-eagle-v2.webp"
           alt="Golden Eagle black hoodie with gold eagle embroidery on a dark studio backdrop"
           fill
           priority
-          sizes="100vw"
+          quality={100}
+          /* Mobile crops a landscape image into a tall frame, so object-cover
+             scales it up — request a larger candidate there to stay sharp. */
+          sizes="(max-width: 1024px) 200vw, 100vw"
           className="object-cover object-right lg:object-center"
         />
-        {/* Dark scrim for text legibility (stronger at the bottom on mobile, on
-            the left on desktop where the headline sits) */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent lg:bg-gradient-to-r lg:from-black/70 lg:via-black/15 lg:to-transparent" />
-
         <div className="relative mx-auto w-full max-w-[1400px] px-5 pb-14 sm:px-8 lg:pb-0">
           <div className="max-w-[540px]">
             <h1 className="display-tight m-0 text-[clamp(44px,7vw,104px)] font-semibold leading-[0.95] text-white">

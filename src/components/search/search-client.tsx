@@ -7,8 +7,14 @@ import { ProductCard } from "@/components/product-card";
 
 const SUGGESTIONS = ["Oversized", "Jersey", "Black", "Tee", "Cap", "Tank"];
 
-export function SearchClient({ products }: { products: Product[] }) {
-  const [q, setQ] = useState("");
+export function SearchClient({
+  products,
+  initialQuery = "",
+}: {
+  products: Product[];
+  initialQuery?: string;
+}) {
+  const [q, setQ] = useState(initialQuery);
   const query = q.trim().toLowerCase();
 
   const results = useMemo(() => {

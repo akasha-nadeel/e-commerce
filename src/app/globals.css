@@ -110,3 +110,44 @@ h3 {
     transparent 2px 24px
   );
 }
+
+/* Rich HTML from Shopify `descriptionHtml` (PDP Description accordion). */
+.rich-text > :first-child {
+  margin-top: 0;
+}
+.rich-text p {
+  margin: 0 0 0.85em;
+}
+.rich-text h1,
+.rich-text h2,
+.rich-text h3,
+.rich-text h4 {
+  margin: 1.2em 0 0.5em;
+  font-weight: 600;
+  color: #0c0c0d;
+  font-size: 15px;
+}
+.rich-text ul,
+.rich-text ol {
+  margin: 0 0 0.85em;
+  padding-left: 1.25em;
+}
+.rich-text ul {
+  list-style: disc;
+}
+.rich-text ol {
+  list-style: decimal;
+}
+.rich-text li {
+  margin: 0.3em 0;
+}
+.rich-text strong,
+.rich-text b {
+  font-weight: 600;
+  color: #0c0c0d;
+}
+.rich-text a {
+  color: #0c0c0d;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

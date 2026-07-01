@@ -21,7 +21,6 @@ export function PurchasePanel({
     product.sizes.find((s) => s.available)?.label ?? product.sizes[0]?.label ?? "";
 
   const [size, setSize] = useState(firstAvailable);
-  const [detailsOpen, setDetailsOpen] = useState(false);
   const [wished, setWished] = useState(false);
   const [added, setAdded] = useState(false);
   const addedTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
@@ -102,11 +101,6 @@ export function PurchasePanel({
           </>
         )}
       </div>
-
-      {/* Description */}
-      <p className="mt-4 max-w-[46ch] text-[15px] leading-[1.6] text-[#6a6a6e]">
-        {product.description}
-      </p>
 
       <hr className="my-6 border-0 border-t border-[#e7e6e9]" />
 
@@ -295,29 +289,15 @@ export function PurchasePanel({
         />
       </div>
 
-      {/* Product details accordion */}
-      <div className="mt-6 border-t border-[#e7e6e9]">
-        <button
-          type="button"
-          onClick={() => setDetailsOpen((o) => !o)}
-          aria-expanded={detailsOpen}
-          className="flex w-full cursor-pointer items-center justify-between bg-transparent py-5 text-[16px] font-semibold text-[#0c0c0d]"
+      {/* Description */}
+      <div className="mt-6">
+        <InfoAccordion
+          title="Description"
+          defaultOpen
+          html={product.descriptionHtml}
         >
-          Product details
-          <span
-            className="inline-block transition-transform duration-200"
-            style={{ transform: detailsOpen ? "rotate(180deg)" : "rotate(0deg)" }}
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0c0c0d" strokeWidth={2}>
-              <path d="M6 9l6 6 6-6" />
-            </svg>
-          </span>
-        </button>
-        {detailsOpen && (
-          <p className="mb-5 mt-0 text-[14px] leading-[1.7] text-[#6a6a6e]">
-            {product.description}
-          </p>
-        )}
+          {product.description}
+        </InfoAccordion>
       </div>
     </div>
   );
@@ -354,6 +334,52 @@ function Trust({
         <div className="text-[12px] font-semibold leading-tight">{title}</div>
         <div className="mt-0.5 text-[11px] leading-tight text-[#8a8a8e]">{sub}</div>
       </div>
+    </div>
+  );
+}
+
+function InfoAccordion({
+  title,
+  defaultOpen = false,
+  html,
+  children,
+}: {
+  title: string;
+  defaultOpen?: boolean;
+  /** Trusted Shopify `descriptionHtml`; rendered with rich-text styles. */
+  html?: string;
+  children?: React.ReactNode;
+}) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <div className="border-t border-[#e7e6e9]">
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+        className="flex w-full cursor-pointer items-center justify-between bg-transparent py-5 text-[16px] font-semibold text-[#0c0c0d]"
+      >
+        {title}
+        <span
+          className="inline-block transition-transform duration-200"
+          style={{ transform: open ? "rotate(180deg)" : "rotate(0deg)" }}
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0c0c0d" strokeWidth={2}>
+            <path d="M6 9l6 6 6-6" />
+          </svg>
+        </span>
+      </button>
+      {open &&
+        (html ? (
+          <div
+            className="rich-text mb-5 mt-0 text-[14px] leading-[1.7] text-[#6a6a6e]"
+            dangerouslySetInnerHTML={{ __html: html }}
+          />
+        ) : (
+          <p className="mb-5 mt-0 text-[14px] leading-[1.7] text-[#6a6a6e]">
+            {children}
+          </p>
+        ))}
     </div>
   );
 }

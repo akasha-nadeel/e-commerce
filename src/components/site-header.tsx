@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Logo } from "./logo";
 import { useCart } from "./cart-provider";
+import { SearchPanel } from "./search/search-panel";
 
 const NAV = [
   { label: "HOME", href: "/", mega: false },
@@ -40,6 +41,7 @@ export function SiteHeader() {
 
   const [megaOpen, setMegaOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   // On the homepage the nav overlays the hero transparently at the very top;
@@ -51,6 +53,19 @@ export function SiteHeader() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, [isHome]);
+
+  // Lock scroll + Esc-to-close while the mobile menu sheet is open.
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setMobileOpen(false);
+    document.addEventListener("keydown", onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [mobileOpen]);
 
   // The homepage hero is a dark studio image, so while the nav overlays it
   // (transparent) the text/logo/icons render light; once scrolled or a menu
@@ -129,12 +144,17 @@ export function SiteHeader() {
 
         {/* Right: utility icons */}
         <div className="flex items-center gap-5 sm:gap-[22px]">
-          <Link href="/search" aria-label="Search products" className={iconCls}>
+          <button
+            type="button"
+            onClick={() => setSearchOpen(true)}
+            aria-label="Search products"
+            className={iconCls}
+          >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
               <circle cx="11" cy="11" r="7" />
               <line x1="16.5" y1="16.5" x2="21" y2="21" />
             </svg>
-          </Link>
+          </button>
           <Link href="/login" aria-label="Account" className={iconCls}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
               <circle cx="12" cy="8" r="4" />
@@ -147,9 +167,19 @@ export function SiteHeader() {
             aria-label={`Open bag, ${count} items`}
             className={`relative ${iconCls}`}
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-              <path d="M6 8h12l-1 12H7L6 8z" />
-              <path d="M9 8V6a3 3 0 0 1 6 0v2" />
+            <svg
+              width="21"
+              height="21"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={1.9}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <circle cx="9" cy="20.5" r="1.6" />
+              <circle cx="18" cy="20.5" r="1.6" />
+              <path d="M2.5 3.5h2.3l2.5 12.2a1.8 1.8 0 0 0 1.77 1.45h8a1.8 1.8 0 0 0 1.76-1.42L20.6 7H5.4" />
             </svg>
             <span className="absolute -right-[9px] -top-2 flex h-[17px] min-w-[17px] items-center justify-center rounded-[9px] bg-[#eec449] px-1 text-[10px] font-semibold text-[#0c0c0d]">
               {count}
@@ -192,35 +222,72 @@ export function SiteHeader() {
         </div>
       )}
 
-      {/* Mobile slide-down menu */}
-      {mobileOpen && (
-        <div className="border-t border-[#e7e6e9] bg-white md:hidden">
-          <nav className="mx-auto flex max-w-[1400px] flex-col px-5 py-2">
+      {/* Mobile menu — bottom sheet */}
+      <div
+        aria-hidden
+        onClick={() => setMobileOpen(false)}
+        className={`fixed inset-0 z-[60] bg-black/50 transition-opacity duration-300 md:hidden ${
+          mobileOpen ? "opacity-100" : "pointer-events-none opacity-0"
+        }`}
+      />
+      <div
+        role="dialog"
+        aria-label="Menu"
+        aria-hidden={!mobileOpen}
+        className={`fixed inset-x-0 bottom-0 z-[70] flex h-[86vh] flex-col rounded-t-[22px] bg-white text-[#0c0c0d] shadow-[0_-10px_40px_rgba(0,0,0,0.22)] transition-transform duration-300 md:hidden ${
+          mobileOpen ? "translate-y-0" : "translate-y-full"
+        }`}
+      >
+        <div className="mx-auto mt-3 h-1 w-10 shrink-0 rounded-full bg-[#d7d6d9]" />
+        <div className="flex-1 overflow-y-auto px-6 pb-2 pt-3">
+          <nav className="flex flex-col">
             {NAV.map((item) => (
               <Link
                 key={item.label}
                 href={item.href}
                 onClick={() => setMobileOpen(false)}
-                className="border-b border-[#f0eff1] py-4 text-[15px] font-medium tracking-[0.02em] text-[#0c0c0d] no-underline"
+                className="flex items-center justify-between border-b border-[#f0eff1] py-[15px] text-[17px] font-semibold tracking-[0.02em] text-[#0c0c0d] no-underline"
               >
                 {item.label}
+                {item.mega && (
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0c0c0d" strokeWidth={2}>
+                    <path d="M9 6l6 6-6 6" />
+                  </svg>
+                )}
               </Link>
             ))}
-            <div className="grid grid-cols-2 gap-x-4 gap-y-3 py-5">
-              {EXPLORE.map((e) => (
-                <Link
-                  key={e.label}
-                  href={e.href}
-                  onClick={() => setMobileOpen(false)}
-                  className="text-[14px] text-[#6a6a6e] no-underline"
-                >
-                  {e.label}
-                </Link>
-              ))}
-            </div>
           </nav>
         </div>
-      )}
+        <div className="flex items-center justify-between border-t border-[#e7e6e9] px-6 py-4">
+          <Link
+            href="/login"
+            onClick={() => setMobileOpen(false)}
+            className="flex items-center gap-2 text-[14px] font-semibold text-[#0c0c0d] no-underline transition-colors hover:text-[#eec449]"
+          >
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+              <circle cx="12" cy="8" r="4" />
+              <path d="M5 21c0-4 3.5-6 7-6s7 2 7 6" />
+            </svg>
+            Login
+          </Link>
+          <div className="flex items-center gap-5">
+            <a href="#" aria-label="Facebook" className="text-[#0c0c0d] transition-colors hover:text-[#eec449]">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M13 22v-8h2.7l.4-3H13V9c0-.86.24-1.45 1.5-1.45H16V4.86A20 20 0 0 0 13.7 4.7c-2.3 0-3.87 1.4-3.87 3.98V11H7.2v3h2.63v8H13Z" />
+              </svg>
+            </a>
+            <a href="#" aria-label="Instagram" className="text-[#0c0c0d] transition-colors hover:text-[#eec449]">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                <rect x="3" y="3" width="18" height="18" rx="5" />
+                <circle cx="12" cy="12" r="4" />
+                <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <SearchPanel open={searchOpen} onClose={() => setSearchOpen(false)} />
     </header>
   );
 }

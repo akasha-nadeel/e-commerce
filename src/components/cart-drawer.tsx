@@ -53,10 +53,18 @@ export function CartDrawer() {
         role="dialog"
         aria-label="Shopping bag"
         aria-hidden={!isOpen}
-        className={`fixed right-0 top-0 z-[70] flex h-full w-full max-w-[420px] flex-col bg-white shadow-[-20px_0_60px_rgba(0,0,0,0.25)] transition-transform duration-300 ${
-          isOpen ? "translate-x-0" : "translate-x-full"
-        }`}
+        className={`fixed z-[70] flex flex-col bg-white transition-transform duration-300
+          inset-x-0 bottom-0 h-[86vh] rounded-t-[22px] shadow-[0_-10px_40px_rgba(0,0,0,0.22)]
+          sm:inset-x-auto sm:bottom-auto sm:right-0 sm:top-0 sm:h-full sm:max-h-none sm:w-full sm:max-w-[420px] sm:rounded-none sm:shadow-[-20px_0_60px_rgba(0,0,0,0.25)]
+          ${
+            isOpen
+              ? "translate-y-0 sm:translate-x-0"
+              : "translate-y-full sm:translate-y-0 sm:translate-x-full"
+          }`}
       >
+        {/* Drag handle (mobile bottom-sheet) */}
+        <div className="mx-auto mt-3 h-1 w-10 shrink-0 rounded-full bg-[#d7d6d9] sm:hidden" />
+
         {/* Header */}
         <div className="flex items-center justify-between border-b border-[#e7e6e9] px-6 py-5">
           <h2 className="m-0 text-[18px] font-semibold tracking-[0.04em]">
@@ -78,9 +86,19 @@ export function CartDrawer() {
         {/* Body */}
         {lines.length === 0 ? (
           <div className="flex flex-1 flex-col items-center justify-center gap-5 px-6 text-center">
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#d7d6d9" strokeWidth={1.6}>
-              <path d="M6 8h12l-1 12H7L6 8z" />
-              <path d="M9 8V6a3 3 0 0 1 6 0v2" />
+            <svg
+              width="44"
+              height="44"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#d7d6d9"
+              strokeWidth={1.5}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <circle cx="9" cy="20.5" r="1.6" />
+              <circle cx="18" cy="20.5" r="1.6" />
+              <path d="M2.5 3.5h2.3l2.5 12.2a1.8 1.8 0 0 0 1.77 1.45h8a1.8 1.8 0 0 0 1.76-1.42L20.6 7H5.4" />
             </svg>
             <p className="m-0 text-[15px] text-[#8a8a8e]">Your bag is empty.</p>
             <Link
