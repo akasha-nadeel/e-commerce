@@ -54,7 +54,7 @@ export function SignupForm() {
     <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
       <AuthHeading
         title="Create your account"
-        subtitle="Join Golden Egal — be better everyday."
+        subtitle="Join Golden Egal — own the day."
       />
 
       <GoogleButton label="Sign up with Google" />

@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     template: "%s · Golden Egal",
   },
   description:
-    "Premium heavyweight tees, jerseys and athleisure for men and women. Built from the ground up — be better everyday. Free island-wide shipping over LKR 20,000.",
+    "Premium heavyweight tees, jerseys and athleisure for men and women. Built from the ground up — own the day. Free island-wide shipping over LKR 20,000.",
   keywords: [
     "Golden Egal",
     "premium t-shirts Sri Lanka",
@@ -40,14 +40,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "Golden Egal",
-    title: "Golden Egal — Be Better Everyday",
+    title: "Golden Egal — Own The Day",
     description:
       "Premium heavyweight tees, jerseys and athleisure for men and women.",
     url: SITE_URL,
   },
   twitter: {
     card: "summary_large_image",
-    title: "Golden Egal — Be Better Everyday",
+    title: "Golden Egal — Own The Day",
     description:
       "Premium heavyweight tees, jerseys and athleisure for men and women.",
   },

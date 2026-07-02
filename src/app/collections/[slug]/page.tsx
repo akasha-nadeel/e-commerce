@@ -24,7 +24,7 @@ const COLLECTIONS: Record<string, Collection> = {
   },
   men: {
     title: "Men",
-    tagline: "Built from the ground up — be better everyday.",
+    tagline: "Built from the ground up — own the day.",
   },
   women: {
     title: "Women",

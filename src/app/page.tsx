@@ -156,7 +156,7 @@ export default async function HomePage() {
             href="/collections/polo"
             dark
             image="/category-polo.jpg"
-            imageClassName="object-cover object-top scale-[1.35]"
+            imageClassName="object-cover object-top scale-[1.35] -translate-y-[6%]"
             nameTop
             nameColor="#fcb710"
             bg="#1b3f3b"
@@ -346,6 +346,17 @@ function CategoryTile({
           </span>
         </>
       )}
+
+      {/* Circular add / shop badge */}
+      <span
+        aria-hidden
+        className="absolute bottom-4 right-4 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-[#0c0c0d] text-white shadow-[0_4px_14px_rgba(0,0,0,0.3)] transition-transform duration-300 group-hover:scale-110"
+      >
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round">
+          <line x1="12" y1="5" x2="12" y2="19" />
+          <line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
+      </span>
     </Link>
   );
 }

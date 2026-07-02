@@ -5,7 +5,7 @@ import { SignupForm } from "@/components/auth/signup-form";
 export const metadata: Metadata = {
   title: "Create Account",
   description:
-    "Create your Golden Egal account — be better everyday with premium tees and athleisure.",
+    "Create your Golden Egal account — own the day with premium tees and athleisure.",
   alternates: { canonical: "/signup" },
 };
 

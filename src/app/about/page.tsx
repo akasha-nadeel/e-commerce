@@ -24,7 +24,7 @@ export default function AboutPage() {
             Our Story
           </div>
           <h1 className="display-tight m-0 max-w-[14ch] text-[clamp(40px,7vw,104px)] font-semibold leading-[0.92] text-white">
-            Be Better Everyday
+            Own The Day
           </h1>
         </div>
       </section>

@@ -81,7 +81,7 @@ export function SiteFooter() {
           </div>
 
           <p className="text-center text-[15px] font-bold italic tracking-[0.04em] text-white">
-            BE BETTER EVERYDAY
+            OWN THE DAY
           </p>
 
           <p className="text-center text-[13px] text-white/45 sm:text-right">
