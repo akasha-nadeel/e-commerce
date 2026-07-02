@@ -43,6 +43,10 @@ export function SiteHeader() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [auth, setAuth] = useState<{ loggedIn: boolean; firstName?: string }>({
+    loggedIn: false,
+  });
+  const [accountOpen, setAccountOpen] = useState(false);
 
   // On the homepage the nav overlays the hero transparently at the very top;
   // as soon as the user starts scrolling it gains a solid white background.
@@ -53,6 +57,18 @@ export function SiteHeader() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, [isHome]);
+
+  // Auth state for the header (logged-in avatar vs sign-in icon).
+  useEffect(() => {
+    let active = true;
+    fetch("/api/auth/me")
+      .then((r) => r.json())
+      .then((d) => active && setAuth(d))
+      .catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, []);
 
   // Lock scroll + Esc-to-close while the mobile menu sheet is open.
   useEffect(() => {
@@ -155,12 +171,66 @@ export function SiteHeader() {
               <line x1="16.5" y1="16.5" x2="21" y2="21" />
             </svg>
           </button>
-          <Link href="/account" aria-label="Account" className={iconCls}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-              <circle cx="12" cy="8" r="4" />
-              <path d="M5 21c0-4 3.5-6 7-6s7 2 7 6" />
-            </svg>
-          </Link>
+          <div className="relative">
+            {auth.loggedIn ? (
+              <button
+                type="button"
+                onClick={() => setAccountOpen((o) => !o)}
+                aria-label="Account menu"
+                aria-expanded={accountOpen}
+                className={`flex h-8 w-8 items-center justify-center rounded-full border border-current text-[12px] font-bold ${iconCls}`}
+              >
+                {auth.firstName ? (
+                  auth.firstName[0].toUpperCase()
+                ) : (
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                    <circle cx="12" cy="8" r="4" />
+                    <path d="M5 21c0-4 3.5-6 7-6s7 2 7 6" />
+                  </svg>
+                )}
+              </button>
+            ) : (
+              <Link href="/login" aria-label="Sign in" className={iconCls}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                  <circle cx="12" cy="8" r="4" />
+                  <path d="M5 21c0-4 3.5-6 7-6s7 2 7 6" />
+                </svg>
+              </Link>
+            )}
+
+            {accountOpen && auth.loggedIn && (
+              <>
+                <div
+                  className="fixed inset-0 z-[55]"
+                  aria-hidden
+                  onClick={() => setAccountOpen(false)}
+                />
+                <div className="absolute right-0 top-full z-[60] mt-3 w-52 border border-[#e7e6e9] bg-white py-2 text-[#0c0c0d] shadow-[0_18px_40px_rgba(0,0,0,0.16)]">
+                  {auth.firstName && (
+                    <div className="border-b border-[#f0eff1] px-4 py-2.5 text-[13px] text-[#8a8a8e]">
+                      Hi,{" "}
+                      <span className="font-semibold text-[#0c0c0d]">
+                        {auth.firstName}
+                      </span>
+                    </div>
+                  )}
+                  <Link
+                    href="/account"
+                    onClick={() => setAccountOpen(false)}
+                    className="block px-4 py-2.5 text-[14px] no-underline transition-colors hover:bg-[#f7f7f8]"
+                  >
+                    My Account
+                  </Link>
+                  <a
+                    href="/api/auth/logout"
+                    className="block px-4 py-2.5 text-[14px] no-underline transition-colors hover:bg-[#f7f7f8]"
+                  >
+                    Log out
+                  </a>
+                </div>
+              </>
+            )}
+          </div>
           <button
             type="button"
             onClick={open}
@@ -259,17 +329,39 @@ export function SiteHeader() {
           </nav>
         </div>
         <div className="flex items-center justify-between border-t border-[#e7e6e9] px-6 py-4">
-          <Link
-            href="/login"
-            onClick={() => setMobileOpen(false)}
-            className="flex items-center gap-2 text-[14px] font-semibold text-[#0c0c0d] no-underline transition-colors hover:text-[#eec449]"
-          >
-            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-              <circle cx="12" cy="8" r="4" />
-              <path d="M5 21c0-4 3.5-6 7-6s7 2 7 6" />
-            </svg>
-            Login
-          </Link>
+          {auth.loggedIn ? (
+            <div className="flex items-center gap-4">
+              <Link
+                href="/account"
+                onClick={() => setMobileOpen(false)}
+                className="flex items-center gap-2 text-[14px] font-semibold text-[#0c0c0d] no-underline transition-colors hover:text-[#eec449]"
+              >
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                  <circle cx="12" cy="8" r="4" />
+                  <path d="M5 21c0-4 3.5-6 7-6s7 2 7 6" />
+                </svg>
+                {auth.firstName ? `Hi, ${auth.firstName}` : "My Account"}
+              </Link>
+              <a
+                href="/api/auth/logout"
+                className="text-[13px] font-semibold text-[#8a8a8e] no-underline transition-colors hover:text-[#0c0c0d]"
+              >
+                Log out
+              </a>
+            </div>
+          ) : (
+            <Link
+              href="/login"
+              onClick={() => setMobileOpen(false)}
+              className="flex items-center gap-2 text-[14px] font-semibold text-[#0c0c0d] no-underline transition-colors hover:text-[#eec449]"
+            >
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                <circle cx="12" cy="8" r="4" />
+                <path d="M5 21c0-4 3.5-6 7-6s7 2 7 6" />
+              </svg>
+              Login
+            </Link>
+          )}
           <div className="flex items-center gap-5">
             <a href="#" aria-label="Facebook" className="text-[#0c0c0d] transition-colors hover:text-[#eec449]">
               <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor">
