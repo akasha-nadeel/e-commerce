@@ -1,61 +1,49 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import {
   AuthHeading,
   GoogleButton,
   FacebookButton,
   OrDivider,
   TextField,
-  PasswordField,
-  AuthCheckbox,
   AuthSubmit,
-  AuthAltLink,
-  AuthSuccess,
   MailIcon,
-  LockKeyIcon,
 } from "./auth-shell";
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-type Errors = { email?: string; password?: string };
-
+/**
+ * Passwordless login: every method hands off to Shopify's hosted login via
+ * /api/auth/login (OAuth). The email field is an optional login_hint to prefill
+ * the address on Shopify's page.
+ */
 export function LoginForm() {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [remember, setRemember] = useState(true);
-  const [errors, setErrors] = useState<Errors>({});
-  const [done, setDone] = useState(false);
+  const [busy, setBusy] = useState(false);
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const next: Errors = {};
-    if (!EMAIL_RE.test(email)) next.email = "Enter a valid email address.";
-    if (password.length < 1) next.password = "Please enter your password.";
-    setErrors(next);
-    if (Object.keys(next).length === 0) setDone(true);
-  }
-
-  if (done) {
-    return (
-      <AuthSuccess
-        title="You're signed in"
-        body={`Welcome back. Live order tracking and returns for ${email} arrive with our Shopify customer accounts shortly.`}
-      />
-    );
+  function startLogin(loginHint?: string) {
+    setBusy(true);
+    const hint = loginHint?.trim();
+    window.location.href = hint
+      ? `/api/auth/login?login_hint=${encodeURIComponent(hint)}`
+      : "/api/auth/login";
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        startLogin(email);
+      }}
+      className="flex flex-col gap-4"
+    >
       <AuthHeading
         title="Log in to your Account"
         subtitle="Welcome back! Select method to log in:"
       />
 
       <div className="grid grid-cols-2 gap-3">
-        <GoogleButton />
-        <FacebookButton />
+        <GoogleButton onClick={() => startLogin()} />
+        <FacebookButton onClick={() => startLogin()} />
       </div>
       <OrDivider label="or continue with email" />
 
@@ -65,48 +53,28 @@ export function LoginForm() {
         type="email"
         placeholder="Email"
         value={email}
-        onChange={(v) => setEmail(v)}
-        error={errors.email}
+        onChange={setEmail}
         autoComplete="email"
-        required
         hideLabel
         icon={<MailIcon />}
       />
-      <PasswordField
-        id="login-password"
-        label="Password"
-        placeholder="Password"
-        value={password}
-        onChange={(v) => setPassword(v)}
-        error={errors.password}
-        autoComplete="current-password"
-        required
-        hideLabel
-        icon={<LockKeyIcon />}
-      />
 
-      <div className="flex items-center justify-between">
-        <AuthCheckbox
-          id="login-remember"
-          checked={remember}
-          onChange={(v) => setRemember(v)}
-        >
-          Remember me
-        </AuthCheckbox>
-        <Link
-          href="/login"
-          className="shrink-0 text-[13px] font-medium text-[#eec449] no-underline hover:underline"
-        >
-          Forgot password?
-        </Link>
-      </div>
+      <AuthSubmit>{busy ? "Redirecting…" : "Continue"}</AuthSubmit>
 
-      <AuthSubmit>Log in</AuthSubmit>
-      <AuthAltLink
-        prompt="Don't have an account?"
-        href="/signup"
-        cta="Create an account"
-      />
+      <p className="mt-1 text-center text-[14px] text-[#6a6a6e]">
+        New here?{" "}
+        <button
+          type="button"
+          onClick={() => startLogin()}
+          className="cursor-pointer font-semibold text-[#eec449] hover:underline"
+        >
+          Create an account
+        </button>
+      </p>
+
+      <p className="mt-1 text-center text-[12px] leading-relaxed text-[#8a8a8e]">
+        Secure passwordless sign-in — Shopify emails you a one-time code.
+      </p>
     </form>
   );
 }

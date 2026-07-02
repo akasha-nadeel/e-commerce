@@ -1,196 +1,143 @@
 import type { Metadata } from "next";
-import { Fragment } from "react";
-import { SignInForm } from "@/components/sign-in-form";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import {
+  customerFetch,
+  isCustomerAuthConfigured,
+} from "@/lib/auth/customer-account";
+import { getSession } from "@/lib/auth/session";
+import { formatLKR } from "@/lib/format";
 
 export const metadata: Metadata = {
   title: "Account",
-  description: "Sign in to your Golden Egal account to track orders and returns.",
-  alternates: { canonical: "/account" },
+  description: "Your Golden Egal account — orders and profile.",
+  robots: { index: false },
 };
 
-export default function AccountPage() {
+const CUSTOMER_QUERY = /* GraphQL */ `
+  query CustomerAccount {
+    customer {
+      firstName
+      lastName
+      emailAddress { emailAddress }
+      orders(first: 10, sortKey: PROCESSED_AT, reverse: true) {
+        edges {
+          node {
+            id
+            name
+            processedAt
+            totalPrice { amount currencyCode }
+          }
+        }
+      }
+    }
+  }
+`;
+
+interface CustomerData {
+  customer: {
+    firstName: string | null;
+    lastName: string | null;
+    emailAddress: { emailAddress: string } | null;
+    orders: {
+      edges: {
+        node: {
+          id: string;
+          name: string;
+          processedAt: string;
+          totalPrice: { amount: string; currencyCode: string };
+        };
+      }[];
+    };
+  };
+}
+
+export default async function AccountPage() {
+  if (!isCustomerAuthConfigured) redirect("/login");
+
+  const session = await getSession();
+  if (!session) redirect("/login");
+
+  let customer: CustomerData["customer"] | null = null;
+  try {
+    const data = await customerFetch<CustomerData>(
+      CUSTOMER_QUERY,
+      session.accessToken,
+    );
+    customer = data.customer;
+  } catch {
+    customer = null;
+  }
+  if (!customer) redirect("/login?error=session");
+
+  const name =
+    [customer.firstName, customer.lastName].filter(Boolean).join(" ") || "there";
+  const email = customer.emailAddress?.emailAddress ?? "";
+  const orders = customer.orders.edges.map((e) => e.node);
+
   return (
     <div className="w-full bg-white">
-      <section className="mx-auto max-w-[1400px] px-5 pb-8 pt-12 sm:px-8">
-        <h1 className="display-tight m-0 text-[clamp(34px,5vw,64px)] font-semibold leading-[0.95]">
-          Account
-        </h1>
-        <p className="mt-3 max-w-[520px] text-[15px] text-[#8a8a8e]">
-          Sign in to track orders, manage returns and check out faster.
-        </p>
-      </section>
-
-      <section className="mx-auto grid max-w-[1400px] grid-cols-1 gap-12 px-5 pb-12 sm:px-8 lg:grid-cols-[1fr_1.2fr]">
-        <div>
-          <h2 className="mb-4 text-[18px] font-semibold">Sign In</h2>
-          <SignInForm />
-        </div>
-
-        <div className="flex flex-col gap-8">
-          <HelpBlock
-            id="track"
-            title="Track Order"
-            body="Order tracking links are emailed the moment your parcel ships. Once the Shopify backend is connected, live tracking appears right here."
-          />
-          <HelpBlock
-            id="returns"
-            title="Returns"
-            body="Free &amp; easy 14-day returns, no questions asked. Start a return from your order history after signing in."
-          />
-          <HelpBlock
-            id="size-guide"
-            title="Size Guide"
-            body="Our tees run true to size with a relaxed, oversized drop-shoulder fit. XS–XXL across the core range; size down for a closer fit."
-          />
-        </div>
-      </section>
-
-      {/* Backorders dashboard */}
-      <section className="mx-auto max-w-[1400px] px-5 pb-20 sm:px-8">
-        <div className="border-t border-[#e7e6e9] pt-8">
-          <div className="flex flex-wrap items-end justify-between gap-3">
-            <h2 className="text-[18px] font-semibold uppercase tracking-[0.04em]">
-              Your Backorders
-            </h2>
-            <span className="text-[13px] text-[#8a8a8e]">
-              {SAMPLE_BACKORDERS.length} pending
-            </span>
+      <section className="mx-auto max-w-[1000px] px-5 pb-6 pt-12 sm:px-8">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <h1 className="display-tight m-0 text-[clamp(32px,5vw,56px)] font-semibold leading-[0.95]">
+              Hi, {name}
+            </h1>
+            {email && <p className="mt-3 text-[15px] text-[#8a8a8e]">{email}</p>}
           </div>
-          <p className="mt-1.5 max-w-[560px] text-[13px] leading-[1.6] text-[#8a8a8e]">
-            Backordered items are fulfilled first-come, first-served. Your place in
-            the queue updates automatically as stock arrives.
-          </p>
-          <div className="mt-5 flex flex-col gap-3">
-            {SAMPLE_BACKORDERS.map((b) => (
-              <BackorderRow key={`${b.name}-${b.variant}`} {...b} />
+          <a
+            href="/api/auth/logout"
+            className="rounded-none border border-[#0c0c0d] px-6 py-3 text-[13px] font-semibold text-[#0c0c0d] no-underline transition-colors hover:bg-[#0c0c0d] hover:text-white"
+          >
+            Log out
+          </a>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-[1000px] px-5 pb-24 sm:px-8">
+        <h2 className="mb-5 text-[18px] font-semibold uppercase tracking-[0.08em]">
+          Order history
+        </h2>
+
+        {orders.length === 0 ? (
+          <div className="flex flex-col items-start gap-4 border border-[#e7e6e9] px-6 py-10">
+            <p className="m-0 text-[15px] text-[#6a6a6e]">
+              You haven&apos;t placed any orders yet.
+            </p>
+            <Link
+              href="/collections/all"
+              className="rounded-none bg-[#0c0c0d] px-8 py-3.5 text-[13px] font-semibold text-white no-underline transition-colors hover:bg-[#eec449] hover:text-[#0c0c0d]"
+            >
+              Start Shopping
+            </Link>
+          </div>
+        ) : (
+          <div className="divide-y divide-[#f0eff1] border-y border-[#e7e6e9]">
+            {orders.map((o) => (
+              <div
+                key={o.id}
+                className="flex flex-wrap items-center justify-between gap-2 py-4"
+              >
+                <div>
+                  <div className="text-[15px] font-semibold text-[#0c0c0d]">
+                    {o.name}
+                  </div>
+                  <div className="mt-0.5 text-[13px] text-[#8a8a8e]">
+                    {new Date(o.processedAt).toLocaleDateString("en-GB", {
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                    })}
+                  </div>
+                </div>
+                <div className="text-[15px] font-medium text-[#0c0c0d]">
+                  {formatLKR(Math.round(parseFloat(o.totalPrice.amount)))}
+                </div>
+              </div>
             ))}
           </div>
-          <p className="mt-4 text-[12px] text-[#a3a3a8]">
-            Sample data — live backorder tracking appears here once the Shopify
-            backend is connected.
-          </p>
-        </div>
+        )}
       </section>
-    </div>
-  );
-}
-
-const STATUS_STEPS = ["Queued", "Allocated", "Shipping"] as const;
-type BackorderStatus = (typeof STATUS_STEPS)[number];
-
-const SAMPLE_BACKORDERS: {
-  name: string;
-  variant: string;
-  position: number;
-  status: BackorderStatus;
-  placed: string;
-}[] = [
-  {
-    name: "Heavyweight Crew Tee",
-    variant: "Bone · M",
-    position: 3,
-    status: "Queued",
-    placed: "Jun 22, 2026",
-  },
-  {
-    name: "Essential Oversized Tee",
-    variant: "Jet Black · XS",
-    position: 1,
-    status: "Allocated",
-    placed: "Jun 18, 2026",
-  },
-];
-
-function BackorderRow({
-  name,
-  variant,
-  position,
-  status,
-  placed,
-}: {
-  name: string;
-  variant: string;
-  position: number;
-  status: BackorderStatus;
-  placed: string;
-}) {
-  const activeIdx = STATUS_STEPS.indexOf(status);
-  return (
-    <div className="border border-[#e7e6e9] p-5">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <div className="text-[15px] font-semibold">{name}</div>
-          <div className="mt-0.5 text-[13px] text-[#8a8a8e]">
-            {variant} · Placed {placed}
-          </div>
-        </div>
-        <div className="flex items-center gap-2.5">
-          <span className="bg-[#eec449]/15 px-2 py-1 text-[12px] font-bold text-[#9a7322]">
-            #{position} in queue
-          </span>
-          <StatusPill status={status} />
-        </div>
-      </div>
-
-      <div className="mt-4 flex items-center gap-2">
-        {STATUS_STEPS.map((step, i) => (
-          <Fragment key={step}>
-            <span className="flex items-center gap-1.5">
-              <span
-                className={`h-2 w-2 ${i <= activeIdx ? "bg-[#0c0c0d]" : "bg-[#d7d6d9]"}`}
-              />
-              <span
-                className={`text-[11px] ${
-                  i <= activeIdx ? "font-semibold text-[#0c0c0d]" : "text-[#a3a3a8]"
-                }`}
-              >
-                {step}
-              </span>
-            </span>
-            {i < STATUS_STEPS.length - 1 && (
-              <span
-                className={`h-px flex-1 ${i < activeIdx ? "bg-[#0c0c0d]" : "bg-[#e2e1e4]"}`}
-              />
-            )}
-          </Fragment>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function StatusPill({ status }: { status: BackorderStatus }) {
-  const styles: Record<BackorderStatus, string> = {
-    Queued: "bg-[#f1f1f3] text-[#6a6a6e]",
-    Allocated: "bg-[#eec449]/20 text-[#9a7322]",
-    Shipping: "bg-[#0c0c0d] text-white",
-  };
-  return (
-    <span
-      className={`px-2 py-1 text-[11px] font-bold uppercase tracking-[0.06em] ${styles[status]}`}
-    >
-      {status}
-    </span>
-  );
-}
-
-function HelpBlock({
-  id,
-  title,
-  body,
-}: {
-  id: string;
-  title: string;
-  body: string;
-}) {
-  return (
-    <div id={id} className="scroll-mt-24 border-t border-[#e7e6e9] pt-6">
-      <h3 className="mb-2 text-[16px] font-semibold uppercase tracking-[0.04em]">
-        {title}
-      </h3>
-      <p className="m-0 max-w-[520px] text-[14px] leading-[1.7] text-[#6a6a6e]">
-        {body}
-      </p>
     </div>
   );
 }
