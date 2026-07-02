@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { Logo } from "./logo";
 import { useCart } from "./cart-provider";
 import { SearchPanel } from "./search/search-panel";
@@ -34,6 +34,9 @@ const EXPLORE: { label: string; href: string }[] = [
   { label: "Joggers & Pants", href: "/collections/all" },
 ];
 
+// Stable no-op subscribe for the hydration flag below.
+const emptySubscribe = () => () => {};
+
 export function SiteHeader() {
   const { count, open } = useCart();
   const pathname = usePathname();
@@ -47,6 +50,13 @@ export function SiteHeader() {
     loggedIn: false,
   });
   const [accountOpen, setAccountOpen] = useState(false);
+  // False during SSR/prerender + first hydration render, true afterwards — so
+  // the hero-overlay styling is applied only client-side (see below).
+  const mounted = useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false,
+  );
 
   // On the homepage the nav overlays the hero transparently at the very top;
   // as soon as the user starts scrolling it gains a solid white background.
@@ -86,20 +96,27 @@ export function SiteHeader() {
   // The homepage hero is a dark studio image, so while the nav overlays it
   // (transparent) the text/logo/icons render light; once scrolled or a menu
   // opens the nav gains a solid white background and switches back to dark.
-  const transparent = isHome && !scrolled && !megaOpen && !mobileOpen;
+  const atTopHero = isHome && !scrolled && !megaOpen && !mobileOpen;
+  // Apply the hero-overlay look only after mount. The home page is statically
+  // prerendered with usePathname === null (so isHome is false at build time),
+  // which would otherwise ship a white nav in the HTML and flash over the dark
+  // hero on load. Defaulting to transparent bg + dark text pre-mount avoids the
+  // flash and any hydration mismatch.
+  const lightText = mounted && atTopHero;
+  const solidBg = mounted && !atTopHero;
 
   // Nav links highlight with a solid ink box on hover; the active route keeps it.
   const navLinkBase =
     "rounded-none px-3 py-2 text-[13px] font-medium tracking-[0.03em] no-underline transition-colors hover:bg-[#0c0c0d] hover:text-white";
   const iconCls = `cursor-pointer transition-colors hover:text-[#eec449] ${
-    transparent ? "text-white" : "text-[#0c0c0d]"
+    lightText ? "text-white" : "text-[#0c0c0d]"
   }`;
 
   return (
     <header
       onMouseLeave={() => setMegaOpen(false)}
       className={`sticky top-0 z-50 text-[#0c0c0d] transition-colors duration-300 ${
-        transparent ? "bg-transparent" : "border-b border-[#e7e6e9] bg-white"
+        solidBg ? "border-b border-[#e7e6e9] bg-white" : "bg-transparent"
       }`}
     >
       <div className="relative mx-auto flex max-w-[1400px] items-center justify-between gap-4 px-5 py-[10px] sm:px-8">
@@ -128,7 +145,7 @@ export function SiteHeader() {
             </svg>
           </button>
           <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 md:static md:translate-x-0 md:translate-y-0">
-            <Logo variant={transparent ? "gold" : "onLight"} showText={false} markHeight={54} />
+            <Logo variant={lightText ? "gold" : "onLight"} showText={false} markHeight={54} />
           </span>
         </div>
 
@@ -145,9 +162,9 @@ export function SiteHeader() {
                 href={item.href}
                 onMouseEnter={() => setMegaOpen(item.mega)}
                 className={`${navLinkBase} ${
-                  active && !transparent
+                  active && !lightText
                     ? "bg-[#0c0c0d] text-white"
-                    : transparent
+                    : lightText
                       ? "text-white"
                       : "text-[#0c0c0d]"
                 }`}
