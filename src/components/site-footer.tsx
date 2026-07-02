@@ -10,7 +10,6 @@ const SHOP: FooterLink[] = [
   { label: "New In", href: "/collections/new" },
   { label: "Men", href: "/collections/men" },
   { label: "Women", href: "/collections/women" },
-  { label: "Accessories", href: "/collections/accessories" },
   { label: "Shop All", href: "/collections/all" },
 ];
 
@@ -19,20 +18,109 @@ const INFORMATION: FooterLink[] = [
   { label: "Track Order", href: "/account#track" },
   { label: "Returns & Exchanges", href: "/account#returns" },
   { label: "Size Guide", href: "/account#size-guide" },
-  { label: "Search", href: "/search" },
+  { label: "Privacy Policy", href: "/privacy" },
   { label: "Contact Us", href: "mailto:hello@goldenegal.com" },
 ];
 
+// Trust band that opens the footer.
+const BENEFITS: { title: string; sub: string; icon: React.ReactNode }[] = [
+  {
+    title: "Free Shipping",
+    sub: "On orders over LKR 20,000",
+    icon: (
+      <>
+        <path d="M3 7h11v8H3z" />
+        <path d="M14 10h4l3 3v2h-7z" />
+        <circle cx="7" cy="18" r="1.6" />
+        <circle cx="17.5" cy="18" r="1.6" />
+      </>
+    ),
+  },
+  {
+    title: "Easy Returns",
+    sub: "14-day return policy",
+    icon: (
+      <>
+        <path d="M21 12a9 9 0 1 1-3-6.7" />
+        <path d="M21 4v5h-5" />
+      </>
+    ),
+  },
+  {
+    title: "Secure Payment",
+    sub: "100% secure checkout",
+    icon: (
+      <>
+        <path d="M12 3l8 3v5c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z" />
+        <path d="M9 12l2 2 4-4" />
+      </>
+    ),
+  },
+  {
+    title: "Island-wide Delivery",
+    sub: "Across Sri Lanka",
+    icon: (
+      <>
+        <circle cx="12" cy="12" r="9" />
+        <path d="M3 12h18M12 3c2.5 2.7 2.5 15.3 0 18M12 3c-2.5 2.7-2.5 15.3 0 18" />
+      </>
+    ),
+  },
+];
+
 const SOCIALS: { label: string; href: string; icon: React.ReactNode }[] = [
-  { label: "Instagram", href: "https://instagram.com/goldenegal", icon: <InstagramIcon /> },
-  { label: "YouTube", href: "https://youtube.com/@goldenegal", icon: <YouTubeIcon /> },
-  { label: "Facebook", href: "https://facebook.com/goldenegal", icon: <FacebookIcon /> },
-  { label: "TikTok", href: "https://tiktok.com/@goldenegal", icon: <TikTokIcon /> },
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/golden_eagle1976?utm_source=qr&igsh=cDh4bHFtYWU1NXE=",
+    icon: <InstagramIcon />,
+  },
+  {
+    label: "Facebook",
+    href: "https://www.facebook.com/share/18dvMtfy7H/",
+    icon: <FacebookIcon />,
+  },
+  {
+    label: "TikTok",
+    href: "https://www.tiktok.com/@golden.eagle381?_r=1&_t=ZS-96U5QzRklNZ",
+    icon: <TikTokIcon />,
+  },
 ];
 
 export function SiteFooter() {
   return (
     <footer className="bg-[#0c0c0d] text-white">
+      {/* Trust band */}
+      <div className="border-b border-white/[0.12]">
+        <div className="mx-auto grid max-w-[1400px] grid-cols-4 gap-x-3 px-4 py-8 sm:gap-x-6 sm:px-8 lg:py-12">
+          {BENEFITS.map((b) => (
+            <div
+              key={b.title}
+              className="flex flex-col items-center gap-1.5 text-center sm:flex-row sm:gap-4 sm:text-left"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#eec449"
+                strokeWidth={1.6}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="h-[18px] w-[18px] shrink-0 sm:h-[30px] sm:w-[30px]"
+              >
+                {b.icon}
+              </svg>
+              <div>
+                <div className="text-[9px] font-semibold leading-tight text-white sm:text-[14px]">
+                  {b.title}
+                </div>
+                <div className="mt-0.5 text-[8px] leading-tight text-white/50 sm:text-[12px]">
+                  {b.sub}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <div className="mx-auto max-w-[1400px] px-5 pb-10 pt-16 sm:px-8 lg:pt-20">
         {/* Oversized brand logo */}
         <Image
@@ -141,13 +229,6 @@ function InstagramIcon() {
   );
 }
 
-function YouTubeIcon() {
-  return (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-      <path d="M23 12s0-3.2-.41-4.74a2.51 2.51 0 0 0-1.77-1.78C19.27 5.07 12 5.07 12 5.07s-7.27 0-8.82.41a2.51 2.51 0 0 0-1.77 1.78C1 8.8 1 12 1 12s0 3.2.41 4.74a2.51 2.51 0 0 0 1.77 1.78c1.55.41 8.82.41 8.82.41s7.27 0 8.82-.41a2.51 2.51 0 0 0 1.77-1.78C23 15.2 23 12 23 12zM9.75 14.85v-5.7L15 12l-5.25 2.85z" />
-    </svg>
-  );
-}
 
 function TikTokIcon() {
   return (

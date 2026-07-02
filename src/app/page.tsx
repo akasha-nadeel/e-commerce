@@ -7,16 +7,11 @@ import { ActivitySwitch } from "@/components/activity-switch";
 import { LogoMarquee } from "@/components/logo-marquee";
 import { PromoBanner } from "@/components/promo-banner";
 import { Button } from "@/components/ui/button";
-import {
-  getAccessoryProducts,
-  getLatestStyles,
-  getRecommendedProducts,
-} from "@/lib/products";
+import { getLatestStyles, getRecommendedProducts } from "@/lib/products";
 
 export default async function HomePage() {
-  const [latestStyles, accessories, recommended] = await Promise.all([
+  const [latestStyles, recommended] = await Promise.all([
     getLatestStyles(),
-    getAccessoryProducts(),
     getRecommendedProducts(),
   ]);
   return (
@@ -212,17 +207,6 @@ export default async function HomePage() {
           />
         </div>
       </TileCarousel>
-
-      {/* ---------------------------------------------------------------- */}
-      {/* Accessories                                                      */}
-      {/* ---------------------------------------------------------------- */}
-      <div id="accessories" className="scroll-mt-24 pb-6 pt-14">
-        <CarouselRow title="Accessories" shopAllHref="/collections/accessories">
-          {accessories.map((p) => (
-            <ProductCard key={p.slug} product={p} />
-          ))}
-        </CarouselRow>
-      </div>
 
       {/* ---------------------------------------------------------------- */}
       {/* Campaign banner — closing CTA above the footer                   */}

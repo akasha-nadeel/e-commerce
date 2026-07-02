@@ -136,10 +136,27 @@ export function transformProduct(p: ShopifyProduct): Product {
       ? sizeLabels.map((label) => ({ label, available: sizeAvailable(label) }))
       : [{ label: "OS", available: p.availableForSale }];
 
-  const images: ProductImage[] = p.images.edges.map((e) => ({
-    src: e.node.url,
-    label: e.node.altText ?? p.title,
-  }));
+  // Map each variant's featured image URL to its colour, so those photos are
+  // tagged with the colour even without alt text.
+  const urlColor: Record<string, string> = {};
+  for (const e of p.variants.edges) {
+    const url = e.node.image?.url;
+    const color = e.node.selectedOptions.find(
+      (o) => o.name.toLowerCase() === "color",
+    )?.value;
+    if (url && color && !urlColor[url]) urlColor[url] = color;
+  }
+
+  const images: ProductImage[] = p.images.edges.map((e) => {
+    const url = e.node.url;
+    const alt = e.node.altText ?? "";
+    // Colour = the variant that features this image, else a colour named in the
+    // alt text (set alt text to the colour in Shopify to group extra shots).
+    const color =
+      urlColor[url] ??
+      colorNames.find((c) => alt.toLowerCase().includes(c.toLowerCase()));
+    return { src: url, label: alt || p.title, color };
+  });
 
   const variants: ProductVariant[] = p.variants.edges.map((e) => ({
     id: e.node.id,

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { BackButton } from "@/components/back-button";
 import { CollectionBrowser } from "@/components/collection/collection-browser";
 import { getCollectionProducts } from "@/lib/products";
 
@@ -29,10 +30,6 @@ const COLLECTIONS: Record<string, Collection> = {
   women: {
     title: "Women",
     tagline: "Premium tees and jerseys, engineered to move.",
-  },
-  accessories: {
-    title: "Accessories",
-    tagline: "Caps, totes and the finishing touches.",
   },
   // Garment-type collections (the Shop By Category cards). Populate by creating
   // Smart collections with these handles in Shopify. `mixed` shows the gender
@@ -91,7 +88,10 @@ export default async function CollectionPage({
 
   return (
     <div className="w-full bg-white">
-      <section className="mx-auto max-w-[1400px] px-5 pb-6 pt-12 sm:px-8">
+      <div className="mx-auto max-w-[1400px] px-5 pt-5 sm:px-8">
+        <BackButton fallbackHref="/" />
+      </div>
+      <section className="mx-auto max-w-[1400px] px-5 pb-6 pt-6 sm:px-8">
         <h1 className="display-tight m-0 text-[clamp(34px,5vw,64px)] font-semibold leading-[0.95]">
           {c.title}
         </h1>

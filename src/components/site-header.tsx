@@ -12,7 +12,7 @@ const NAV = [
   { label: "NEW IN", href: "/collections/new", mega: false },
   { label: "MEN", href: "/collections/men", mega: true },
   { label: "WOMEN", href: "/collections/women", mega: true },
-  { label: "ACCESSORIES", href: "/collections/accessories", mega: false },
+  { label: "SHOP ALL", href: "/collections/all", mega: false },
   { label: "ABOUT", href: "/about", mega: false },
 ];
 
@@ -304,7 +304,7 @@ export function SiteHeader() {
               </div>
             </div>
             <PromoTile caption="PROMO · CAMPAIGN" title="Recommended For You" href="/collections/new" />
-            <PromoTile caption="PROMO · ACCESSORIES" title="Bags" href="/collections/accessories" />
+            <PromoTile caption="PROMO · SHOP ALL" title="Best Sellers" href="/collections/all" />
           </div>
         </div>
       )}

@@ -10,7 +10,7 @@ const QUICK_LINKS = [
   { label: "NEW IN", href: "/collections/new" },
   { label: "MEN", href: "/collections/men" },
   { label: "WOMEN", href: "/collections/women" },
-  { label: "ACCESSORIES", href: "/collections/accessories" },
+  { label: "SHOP ALL", href: "/collections/all" },
 ];
 
 interface SearchItem {

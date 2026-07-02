@@ -25,6 +25,9 @@ export interface ProductImage {
   label: string;
   /** Optional real image URL (Shopify CDN later); falls back to the tile when absent. */
   src?: string;
+  /** Colour this shot belongs to (from its variant image or alt text) — lets the
+   * gallery show only the selected colour's photos. Undefined = shown for all. */
+  color?: string;
 }
 
 export interface ProductVariant {

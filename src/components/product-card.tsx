@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/lib/catalog";
 import { formatLKR } from "@/lib/format";
@@ -21,7 +22,7 @@ export function ProductCard({
 
   return (
     <div
-      className={`group relative transition-transform duration-300 ease-out hover:z-10 hover:scale-[1.03] ${
+      className={`group relative ${
         inGrid ? "w-full" : "w-[clamp(238px,25vw,300px)] shrink-0 snap-start"
       }`}
     >
@@ -60,16 +61,27 @@ export function ProductCard({
       </div>
 
       {product.colors.length > 1 && (
-        <div className="mt-3 flex flex-wrap gap-1.5">
+        <div className="mt-3 flex flex-wrap gap-2">
           {product.colors.slice(0, 5).map((c, i) => (
             <span
               key={c.name}
               title={c.name}
-              className={`h-[22px] w-[22px] rounded-[5px] border transition-colors ${
+              className={`relative block h-[38px] w-[31px] overflow-hidden rounded-[4px] border transition-colors ${
                 i === 0 ? "border-[#0c0c0d]" : "border-black/10"
               }`}
-              style={{ background: c.swatch }}
-            />
+              style={c.image ? undefined : { background: c.swatch }}
+            >
+              {c.image && (
+                <Image
+                  src={c.image}
+                  alt={c.name}
+                  fill
+                  quality={100}
+                  sizes="31px"
+                  className="object-cover"
+                />
+              )}
+            </span>
           ))}
         </div>
       )}

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
+import { BackButton } from "@/components/back-button";
 import { CarouselRow } from "@/components/carousel-row";
 import { ProductCard } from "@/components/product-card";
 import { ProductView } from "@/components/product/product-view";
@@ -74,25 +74,17 @@ export default async function ProductPage({
   };
 
   return (
-    <div className="w-full overflow-x-hidden bg-white">
+    <div className="w-full overflow-x-clip bg-white">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* Breadcrumb */}
-      <div className="mx-auto max-w-[1400px] px-5 pt-5 text-[13px] text-[#8a8a8e] sm:px-8">
-        <Link href="/" className="text-[#8a8a8e] no-underline hover:text-[#0c0c0d]">
-          Home
-        </Link>{" "}
-        /{" "}
-        <Link
-          href={`/collections/${product.category.toLowerCase()}`}
-          className="text-[#8a8a8e] no-underline hover:text-[#0c0c0d]"
-        >
-          {product.category}
-        </Link>{" "}
-        / <span className="text-[#0c0c0d]">{product.name}</span>
+      {/* Back */}
+      <div className="mx-auto max-w-[1400px] px-5 pt-3 sm:px-8">
+        <BackButton
+          fallbackHref={`/collections/${product.category.toLowerCase()}`}
+        />
       </div>
 
       {/* Gallery + purchase (shared colour state) */}
