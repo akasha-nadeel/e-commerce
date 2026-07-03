@@ -6,6 +6,7 @@ import { useEffect, useState, useSyncExternalStore } from "react";
 import { Logo } from "./logo";
 import { useCart } from "./cart-provider";
 import { SearchPanel } from "./search/search-panel";
+import { useSheetDrag } from "@/lib/use-sheet-drag";
 
 const NAV = [
   { label: "HOME", href: "/", mega: false },
@@ -56,6 +57,10 @@ export function SiteHeader() {
     emptySubscribe,
     () => true,
     () => false,
+  );
+
+  const { style: menuDragStyle, handlers: menuHandlers } = useSheetDrag(() =>
+    setMobileOpen(false),
   );
 
   // On the homepage the nav overlays the hero transparently at the very top;
@@ -321,11 +326,14 @@ export function SiteHeader() {
         role="dialog"
         aria-label="Menu"
         aria-hidden={!mobileOpen}
-        className={`fixed inset-x-0 bottom-0 z-[70] flex h-[86vh] flex-col rounded-t-[22px] bg-white text-[#0c0c0d] shadow-[0_-10px_40px_rgba(0,0,0,0.22)] transition-transform duration-300 md:hidden ${
+        style={menuDragStyle}
+        className={`fixed inset-x-0 bottom-0 z-[70] flex h-[80vh] flex-col rounded-t-[22px] bg-white text-[#0c0c0d] shadow-[0_-10px_40px_rgba(0,0,0,0.22)] transition-transform duration-300 md:hidden ${
           mobileOpen ? "translate-y-0" : "translate-y-full"
         }`}
       >
-        <div className="mx-auto mt-3 h-1 w-10 shrink-0 rounded-full bg-[#d7d6d9]" />
+        <div {...menuHandlers} className="shrink-0 touch-none pb-1 pt-3">
+          <div className="mx-auto h-1 w-10 rounded-full bg-[#d7d6d9]" />
+        </div>
         <div className="flex-1 overflow-y-auto px-6 pb-2 pt-3">
           <nav className="flex flex-col">
             {NAV.map((item) => (

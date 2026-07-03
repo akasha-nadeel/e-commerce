@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { formatLKR } from "@/lib/format";
+import { useSheetDrag } from "@/lib/use-sheet-drag";
 
 const QUICK_LINKS = [
   { label: "NEW IN", href: "/collections/new" },
@@ -114,6 +115,8 @@ export function SearchPanel({
     router.push(term ? `/search?q=${encodeURIComponent(term)}` : "/search");
   }
 
+  const { style: dragStyle, handlers } = useSheetDrag(onClose);
+
   return (
     <>
       <div
@@ -127,8 +130,9 @@ export function SearchPanel({
         role="dialog"
         aria-label="Search"
         aria-hidden={!open}
+        style={dragStyle}
         className={`fixed z-[90] flex flex-col bg-white shadow-[0_-10px_40px_rgba(0,0,0,0.2)] transition-transform duration-300 ease-out
-          inset-x-0 bottom-0 h-[86vh] rounded-t-[22px]
+          inset-x-0 bottom-0 h-[80vh] rounded-t-[22px]
           sm:inset-y-0 sm:left-auto sm:right-0 sm:h-full sm:w-[440px] sm:rounded-none sm:shadow-[-20px_0_60px_rgba(0,0,0,0.22)]
           ${
             open
@@ -136,9 +140,10 @@ export function SearchPanel({
               : "translate-y-full sm:translate-y-0 sm:translate-x-full"
           }`}
       >
-        <div className="mx-auto mt-3 h-1 w-10 shrink-0 rounded-full bg-[#d7d6d9] sm:hidden" />
+        <div {...handlers} className="shrink-0 touch-none sm:touch-auto">
+          <div className="mx-auto mt-3 h-1 w-10 rounded-full bg-[#d7d6d9] sm:hidden" />
 
-        <div className="flex items-center justify-between px-6 py-5 sm:border-b sm:border-[#e7e6e9]">
+          <div className="flex items-center justify-between px-6 py-5 sm:border-b sm:border-[#e7e6e9]">
           <h2 className="m-0 text-[22px] font-semibold tracking-[0.01em]">Search</h2>
           <button
             type="button"
@@ -151,6 +156,7 @@ export function SearchPanel({
               <line x1="18" y1="6" x2="6" y2="18" />
             </svg>
           </button>
+          </div>
         </div>
 
         {/* Input */}

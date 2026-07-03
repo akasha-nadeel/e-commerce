@@ -94,7 +94,7 @@ export default async function HomePage() {
             title="Shop Women"
             href="/collections/women"
             image="/dept-women-wide-v2.jpg"
-            imageClassName="object-cover object-center origin-bottom scale-[1.6] translate-x-[24%] translate-y-[21%] sm:scale-[1.3] sm:translate-x-[12%] sm:translate-y-[21%]"
+            imageClassName="object-cover object-center origin-bottom scale-[1.6] translate-x-[24%] translate-y-[26%] sm:scale-[1.3] sm:translate-x-[12%] sm:translate-y-[21%]"
             align="top"
             bg="#875ea0"
             buttonHoverOnly
@@ -219,7 +219,7 @@ export default async function HomePage() {
           fill
           quality={100}
           sizes="(max-width: 1280px) 100vw, 1280px"
-          className="object-cover object-[75%_top] translate-y-[42%] lg:translate-y-0"
+          className="object-cover object-[72%_top] translate-y-[42%] lg:translate-y-0 lg:object-[72%_22%]"
         />
         {/* White scrim only on desktop, where the dark copy sits over the photo;
             on mobile the copy sits up top over the empty sky, no overlay. */}

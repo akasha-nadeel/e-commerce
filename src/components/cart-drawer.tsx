@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useCart } from "./cart-provider";
 import { startCheckout } from "@/lib/actions/checkout";
 import { formatLKR } from "@/lib/format";
+import { useSheetDrag } from "@/lib/use-sheet-drag";
 
 const FREE_SHIPPING_THRESHOLD = 20000;
 
@@ -37,6 +38,8 @@ export function CartDrawer() {
   const remaining = Math.max(0, FREE_SHIPPING_THRESHOLD - subtotal);
   const progress = Math.min(100, (subtotal / FREE_SHIPPING_THRESHOLD) * 100);
 
+  const { style: dragStyle, handlers } = useSheetDrag(close);
+
   return (
     <>
       {/* Backdrop */}
@@ -53,8 +56,9 @@ export function CartDrawer() {
         role="dialog"
         aria-label="Shopping bag"
         aria-hidden={!isOpen}
+        style={dragStyle}
         className={`fixed z-[70] flex flex-col bg-white transition-transform duration-300
-          inset-x-0 bottom-0 h-[86vh] rounded-t-[22px] shadow-[0_-10px_40px_rgba(0,0,0,0.22)]
+          inset-x-0 bottom-0 h-[80vh] rounded-t-[22px] shadow-[0_-10px_40px_rgba(0,0,0,0.22)]
           sm:inset-x-auto sm:bottom-auto sm:right-0 sm:top-0 sm:h-full sm:max-h-none sm:w-full sm:max-w-[420px] sm:rounded-none sm:shadow-[-20px_0_60px_rgba(0,0,0,0.25)]
           ${
             isOpen
@@ -62,25 +66,27 @@ export function CartDrawer() {
               : "translate-y-full sm:translate-y-0 sm:translate-x-full"
           }`}
       >
-        {/* Drag handle (mobile bottom-sheet) */}
-        <div className="mx-auto mt-3 h-1 w-10 shrink-0 rounded-full bg-[#d7d6d9] sm:hidden" />
+        <div {...handlers} className="shrink-0 touch-none sm:touch-auto">
+          {/* Drag handle (mobile bottom-sheet) */}
+          <div className="mx-auto mt-3 h-1 w-10 rounded-full bg-[#d7d6d9] sm:hidden" />
 
-        {/* Header */}
-        <div className="flex items-center justify-between border-b border-[#e7e6e9] px-6 py-5">
-          <h2 className="m-0 text-[18px] font-semibold tracking-[0.04em]">
-            Your Bag{count > 0 ? ` (${count})` : ""}
-          </h2>
-          <button
-            type="button"
-            aria-label="Close bag"
-            onClick={close}
-            className="flex h-9 w-9 cursor-pointer items-center justify-center text-[#0c0c0d] transition-colors hover:text-[#eec449]"
-          >
+          {/* Header */}
+          <div className="flex items-center justify-between border-b border-[#e7e6e9] px-6 py-5">
+            <h2 className="m-0 text-[18px] font-semibold tracking-[0.04em]">
+              Your Bag{count > 0 ? ` (${count})` : ""}
+            </h2>
+            <button
+              type="button"
+              aria-label="Close bag"
+              onClick={close}
+              className="flex h-9 w-9 cursor-pointer items-center justify-center text-[#0c0c0d] transition-colors hover:text-[#eec449]"
+            >
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
               <line x1="6" y1="6" x2="18" y2="18" />
               <line x1="18" y1="6" x2="6" y2="18" />
             </svg>
-          </button>
+            </button>
+          </div>
         </div>
 
         {/* Body */}
