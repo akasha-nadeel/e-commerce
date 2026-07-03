@@ -115,7 +115,7 @@ export function SearchPanel({
     router.push(term ? `/search?q=${encodeURIComponent(term)}` : "/search");
   }
 
-  const { style: dragStyle, handlers } = useSheetDrag(onClose);
+  const { style: dragStyle, handlers, scrollRef } = useSheetDrag(onClose);
 
   return (
     <>
@@ -131,8 +131,9 @@ export function SearchPanel({
         aria-label="Search"
         aria-hidden={!open}
         style={dragStyle}
+        {...handlers}
         className={`fixed z-[90] flex flex-col bg-white shadow-[0_-10px_40px_rgba(0,0,0,0.2)] transition-transform duration-300 ease-out
-          inset-x-0 bottom-0 h-[80vh] rounded-t-[22px]
+          inset-x-0 bottom-0 h-[72vh] rounded-t-[22px]
           sm:inset-y-0 sm:left-auto sm:right-0 sm:h-full sm:w-[440px] sm:rounded-none sm:shadow-[-20px_0_60px_rgba(0,0,0,0.22)]
           ${
             open
@@ -140,7 +141,7 @@ export function SearchPanel({
               : "translate-y-full sm:translate-y-0 sm:translate-x-full"
           }`}
       >
-        <div {...handlers} className="shrink-0 touch-none sm:touch-auto">
+        <div className="shrink-0">
           <div className="mx-auto mt-3 h-1 w-10 rounded-full bg-[#d7d6d9] sm:hidden" />
 
           <div className="flex items-center justify-between px-6 py-5 sm:border-b sm:border-[#e7e6e9]">
@@ -197,7 +198,7 @@ export function SearchPanel({
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto px-6 pb-6 pt-5">
+        <div ref={scrollRef} className="flex-1 overflow-y-auto overscroll-contain px-6 pb-6 pt-5">
           {!query ? (
             <nav className="flex flex-col">
               {QUICK_LINKS.map((l) => (

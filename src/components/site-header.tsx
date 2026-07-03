@@ -59,9 +59,11 @@ export function SiteHeader() {
     () => false,
   );
 
-  const { style: menuDragStyle, handlers: menuHandlers } = useSheetDrag(() =>
-    setMobileOpen(false),
-  );
+  const {
+    style: menuDragStyle,
+    handlers: menuHandlers,
+    scrollRef: menuScrollRef,
+  } = useSheetDrag(() => setMobileOpen(false));
 
   // On the homepage the nav overlays the hero transparently at the very top;
   // as soon as the user starts scrolling it gains a solid white background.
@@ -327,14 +329,15 @@ export function SiteHeader() {
         aria-label="Menu"
         aria-hidden={!mobileOpen}
         style={menuDragStyle}
-        className={`fixed inset-x-0 bottom-0 z-[70] flex h-[80vh] flex-col rounded-t-[22px] bg-white text-[#0c0c0d] shadow-[0_-10px_40px_rgba(0,0,0,0.22)] transition-transform duration-300 md:hidden ${
+        {...menuHandlers}
+        className={`fixed inset-x-0 bottom-0 z-[70] flex h-[72vh] flex-col rounded-t-[22px] bg-white text-[#0c0c0d] shadow-[0_-10px_40px_rgba(0,0,0,0.22)] transition-transform duration-300 md:hidden ${
           mobileOpen ? "translate-y-0" : "translate-y-full"
         }`}
       >
-        <div {...menuHandlers} className="shrink-0 touch-none pb-1 pt-3">
+        <div className="shrink-0 pb-1 pt-3">
           <div className="mx-auto h-1 w-10 rounded-full bg-[#d7d6d9]" />
         </div>
-        <div className="flex-1 overflow-y-auto px-6 pb-2 pt-3">
+        <div ref={menuScrollRef} className="flex-1 overflow-y-auto overscroll-contain px-6 pb-2 pt-3">
           <nav className="flex flex-col">
             {NAV.map((item) => (
               <Link

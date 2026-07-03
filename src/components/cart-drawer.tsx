@@ -38,7 +38,7 @@ export function CartDrawer() {
   const remaining = Math.max(0, FREE_SHIPPING_THRESHOLD - subtotal);
   const progress = Math.min(100, (subtotal / FREE_SHIPPING_THRESHOLD) * 100);
 
-  const { style: dragStyle, handlers } = useSheetDrag(close);
+  const { style: dragStyle, handlers, scrollRef } = useSheetDrag(close);
 
   return (
     <>
@@ -57,8 +57,9 @@ export function CartDrawer() {
         aria-label="Shopping bag"
         aria-hidden={!isOpen}
         style={dragStyle}
+        {...handlers}
         className={`fixed z-[70] flex flex-col bg-white transition-transform duration-300
-          inset-x-0 bottom-0 h-[80vh] rounded-t-[22px] shadow-[0_-10px_40px_rgba(0,0,0,0.22)]
+          inset-x-0 bottom-0 h-[72vh] rounded-t-[22px] shadow-[0_-10px_40px_rgba(0,0,0,0.22)]
           sm:inset-x-auto sm:bottom-auto sm:right-0 sm:top-0 sm:h-full sm:max-h-none sm:w-full sm:max-w-[420px] sm:rounded-none sm:shadow-[-20px_0_60px_rgba(0,0,0,0.25)]
           ${
             isOpen
@@ -66,7 +67,7 @@ export function CartDrawer() {
               : "translate-y-full sm:translate-y-0 sm:translate-x-full"
           }`}
       >
-        <div {...handlers} className="shrink-0 touch-none sm:touch-auto">
+        <div className="shrink-0">
           {/* Drag handle (mobile bottom-sheet) */}
           <div className="mx-auto mt-3 h-1 w-10 rounded-full bg-[#d7d6d9] sm:hidden" />
 
@@ -147,7 +148,7 @@ export function CartDrawer() {
               </div>
             )}
 
-            <div className="flex-1 overflow-y-auto px-6 py-4">
+            <div ref={scrollRef} className="flex-1 overflow-y-auto overscroll-contain px-6 py-4">
               {lines.map((l) => (
                 <div key={l.id} className="flex gap-4 border-b border-[#f0eff1] py-4">
                   <Link
