@@ -10,6 +10,7 @@ import {
   getProductBySlug,
   getRelatedProducts,
 } from "@/lib/products";
+import { getProductReviews } from "@/lib/reviews";
 
 export async function generateStaticParams() {
   const slugs = await getAllProductSlugs();
@@ -46,7 +47,10 @@ export default async function ProductPage({
   const product = await getProductBySlug(slug);
   if (!product) notFound();
 
-  const related = await getRelatedProducts(slug);
+  const [related, reviews] = await Promise.all([
+    getRelatedProducts(slug),
+    getProductReviews(slug),
+  ]);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -92,9 +96,14 @@ export default async function ProductPage({
 
       {/* Reviews */}
       <ProductReviews
-        rating={product.rating ?? 4.8}
-        reviewCount={product.reviewCount ?? 120}
-        seed={product.slug}
+        productHandle={product.slug}
+        productTitle={product.name}
+        reviews={reviews.reviews}
+        summary={{
+          count: reviews.count,
+          average: reviews.average,
+          breakdown: reviews.breakdown,
+        }}
       />
 
       {/* You may also like */}
