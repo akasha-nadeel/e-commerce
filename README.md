@@ -1,6 +1,6 @@
-# Golden Egal — Storefront
+# Golden Eagle — Storefront
 
-Premium headless e-commerce storefront for **Golden Egal**, a Sri Lankan
+Premium headless e-commerce storefront for **Golden Eagle**, a Sri Lankan
 men's & women's T-shirt / athleisure brand. Built with **Next.js 16 (App
 Router) + React 19 + TypeScript + Tailwind v4**, designed to run as the custom
 frontend for a **Shopify** backend.

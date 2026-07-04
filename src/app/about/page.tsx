@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Golden Egal is a premium menswear and womenswear label built from the ground up — heavyweight tees, jerseys and athleisure engineered for everyday wear.",
+    "Golden Eagle is a premium menswear and womenswear label built from the ground up — heavyweight tees, jerseys and athleisure engineered for everyday wear.",
   alternates: { canonical: "/about" },
 };
 
@@ -32,7 +32,7 @@ export default function AboutPage() {
       {/* Story */}
       <section className="mx-auto max-w-[820px] px-5 py-20 sm:px-8">
         <p className="m-0 text-[clamp(20px,2.4vw,30px)] font-bold leading-[1.4] tracking-[-0.01em]">
-          Golden Egal is a premium label for men and women — built from the ground
+          Golden Eagle is a premium label for men and women — built from the ground
           up for people who show up, train hard and live in what they wear.
         </p>
         <div className="mt-8 flex flex-col gap-5 text-[16px] leading-[1.7] text-[#4a4a4e]">
@@ -49,7 +49,7 @@ export default function AboutPage() {
             talking. Quietly confident. Made to last.
           </p>
           <p className="m-0">
-            Proudly rooted in Sri Lanka and made for everywhere — Golden Egal is
+            Proudly rooted in Sri Lanka and made for everywhere — Golden Eagle is
             for the long run, not the next trend.
           </p>
         </div>

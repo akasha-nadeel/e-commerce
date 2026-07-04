@@ -41,7 +41,7 @@ export default async function HomePage() {
               The Day
             </h1>
             <p className="mb-8 mt-5 text-[clamp(15px,1.4vw,20px)] text-white/75">
-              Explore the Golden Egal collection.
+              Explore the Golden Eagle collection.
             </p>
             <div className="flex flex-wrap gap-3.5">
               <Link
@@ -182,9 +182,9 @@ export default async function HomePage() {
       </TileCarousel>
 
       {/* ---------------------------------------------------------------- */}
-      {/* Train in Golden Egal                                             */}
+      {/* Train in Golden Eagle                                             */}
       {/* ---------------------------------------------------------------- */}
-      <TileCarousel title="Train In Golden Egal" control={<ActivitySwitch />}>
+      <TileCarousel title="Train In Golden Eagle" control={<ActivitySwitch />}>
         <div className="w-[78%] shrink-0 snap-start sm:w-[48%] lg:w-[32%]">
           <ActivityTile
             name="Running"
@@ -215,7 +215,7 @@ export default async function HomePage() {
       <section className="relative mx-auto flex min-h-[58vh] max-w-[1280px] items-start overflow-hidden rounded-3xl bg-[#b4d0eb] lg:items-center">
         <Image
           src="/campaign-v2.png"
-          alt="Golden Egal campaign — model in the graphic tee on a studio plinth"
+          alt="Golden Eagle campaign — model in the graphic tee on a studio plinth"
           fill
           quality={100}
           sizes="(max-width: 1280px) 100vw, 1280px"

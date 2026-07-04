@@ -7,7 +7,7 @@ import { getSession } from "@/lib/auth/session";
 export const metadata: Metadata = {
   title: "Create Account",
   description:
-    "Create your Golden Egal account — own the day with premium tees and athleisure.",
+    "Create your Golden Eagle account — own the day with premium tees and athleisure.",
   alternates: { canonical: "/signup" },
 };
 

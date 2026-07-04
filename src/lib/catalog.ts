@@ -1,5 +1,5 @@
 /**
- * Golden Egal product catalog.
+ * Golden Eagle product catalog.
  *
  * This module is the integration seam for the headless Shopify backend.
  * Today it returns typed mock data that mirrors the Claude Design prototype;
@@ -242,7 +242,7 @@ export const PRODUCTS: Product[] = [
     ],
     sizes: ONE_SIZE,
     description:
-      "Six-panel cotton twill cap with a low-profile crown, embroidered Golden Egal mark and an adjustable strap back. One size fits most. 100% cotton.",
+      "Six-panel cotton twill cap with a low-profile crown, embroidered Golden Eagle mark and an adjustable strap back. One size fits most. 100% cotton.",
     images: gallery("PRODUCT"),
     cardLabel: "PRODUCT · CAP",
     square: true,
@@ -308,7 +308,7 @@ export const PRODUCTS: Product[] = [
     ],
     sizes: ONE_SIZE,
     description:
-      "A fine-gauge ribbed knit beanie with a folded cuff and a woven Golden Egal tab. Warm without the bulk. 50% merino wool, 50% acrylic.",
+      "A fine-gauge ribbed knit beanie with a folded cuff and a woven Golden Eagle tab. Warm without the bulk. 50% merino wool, 50% acrylic.",
     images: gallery("PRODUCT"),
     cardLabel: "PRODUCT · BEANIE",
     square: true,

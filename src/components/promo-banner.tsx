@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 
-const CODE = "EGAL20";
+const CODE = "EAGLE20";
 
 // Heading / button styling follows the "Shoppin Land" reference: dark slate
 // copy left-aligned over the yellow shopping photo, with a coral-red CTA. The

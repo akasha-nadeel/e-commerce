@@ -1,7 +1,7 @@
 /**
  * Payment-brand acceptance marks, rendered as crisp inline SVG so they stay
  * sharp at any DPI and need no network requests. These are the gateways the
- * Golden Egal checkout actually settles through:
+ * Golden Eagle checkout actually settles through:
  *   • Visa / Mastercard / Amex — captured by PayHere (local + international)
  *   • PayHere — the Sri Lankan gateway of record
  *   • PayPal — international wallets (where the SL account can receive)

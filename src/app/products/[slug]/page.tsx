@@ -30,7 +30,7 @@ export async function generateMetadata({
     title: product.name,
     description: product.description,
     openGraph: {
-      title: `${product.name} — Golden Egal`,
+      title: `${product.name} — Golden Eagle`,
       description: product.description,
       type: "website",
     },
@@ -59,7 +59,7 @@ export default async function ProductPage({
     description: product.description,
     category: product.category,
     color: product.colors.map((c) => c.name),
-    brand: { "@type": "Brand", name: "Golden Egal" },
+    brand: { "@type": "Brand", name: "Golden Eagle" },
     ...(reviews.count > 0
       ? {
           aggregateRating: {

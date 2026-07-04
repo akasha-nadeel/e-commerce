@@ -10,7 +10,7 @@ import { formatLKR } from "@/lib/format";
 
 export const metadata: Metadata = {
   title: "Account",
-  description: "Your Golden Egal account — orders and profile.",
+  description: "Your Golden Eagle account — orders and profile.",
   robots: { index: false },
 };
 

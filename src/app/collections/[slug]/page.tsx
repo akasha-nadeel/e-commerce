@@ -15,7 +15,7 @@ type Collection = {
 const COLLECTIONS: Record<string, Collection> = {
   all: {
     title: "All Products",
-    tagline: "The full Golden Egal collection.",
+    tagline: "The full Golden Eagle collection.",
     mixed: true,
   },
   new: {
@@ -51,7 +51,7 @@ const COLLECTIONS: Record<string, Collection> = {
   },
   tanks: {
     title: "Tanks",
-    tagline: "Built to move — train in Golden Egal.",
+    tagline: "Built to move — train in Golden Eagle.",
     mixed: true,
   },
 };

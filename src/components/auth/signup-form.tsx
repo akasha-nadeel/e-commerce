@@ -37,7 +37,7 @@ export function SignupForm() {
     >
       <AuthHeading
         title="Create your account"
-        subtitle="Join Golden Egal — own the day."
+        subtitle="Join Golden Eagle — own the day."
       />
 
       <div className="grid grid-cols-2 gap-3">

@@ -16,7 +16,7 @@ import {
 } from "./payment-marks";
 
 /**
- * Golden Egal checkout — modelled on world-class checkout flows (Shopify,
+ * Golden Eagle checkout — modelled on world-class checkout flows (Shopify,
  * Stripe, Apple): a distraction-free header, clearly numbered steps, a
  * country-aware shipping + payment engine, real payment-brand marks, a discount
  * field and a collapsible mobile order summary.
@@ -151,7 +151,7 @@ export function CheckoutClient() {
             Order Confirmed
           </h1>
           <p className="mx-auto mt-3 max-w-[460px] text-[15px] text-[#8a8a8e]">
-            Thanks for shopping Golden Egal. A confirmation is on its way and our
+            Thanks for shopping Golden Eagle. A confirmation is on its way and our
             warehouse has been notified to pack your order
             {effectivePayment === "cod" ? " for cash on delivery" : ""}.
           </p>

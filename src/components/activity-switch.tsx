@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-/** Mens/Womens pill toggle for the "Train In Golden Egal" section. */
+/** Mens/Womens pill toggle for the "Train In Golden Eagle" section. */
 export function ActivitySwitch() {
   const [mens, setMens] = useState(false);
 

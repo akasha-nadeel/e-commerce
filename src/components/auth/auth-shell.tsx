@@ -6,11 +6,11 @@ import Link from "next/link";
 import { Logo } from "@/components/logo";
 
 /* ------------------------------------------------------------------ */
-/* Golden Egal auth experience                                         */
+/* Golden Eagle auth experience                                         */
 /* Split-screen shell: focused form on the left, a tall brand showcase */
 /* card on the right. Re-used by both /login and /signup so the two    */
 /* pages stay pixel-consistent. Mirrors the reference layout but is     */
-/* fully re-skinned in the Golden Egal design tokens.                  */
+/* fully re-skinned in the Golden Eagle design tokens.                  */
 /* ------------------------------------------------------------------ */
 
 export function AuthShell({ children }: { children: React.ReactNode }) {
@@ -51,7 +51,7 @@ function Showcase() {
     <div className="relative h-full w-full overflow-hidden rounded-[28px] bg-[#ededee]">
       <Image
         src="/auth-showcase.webp"
-        alt="Golden Egal model in a yellow summer dress holding a sunflower"
+        alt="Golden Eagle model in a yellow summer dress holding a sunflower"
         fill
         priority
         quality={100}
@@ -63,7 +63,7 @@ function Showcase() {
 
       <div className="absolute inset-x-0 bottom-0 p-9 xl:p-11">
         <p className="mb-3 text-[12px] font-semibold uppercase tracking-[0.3em] text-white/70">
-          Golden Egal
+          Golden Eagle
         </p>
         <h2 className="display-tight m-0 max-w-[440px] text-[clamp(28px,3vw,42px)] font-semibold leading-[1.05] text-white">
           Own The Day

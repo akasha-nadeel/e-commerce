@@ -3,7 +3,7 @@ import { CheckoutClient } from "@/components/checkout/checkout-client";
 
 export const metadata: Metadata = {
   title: "Checkout",
-  description: "Securely complete your Golden Egal order.",
+  description: "Securely complete your Golden Eagle order.",
   robots: { index: false },
 };
 

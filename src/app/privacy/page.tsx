@@ -4,7 +4,7 @@ import { BackButton } from "@/components/back-button";
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
-    "How Golden Egal collects, uses and protects your personal information when you shop with us.",
+    "How Golden Eagle collects, uses and protects your personal information when you shop with us.",
   alternates: { canonical: "/privacy" },
 };
 
@@ -29,7 +29,7 @@ export default function PrivacyPolicyPage() {
       <section className="mx-auto max-w-[820px] px-5 pb-24 sm:px-8">
         <div className="rich-text text-[15px] leading-[1.75] text-[#4a4a4e]">
           <p>
-            This Privacy Policy explains how <strong>Golden Egal</strong>
+            This Privacy Policy explains how <strong>Golden Eagle</strong>
             (&ldquo;we&rdquo;, &ldquo;us&rdquo;, &ldquo;our&rdquo;) collects,
             uses and protects your personal information when you visit or make a
             purchase from our store. By using our website you agree to the
@@ -126,7 +126,7 @@ export default function PrivacyPolicyPage() {
           <Section title="Contact us">
             <p>
               Questions about this policy or your data? Email us at{" "}
-              <a href="mailto:hello@goldenegal.com">hello@goldenegal.com</a>. We
+              <a href="mailto:hello@goldeneagleclothing.com">hello@goldeneagleclothing.com</a>. We
               may update this policy from time to time; the latest version will
               always be posted on this page.
             </p>

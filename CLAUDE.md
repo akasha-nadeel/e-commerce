@@ -8,7 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-**Golden Egal** — a headless storefront for a Sri Lankan men's/women's T-shirt & athleisure brand. Next.js 16 (App Router) + React 19 + TypeScript + Tailwind v4. The frontend is built to run against a **Shopify** backend that isn't wired up yet; today it runs entirely on typed mock data.
+**Golden Eagle** — a headless storefront for a Sri Lankan men's/women's T-shirt & athleisure brand. Next.js 16 (App Router) + React 19 + TypeScript + Tailwind v4. The frontend is built to run against a **Shopify** backend that isn't wired up yet; today it runs entirely on typed mock data.
 
 ## Commands
 

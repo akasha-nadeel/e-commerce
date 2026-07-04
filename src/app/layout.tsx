@@ -18,18 +18,18 @@ const inter = Inter({
   weight: ["400", "500", "600", "700", "800", "900"],
 });
 
-const SITE_URL = "https://goldenegal.com";
+const SITE_URL = "https://goldeneagleclothing.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Golden Egal — Premium T-Shirts for Men & Women",
-    template: "%s · Golden Egal",
+    default: "Golden Eagle — Premium T-Shirts for Men & Women",
+    template: "%s · Golden Eagle",
   },
   description:
     "Premium heavyweight tees, jerseys and athleisure for men and women. Built from the ground up — own the day. Free island-wide shipping over LKR 20,000.",
   keywords: [
-    "Golden Egal",
+    "Golden Eagle",
     "premium t-shirts Sri Lanka",
     "oversized tees",
     "jerseys",
@@ -39,15 +39,15 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     type: "website",
-    siteName: "Golden Egal",
-    title: "Golden Egal — Own The Day",
+    siteName: "Golden Eagle",
+    title: "Golden Eagle — Own The Day",
     description:
       "Premium heavyweight tees, jerseys and athleisure for men and women.",
     url: SITE_URL,
   },
   twitter: {
     card: "summary_large_image",
-    title: "Golden Egal — Own The Day",
+    title: "Golden Eagle — Own The Day",
     description:
       "Premium heavyweight tees, jerseys and athleisure for men and women.",
   },

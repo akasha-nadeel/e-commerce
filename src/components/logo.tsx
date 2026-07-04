@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 /**
- * Golden Egal logo — eagle mark with an optional wordmark.
+ * Golden Eagle logo — eagle mark with an optional wordmark.
  *
  * The eagle master is white-on-transparent. On dark surfaces we render it as-is;
  * on light surfaces we swap to the black master (the client asked for a black
@@ -19,7 +19,7 @@ export function Logo({
   variant?: "onDark" | "onLight" | "gold";
   size?: number;
   href?: string;
-  /** Show the "Golden Egal" wordmark next to the eagle. */
+  /** Show the "Golden Eagle" wordmark next to the eagle. */
   showText?: boolean;
   /** Explicit eagle height in px; defaults to a ratio of the wordmark size. */
   markHeight?: number;
@@ -38,13 +38,13 @@ export function Logo({
   return (
     <Link
       href={href}
-      aria-label="Golden Egal — home"
+      aria-label="Golden Eagle — home"
       className="flex items-center gap-2.5 no-underline"
       style={{ color: isGold ? "#eec449" : onDark ? "#fff" : "#0c0c0d" }}
     >
       <Image
         src={mark}
-        alt="Golden Egal eagle"
+        alt="Golden Eagle eagle"
         width={Math.round(h * (590 / 360))}
         height={h}
         priority
@@ -56,7 +56,7 @@ export function Logo({
           className="font-semibold uppercase"
           style={{ fontSize: size, letterSpacing: "0.2em", lineHeight: 1 }}
         >
-          Golden Egal
+          Golden Eagle
         </span>
       )}
     </Link>

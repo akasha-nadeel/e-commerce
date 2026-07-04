@@ -4,7 +4,7 @@ import { getAllProducts } from "@/lib/products";
 
 export const metadata: Metadata = {
   title: "Search",
-  description: "Search the Golden Egal collection.",
+  description: "Search the Golden Eagle collection.",
   robots: { index: false },
 };
 

@@ -7,7 +7,7 @@ import { getSession } from "@/lib/auth/session";
 export const metadata: Metadata = {
   title: "Log In",
   description:
-    "Sign in to your Golden Egal account to track orders, manage returns and check out faster.",
+    "Sign in to your Golden Eagle account to track orders, manage returns and check out faster.",
   alternates: { canonical: "/login" },
 };
 

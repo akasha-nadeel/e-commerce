@@ -19,7 +19,7 @@ const INFORMATION: FooterLink[] = [
   { label: "Returns & Exchanges", href: "/account#returns" },
   { label: "Size Guide", href: "/account#size-guide" },
   { label: "Privacy Policy", href: "/privacy" },
-  { label: "Contact Us", href: "mailto:hello@goldenegal.com" },
+  { label: "Contact Us", href: "mailto:hello@goldeneagleclothing.com" },
 ];
 
 // Trust band that opens the footer.
@@ -173,7 +173,7 @@ export function SiteFooter() {
           </p>
 
           <p className="text-center text-[13px] text-white/45 sm:text-right">
-            © 2026 Golden Egal — Made in Sri Lanka
+            © 2026 Golden Eagle — Made in Sri Lanka
           </p>
         </div>
       </div>
