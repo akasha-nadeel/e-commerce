@@ -137,11 +137,11 @@ export default async function HomePage() {
             caption="Everyday Essentials"
             href="/collections/t-shirts"
             dark
-            image="/category-tshirt-v2.png"
-            imageClassName="object-cover object-bottom origin-bottom scale-[1.3]"
+            image="/category-tshirt-v3.webp"
+            imageClassName="object-cover object-center"
             nameTop
-            nameColor="#fcb710"
-            bg="radial-gradient(120% 120% at 40% 30%,#2a2a2e,#101012)"
+            nameColor="#ffffff"
+            bg="#123047"
           />
         </div>
         <div className="w-[60%] shrink-0 snap-start sm:w-[42%] lg:w-[23.5%]">
@@ -150,33 +150,37 @@ export default async function HomePage() {
             caption="Smart Casual"
             href="/collections/polo"
             dark
-            image="/category-polo.jpg"
-            imageClassName="object-cover object-top scale-[1.35] -translate-y-[6%]"
+            image="/category-polo-v2.webp"
+            imageClassName="object-cover object-center"
             nameTop
-            nameColor="#fcb710"
-            bg="#1b3f3b"
+            nameColor="#ffffff"
+            bg="#123047"
           />
         </div>
         <div className="w-[60%] shrink-0 snap-start sm:w-[42%] lg:w-[23.5%]">
           <CategoryTile
-            name="Hoody"
+            name="Hoodies"
             caption="Cozy Layers"
             href="/collections/hoody"
             dark
-            image="/category-hoody.png"
-            imageClassName="object-cover object-center"
+            image="/category-hoody-v5.webp"
+            imageClassName="object-cover object-center scale-[1.15]"
             nameTop
-            nameColor="#f97316"
-            bg="#2c2a2a"
+            nameColor="#ffffff"
+            bg="#0a0a0a"
           />
         </div>
         <div className="w-[60%] shrink-0 snap-start sm:w-[42%] lg:w-[23.5%]">
           <CategoryTile
             name="Tanks"
-            caption="CATEGORY · TANKS"
+            caption="Summer Ready"
             href="/collections/tanks"
             dark
-            bg="radial-gradient(120% 120% at 60% 30%,#26262a,#0d0d0f)"
+            image="/category-tank-v1.webp"
+            imageClassName="object-cover object-[58%_center]"
+            nameTop
+            nameColor="#ffffff"
+            bg="#123047"
           />
         </div>
       </TileCarousel>
@@ -301,6 +305,12 @@ function CategoryTile({
             className={imageClassName}
           />
         </div>
+      )}
+      {image && nameTop && (
+        <div
+          aria-hidden
+          className="absolute inset-x-0 top-0 z-[5] h-1/2 bg-gradient-to-b from-black/55 via-black/15 to-transparent"
+        />
       )}
       {nameTop ? (
         <div className="absolute left-5 right-5 top-5 z-10">
