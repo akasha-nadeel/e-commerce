@@ -13,10 +13,15 @@ export function PurchasePanel({
   product,
   colorIdx,
   onColorChange,
+  reviewAverage = 0,
+  reviewCount = 0,
 }: {
   product: Product;
   colorIdx: number;
   onColorChange: (i: number) => void;
+  /** Real review data from Shopify; when count is 0 the rating row is hidden. */
+  reviewAverage?: number;
+  reviewCount?: number;
 }) {
   const { add } = useCart();
   const firstAvailable =
@@ -28,8 +33,8 @@ export function PurchasePanel({
   const addedTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const hasSizes = product.sizes.length > 1;
-  const rating = product.rating ?? 4.8;
-  const reviews = product.reviewCount ?? 124;
+  const rating = reviewAverage;
+  const reviews = reviewCount;
   const onSale = !!product.compareAtLKR && product.compareAtLKR > product.priceLKR;
 
   const activeSize = hasSizes ? size : product.sizes[0]?.label ?? "OS";
@@ -147,13 +152,15 @@ export function PurchasePanel({
         {product.name}
       </h1>
 
-      {/* Rating */}
-      <div className="mt-3 flex items-center gap-2">
-        <Stars value={rating} />
-        <span className="text-[14px] text-[#6a6a6e]">
-          {rating.toFixed(1)} ({reviews} reviews)
-        </span>
-      </div>
+      {/* Rating (only when there are real reviews) */}
+      {reviews > 0 && (
+        <div className="mt-3 flex items-center gap-2">
+          <Stars value={rating} />
+          <span className="text-[14px] text-[#6a6a6e]">
+            {rating.toFixed(1)} ({reviews} {reviews === 1 ? "review" : "reviews"})
+          </span>
+        </div>
+      )}
 
       {/* Price */}
       <div className="mt-4 flex flex-wrap items-center gap-3">

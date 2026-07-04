@@ -1,13 +1,14 @@
 "use client";
 
-import { useRef, useState } from "react";
+import Image from "next/image";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { submitReview } from "@/lib/actions/review";
 
 /**
- * "Latest Reviews" block for the PDP — real reviews from Shopify (metaobjects).
- * The write-a-review form submits via a server action; reviews appear here once
- * approved in Shopify admin (Content → Metaobjects → set Active).
+ * Per-product "Ratings & Reviews" — real reviews from Shopify (metaobjects),
+ * shown as a left-aligned Daraz/AliExpress-style list. The write-a-review form
+ * submits via a server action; reviews appear once approved in Shopify admin.
  */
 
 interface ReviewItem {
@@ -17,12 +18,34 @@ interface ReviewItem {
   title: string;
   body: string;
   createdAt: string;
+  photos: string[];
+}
+
+const MAX_PHOTOS = 4;
+
+/** Downscale + compress an image client-side before upload (keeps it small). */
+async function resizeImage(file: File, max = 1400, quality = 0.85): Promise<Blob> {
+  const bitmap = await createImageBitmap(file);
+  let { width, height } = bitmap;
+  if (width > max || height > max) {
+    const scale = Math.min(max / width, max / height);
+    width = Math.round(width * scale);
+    height = Math.round(height * scale);
+  }
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d");
+  ctx?.drawImage(bitmap, 0, 0, width, height);
+  return new Promise((resolve) =>
+    canvas.toBlob((b) => resolve(b ?? file), "image/jpeg", quality),
+  );
 }
 
 interface Summary {
   count: number;
   average: number;
-  breakdown: number[]; // 5★ … 1★
+  breakdown: number[]; // 5★ … 1★ (percent)
 }
 
 function formatDate(iso: string): string {
@@ -33,10 +56,6 @@ function formatDate(iso: string): string {
     month: "short",
     year: "numeric",
   });
-}
-
-function formatCount(n: number): string {
-  return n >= 1000 ? `${(n / 1000).toFixed(1)}k` : `${n}`;
 }
 
 function StarIcon({ size, color }: { size: number; color: string }) {
@@ -83,16 +102,33 @@ export function ProductReviews({
   const [stars, setStars] = useState(0);
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
+  const [photos, setPhotos] = useState<File[]>([]);
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState("");
-  const [activeDot, setActiveDot] = useState(0);
+  const [lightbox, setLightbox] = useState<string | null>(null);
 
-  const rowRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
+
+  // Local object URLs for previewing selected photos before upload.
+  const previews = useMemo(
+    () => photos.map((f) => URL.createObjectURL(f)),
+    [photos],
+  );
+  useEffect(
+    () => () => previews.forEach((u) => URL.revokeObjectURL(u)),
+    [previews],
+  );
 
   const hasReviews = summary.count > 0;
   const valid = name.trim() !== "" && text.trim() !== "" && stars > 0;
+
+  // Per-star counts for the breakdown (index 0 = 5★ … 4 = 1★).
+  const counts = useMemo(() => {
+    const c = [0, 0, 0, 0, 0];
+    for (const r of reviews) c[5 - r.rating] += 1;
+    return c;
+  }, [reviews]);
 
   function openForm() {
     setOpen(true);
@@ -103,25 +139,42 @@ export function ProductReviews({
     );
   }
 
+  function addPhotos(list: FileList | null) {
+    if (!list) return;
+    const picked = Array.from(list).filter((f) => f.type.startsWith("image/"));
+    setPhotos((prev) => [...prev, ...picked].slice(0, MAX_PHOTOS));
+  }
+
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     if (!valid || busy) return;
     setBusy(true);
     setError("");
-    const res = await submitReview({
-      productHandle,
-      productTitle,
-      rating: stars,
-      author: name.trim(),
-      title: title.trim(),
-      body: text.trim(),
-    });
+
+    const fd = new FormData();
+    fd.set("productHandle", productHandle);
+    fd.set("productTitle", productTitle);
+    fd.set("rating", String(stars));
+    fd.set("author", name.trim());
+    fd.set("title", title.trim());
+    fd.set("body", text.trim());
+    for (const file of photos) {
+      try {
+        const blob = await resizeImage(file);
+        fd.append("photos", blob, file.name.replace(/\.\w+$/, "") + ".jpg");
+      } catch {
+        fd.append("photos", file, file.name);
+      }
+    }
+
+    const res = await submitReview(fd);
     setBusy(false);
     if (res.ok) {
       setName("");
       setStars(0);
       setTitle("");
       setText("");
+      setPhotos([]);
       setOpen(false);
       setDone(true);
     } else {
@@ -129,91 +182,73 @@ export function ProductReviews({
     }
   }
 
-  function cardStep(): number {
-    const el = rowRef.current;
-    const card = el?.firstElementChild as HTMLElement | null;
-    return card ? card.offsetWidth + 18 : el?.clientWidth ?? 1;
-  }
-  function onRowScroll() {
-    const el = rowRef.current;
-    if (el) setActiveDot(Math.round(el.scrollLeft / cardStep()));
-  }
-  function goTo(i: number) {
-    rowRef.current?.scrollTo({ left: i * cardStep(), behavior: "smooth" });
-  }
-
   return (
     <section className="border-t border-[#e7e6e9] bg-white">
-      <div className="mx-auto max-w-[1400px] px-5 py-16 sm:px-8">
-        <h2 className="text-center text-[clamp(26px,4vw,40px)] font-semibold tracking-[-0.01em]">
-          Latest Reviews
+      <div className="mx-auto max-w-[1000px] px-5 py-14 sm:px-8">
+        <h2 className="text-[clamp(22px,3vw,30px)] font-semibold tracking-[-0.01em]">
+          Ratings &amp; Reviews
         </h2>
 
-        {/* Summary card */}
-        <div className="mx-auto mt-10 grid max-w-[1100px] grid-cols-1 gap-10 border border-[#e7e6e9] p-6 sm:p-9 lg:grid-cols-2 lg:gap-16">
-          {/* Score + breakdown */}
-          <div>
-            {hasReviews ? (
-              <>
-                <div className="flex items-center gap-4">
-                  <div className="text-[44px] font-bold leading-none tracking-[-0.02em]">
-                    {summary.average.toFixed(1)}
-                  </div>
-                  <div>
-                    <Stars value={summary.average} size={18} />
-                    <div className="mt-1.5 text-[13px] text-[#8a8a8e]">
-                      {formatCount(summary.count)}{" "}
-                      {summary.count === 1 ? "Review" : "Reviews"}
-                    </div>
-                  </div>
-                </div>
-                <div className="mt-6 flex flex-col gap-2.5">
-                  {summary.breakdown.map((pct, idx) => {
-                    const star = 5 - idx;
-                    return (
-                      <div key={star} className="flex items-center gap-3">
-                        <span className="w-3 text-[13px] text-[#6a6a6e]">{star}</span>
-                        <div className="h-2 flex-1 overflow-hidden bg-[#eeedef]">
-                          <div className="h-full bg-[#0c0c0d] transition-[width] duration-700" style={{ width: `${pct}%` }} />
-                        </div>
-                        <span className="w-9 text-right text-[12px] text-[#8a8a8e]">{pct}%</span>
-                      </div>
-                    );
-                  })}
-                </div>
-              </>
-            ) : (
-              <div className="flex h-full flex-col justify-center">
-                <div className="text-[22px] font-semibold">No reviews yet</div>
-                <p className="mt-2 max-w-[360px] text-[14px] leading-[1.7] text-[#8a8a8e]">
-                  Be the first to share your experience with the {productTitle}.
-                </p>
-              </div>
-            )}
+        {/* Summary */}
+        <div className="mt-8 grid grid-cols-1 gap-8 border-b border-[#e7e6e9] pb-10 sm:grid-cols-[auto_1fr] sm:gap-12">
+          <div className="flex flex-col items-start">
+            <div className="flex items-end gap-1">
+              <span className="text-[52px] font-bold leading-none tracking-[-0.02em]">
+                {hasReviews ? summary.average.toFixed(1) : "0.0"}
+              </span>
+              <span className="mb-1 text-[18px] text-[#9a9a9e]">/5</span>
+            </div>
+            <div className="mt-3">
+              <Stars value={summary.average} size={22} />
+            </div>
+            <div className="mt-2 text-[13px] text-[#8a8a8e]">
+              {summary.count} {summary.count === 1 ? "Rating" : "Ratings"}
+            </div>
           </div>
 
-          {/* Write your experience */}
-          <div className="flex flex-col items-start justify-center lg:border-l lg:border-[#e7e6e9] lg:pl-16">
-            <h3 className="text-[22px] font-semibold tracking-[-0.01em]">Write your Experience</h3>
-            <p className="mt-3 max-w-[440px] text-[14px] leading-[1.7] text-[#8a8a8e]">
-              Share your feedback and help shape an exceptional shopping journey.
-              Together, let&apos;s build a community where every voice is heard and
-              every experience counts.
+          <div className="flex flex-col justify-center gap-2">
+            {summary.breakdown.map((pct, idx) => {
+              const star = 5 - idx;
+              return (
+                <div key={star} className="flex items-center gap-3">
+                  <span className="flex w-7 items-center gap-0.5 text-[13px] text-[#6a6a6e]">
+                    {star}
+                    <StarIcon size={12} color="#eec449" />
+                  </span>
+                  <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-[#eeedef]">
+                    <div
+                      className="h-full rounded-full bg-[#eec449] transition-[width] duration-700"
+                      style={{ width: `${pct}%` }}
+                    />
+                  </div>
+                  <span className="w-8 text-right text-[13px] text-[#8a8a8e]">
+                    {counts[idx]}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Write a review row */}
+        <div className="flex flex-wrap items-center justify-between gap-4 py-6">
+          <div>
+            <h3 className="text-[17px] font-semibold">Write your Experience</h3>
+            <p className="mt-1 max-w-[520px] text-[14px] leading-[1.6] text-[#8a8a8e]">
+              Share your feedback on the {productTitle} and help other shoppers.
             </p>
             {done && (
-              <p className="mt-4 text-[14px] font-medium text-[#0c0c0d]">
+              <p className="mt-2 text-[14px] font-medium text-[#0c0c0d]">
                 Thanks! Your review was submitted and will appear once approved.
               </p>
             )}
-            <Button onClick={openForm} className="mt-6">
-              Write a Review
-            </Button>
           </div>
+          <Button onClick={openForm}>Write a Review</Button>
         </div>
 
         {/* Write-a-review form */}
         {open && (
-          <form ref={formRef} onSubmit={submit} className="mx-auto mt-6 max-w-[1100px] border border-[#e7e6e9] p-6 sm:p-8">
+          <form ref={formRef} onSubmit={submit} className="mb-8 border border-[#e7e6e9] p-6 sm:p-8">
             <h3 className="text-[18px] font-semibold">Write a Review</h3>
 
             <div className="mt-4 flex items-center gap-1">
@@ -254,6 +289,52 @@ export function ProductReviews({
               className="mt-4 w-full resize-none border border-[#d7d6d9] px-4 py-3 text-[15px] outline-none transition-colors focus:border-[#0c0c0d]"
             />
 
+            {/* Photos */}
+            <div className="mt-4">
+              <div className="flex flex-wrap gap-3">
+                {previews.map((src, i) => (
+                  <div
+                    key={src}
+                    className="relative h-[72px] w-[72px] overflow-hidden border border-[#e2e1e4]"
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={src} alt="" className="h-full w-full object-cover" />
+                    <button
+                      type="button"
+                      aria-label="Remove photo"
+                      onClick={() => setPhotos((prev) => prev.filter((_, j) => j !== i))}
+                      className="absolute right-0.5 top-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-black/60 text-white"
+                    >
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                      </svg>
+                    </button>
+                  </div>
+                ))}
+                {photos.length < MAX_PHOTOS && (
+                  <label className="flex h-[72px] w-[72px] cursor-pointer flex-col items-center justify-center gap-1 border border-dashed border-[#c7c6ca] text-[#8a8a8e] transition-colors hover:border-[#0c0c0d] hover:text-[#0c0c0d]">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
+                      <rect x="3" y="5" width="18" height="14" rx="2" />
+                      <circle cx="9" cy="10" r="1.5" />
+                      <path d="M21 16l-5-5-9 8" />
+                    </svg>
+                    <span className="text-[10px]">Add</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={(e) => addPhotos(e.target.files)}
+                      className="hidden"
+                    />
+                  </label>
+                )}
+              </div>
+              <p className="mt-2 text-[12px] text-[#a3a3a8]">
+                Add up to {MAX_PHOTOS} photos (optional).
+              </p>
+            </div>
+
             {error && <p className="mt-3 text-[13px] text-[#d23b3b]">{error}</p>}
 
             <div className="mt-4 flex items-center gap-3">
@@ -271,53 +352,92 @@ export function ProductReviews({
           </form>
         )}
 
-        {/* Review carousel */}
-        {hasReviews && (
+        {/* Review list */}
+        {hasReviews ? (
           <>
-            <div
-              ref={rowRef}
-              onScroll={onRowScroll}
-              className="no-scrollbar mt-12 flex snap-x snap-mandatory gap-[18px] overflow-x-auto pb-2"
-            >
+            <h3 className="border-b border-[#e7e6e9] pb-4 text-[16px] font-semibold">
+              Product Reviews
+            </h3>
+            <div className="divide-y divide-[#f0eff1]">
               {reviews.map((r) => (
-                <article
-                  key={r.id}
-                  className="flex w-[86%] shrink-0 snap-start flex-col items-center border border-[#e7e6e9] p-6 text-center sm:w-[calc(50%-9px)] lg:w-[calc(33.333%-12px)]"
-                >
-                  <Stars value={r.rating} size={16} />
+                <article key={r.id} className="py-6">
+                  <div className="flex items-start justify-between gap-4">
+                    <Stars value={r.rating} size={16} />
+                    {r.createdAt && (
+                      <span className="shrink-0 text-[13px] text-[#a3a3a8]">
+                        {formatDate(r.createdAt)}
+                      </span>
+                    )}
+                  </div>
                   {r.title && (
-                    <div className="mt-3 text-[15px] font-semibold text-[#0c0c0d]">{r.title}</div>
+                    <div className="mt-2.5 text-[15px] font-semibold text-[#0c0c0d]">
+                      {r.title}
+                    </div>
                   )}
-                  <p className="mt-3 flex-1 text-[14px] leading-[1.7] text-[#6a6a6e]">
-                    &ldquo;{r.body}&rdquo;
+                  <p className="mt-1.5 text-[14px] leading-[1.7] text-[#4a4a4e]">
+                    {r.body}
                   </p>
-                  <div className="mt-4 text-[14px] font-semibold text-[#0c0c0d]">{r.author}</div>
-                  {r.createdAt && (
-                    <div className="mt-0.5 text-[12px] text-[#a3a3a8]">{formatDate(r.createdAt)}</div>
+                  {r.photos.length > 0 && (
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {r.photos.map((src) => (
+                        <button
+                          key={src}
+                          type="button"
+                          onClick={() => setLightbox(src)}
+                          className="relative h-[84px] w-[84px] cursor-pointer overflow-hidden border border-[#e7e6e9]"
+                          aria-label="View review photo"
+                        >
+                          <Image
+                            src={src}
+                            alt={`Photo from ${r.author}'s review`}
+                            fill
+                            sizes="84px"
+                            className="object-cover"
+                          />
+                        </button>
+                      ))}
+                    </div>
                   )}
+                  <div className="mt-3 text-[13px] text-[#8a8a8e]">
+                    by <span className="font-medium text-[#0c0c0d]">{r.author}</span>
+                  </div>
                 </article>
               ))}
             </div>
-
-            {reviews.length > 1 && (
-              <div className="mt-6 flex items-center justify-center gap-2">
-                {reviews.map((r, i) => (
-                  <button
-                    key={r.id}
-                    type="button"
-                    aria-label={`Go to review ${i + 1}`}
-                    aria-current={activeDot === i}
-                    onClick={() => goTo(i)}
-                    className={`h-2 cursor-pointer transition-all ${
-                      activeDot === i ? "w-6 bg-[#0c0c0d]" : "w-2 bg-[#d7d6d9] hover:bg-[#8a8a8e]"
-                    }`}
-                  />
-                ))}
-              </div>
-            )}
           </>
+        ) : (
+          <div className="border-t border-[#e7e6e9] py-10 text-center">
+            <p className="m-0 text-[15px] text-[#8a8a8e]">
+              No reviews yet — be the first to review the {productTitle}.
+            </p>
+          </div>
         )}
       </div>
+
+      {/* Photo lightbox */}
+      {lightbox && (
+        <div
+          role="dialog"
+          aria-label="Review photo"
+          onClick={() => setLightbox(null)}
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 p-6"
+        >
+          <button
+            type="button"
+            aria-label="Close"
+            onClick={() => setLightbox(null)}
+            className="absolute right-5 top-5 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20"
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+              <line x1="6" y1="6" x2="18" y2="18" />
+              <line x1="18" y1="6" x2="6" y2="18" />
+            </svg>
+          </button>
+          <div className="relative h-[86vh] w-full max-w-[760px]" onClick={(e) => e.stopPropagation()}>
+            <Image src={lightbox} alt="Review photo" fill className="object-contain" sizes="760px" />
+          </div>
+        </div>
+      )}
     </section>
   );
 }

@@ -60,12 +60,12 @@ export default async function ProductPage({
     category: product.category,
     color: product.colors.map((c) => c.name),
     brand: { "@type": "Brand", name: "Golden Egal" },
-    ...(product.rating && product.reviewCount
+    ...(reviews.count > 0
       ? {
           aggregateRating: {
             "@type": "AggregateRating",
-            ratingValue: product.rating,
-            reviewCount: product.reviewCount,
+            ratingValue: Number(reviews.average.toFixed(1)),
+            reviewCount: reviews.count,
           },
         }
       : {}),
@@ -92,7 +92,11 @@ export default async function ProductPage({
       </div>
 
       {/* Gallery + purchase (shared colour state) */}
-      <ProductView product={product} />
+      <ProductView
+        product={product}
+        reviewAverage={reviews.average}
+        reviewCount={reviews.count}
+      />
 
       {/* Reviews */}
       <ProductReviews

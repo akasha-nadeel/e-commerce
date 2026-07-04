@@ -4,109 +4,76 @@ import { useState } from "react";
 import {
   AuthHeading,
   GoogleButton,
+  FacebookButton,
   OrDivider,
   TextField,
-  PasswordField,
-  AuthCheckbox,
   AuthSubmit,
-  AuthAltLink,
-  AuthSuccess,
+  MailIcon,
 } from "./auth-shell";
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-type Errors = {
-  name?: string;
-  email?: string;
-  password?: string;
-  agree?: string;
-};
-
+/**
+ * Passwordless sign-up: the same hosted Shopify flow that handles login also
+ * creates a new account, so every method hands off to /api/auth/login.
+ */
 export function SignupForm() {
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [agree, setAgree] = useState(false);
-  const [errors, setErrors] = useState<Errors>({});
-  const [done, setDone] = useState(false);
+  const [busy, setBusy] = useState(false);
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const next: Errors = {};
-    if (!name.trim()) next.name = "Please enter your name.";
-    if (!EMAIL_RE.test(email)) next.email = "Enter a valid email address.";
-    if (password.length < 8) next.password = "Use at least 8 characters.";
-    if (!agree) next.agree = "Please accept the terms to continue.";
-    setErrors(next);
-    if (Object.keys(next).length === 0) setDone(true);
-  }
-
-  if (done) {
-    return (
-      <AuthSuccess
-        title="Welcome to Golden Egal"
-        body={`Your account for ${email} is ready. Full sign-in goes live with our Shopify customer accounts shortly.`}
-      />
-    );
+  function startSignup(loginHint?: string) {
+    setBusy(true);
+    const hint = loginHint?.trim();
+    window.location.href = hint
+      ? `/api/auth/login?login_hint=${encodeURIComponent(hint)}`
+      : "/api/auth/login";
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        startSignup(email);
+      }}
+      className="flex flex-col gap-4"
+    >
       <AuthHeading
         title="Create your account"
         subtitle="Join Golden Egal — own the day."
       />
 
-      <GoogleButton label="Sign up with Google" />
-      <OrDivider />
+      <div className="grid grid-cols-2 gap-3">
+        <GoogleButton onClick={() => startSignup()} />
+        <FacebookButton onClick={() => startSignup()} />
+      </div>
+      <OrDivider label="or continue with email" />
 
-      <TextField
-        id="signup-name"
-        label="Name"
-        placeholder="Enter your name"
-        value={name}
-        onChange={(v) => setName(v)}
-        error={errors.name}
-        autoComplete="name"
-        required
-      />
       <TextField
         id="signup-email"
         label="Email"
         type="email"
-        placeholder="Enter your email"
+        placeholder="Email"
         value={email}
-        onChange={(v) => setEmail(v)}
-        error={errors.email}
+        onChange={setEmail}
         autoComplete="email"
-        required
-      />
-      <PasswordField
-        id="signup-password"
-        label="Password"
-        placeholder="Create a password"
-        value={password}
-        onChange={(v) => setPassword(v)}
-        error={errors.password}
-        autoComplete="new-password"
-        required
+        hideLabel
+        icon={<MailIcon />}
       />
 
-      <AuthCheckbox
-        id="signup-agree"
-        checked={agree}
-        onChange={(v) => setAgree(v)}
-        error={errors.agree}
-      >
-        I agree to all Terms, Privacy Policy and Fees
-      </AuthCheckbox>
+      <AuthSubmit>{busy ? "Redirecting…" : "Continue"}</AuthSubmit>
 
-      <AuthSubmit>Sign Up</AuthSubmit>
-      <AuthAltLink
-        prompt="Already have an account?"
-        href="/login"
-        cta="Log in"
-      />
+      <p className="mt-1 text-center text-[14px] text-[#6a6a6e]">
+        Already have an account?{" "}
+        <button
+          type="button"
+          onClick={() => startSignup()}
+          className="cursor-pointer font-semibold text-[#eec449] hover:underline"
+        >
+          Log in
+        </button>
+      </p>
+
+      <p className="mt-1 text-center text-[12px] leading-relaxed text-[#8a8a8e]">
+        Secure passwordless sign-up — Shopify emails you a one-time code.
+      </p>
     </form>
   );
 }

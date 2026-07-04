@@ -19,6 +19,7 @@ export interface Review {
   title: string;
   body: string;
   createdAt: string;
+  photos: string[];
 }
 
 export interface ReviewSummary {
@@ -37,6 +38,11 @@ type MetaobjectNode = {
   id: string;
   fields: { key: string; value: string | null }[];
   capabilities?: { publishable?: { status: string } };
+  photos?: {
+    references?: {
+      nodes: { image?: { url: string } | null }[];
+    } | null;
+  } | null;
 };
 
 function fieldMap(node: MetaobjectNode): Record<string, string> {
@@ -65,6 +71,11 @@ export async function getProductReviews(
             id
             capabilities { publishable { status } }
             fields { key value }
+            photos: field(key: "photos") {
+              references(first: 6) {
+                nodes { ... on MediaImage { image { url } } }
+              }
+            }
           }
         }
       }
@@ -90,6 +101,9 @@ export async function getProductReviews(
     .filter((e) => e.node.capabilities?.publishable?.status === "ACTIVE")
     .map((e) => {
       const f = fieldMap(e.node);
+      const photos = (e.node.photos?.references?.nodes ?? [])
+        .map((n) => n.image?.url)
+        .filter((u): u is string => Boolean(u));
       return {
         id: e.node.id,
         productHandle: f.product_handle ?? handle,
@@ -98,6 +112,7 @@ export async function getProductReviews(
         title: f.title ?? "",
         body: f.body ?? "",
         createdAt: f.created_at ?? "",
+        photos,
       };
     })
     // Belt-and-braces: only keep reviews for this exact product.
@@ -123,10 +138,12 @@ export async function createReview(input: {
   author: string;
   title: string;
   body: string;
+  photoGids?: string[];
 }): Promise<boolean> {
   if (!isAdminConfigured) return false;
 
   const rating = Math.max(1, Math.min(5, Math.round(input.rating)));
+  const photoGids = input.photoGids ?? [];
   const mutation = /* GraphQL */ `
     mutation CreateReview($metaobject: MetaobjectCreateInput!) {
       metaobjectCreate(metaobject: $metaobject) {
@@ -155,6 +172,9 @@ export async function createReview(input: {
           { key: "title", value: input.title.slice(0, 120) },
           { key: "body", value: input.body.slice(0, 2000) },
           { key: "created_at", value: new Date().toISOString() },
+          ...(photoGids.length
+            ? [{ key: "photos", value: JSON.stringify(photoGids) }]
+            : []),
         ],
       },
     },

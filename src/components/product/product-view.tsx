@@ -9,7 +9,15 @@ import { PurchasePanel } from "./purchase-panel";
  * Client shell that owns the selected colour so the purchase panel drives the
  * cart variant, and the gallery highlights that colour's image.
  */
-export function ProductView({ product }: { product: Product }) {
+export function ProductView({
+  product,
+  reviewAverage = 0,
+  reviewCount = 0,
+}: {
+  product: Product;
+  reviewAverage?: number;
+  reviewCount?: number;
+}) {
   const [colorIdx, setColorIdx] = useState(0);
   const activeColor = product.colors[colorIdx]?.name;
 
@@ -28,6 +36,8 @@ export function ProductView({ product }: { product: Product }) {
         product={product}
         colorIdx={colorIdx}
         onColorChange={setColorIdx}
+        reviewAverage={reviewAverage}
+        reviewCount={reviewCount}
       />
     </section>
   );

@@ -48,9 +48,37 @@ const CartContext = createContext<CartState | null>(null);
 
 const lineId = (l: NewCartLine) => `${l.slug}::${l.colorName}::${l.size}`;
 
+const STORAGE_KEY = "ge_cart_v1";
+
 export function CartProvider({ children }: { children: ReactNode }) {
   const [lines, setLines] = useState<CartLine[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
+
+  // Restore the saved cart after mount. Kept in an effect (not a lazy
+  // initialiser) so the first client render matches the empty SSR markup — no
+  // hydration mismatch. This is a legitimate external-store sync.
+  useEffect(() => {
+    try {
+      const raw = window.localStorage.getItem(STORAGE_KEY);
+      const saved = raw ? (JSON.parse(raw) as CartLine[]) : [];
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      if (Array.isArray(saved) && saved.length) setLines(saved);
+    } catch {
+      // ignore corrupt/blocked storage
+    }
+    setHydrated(true);
+  }, []);
+
+  // Persist on change, but only after the restore has run.
+  useEffect(() => {
+    if (!hydrated) return;
+    try {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(lines));
+    } catch {
+      // ignore quota/private-mode errors
+    }
+  }, [lines, hydrated]);
 
   const add = useCallback((line: NewCartLine, qty = 1) => {
     const id = lineId(line);

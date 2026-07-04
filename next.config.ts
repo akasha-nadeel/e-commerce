@@ -11,6 +11,11 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "cdn.shopify.com" },
     ],
   },
+  experimental: {
+    // Review photo uploads go through a server action; allow room for a few
+    // (client-resized) images per submission.
+    serverActions: { bodySizeLimit: "8mb" },
+  },
 };
 
 export default nextConfig;
