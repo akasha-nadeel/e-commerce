@@ -29,15 +29,15 @@ export function PromoBanner() {
   };
 
   return (
-    <section className="my-12 px-5 sm:px-8">
-      <div className="relative mx-auto max-w-[1400px] overflow-hidden rounded-3xl bg-[#eaac33]">
+    <section className="my-12">
+      <div className="relative overflow-hidden bg-[#eaac33]">
         {/* Lifestyle photo — models sit on the right; copy lives over the left */}
         <Image
           src="/promo-shopping.png"
           alt="Two friends excitedly shopping online together"
           fill
           quality={100}
-          sizes="(max-width: 1400px) 100vw, 1400px"
+          sizes="100vw"
           className="object-cover object-[72%_center]"
         />
         {/* Yellow scrim keeps the dark copy legible over the photo on mobile,

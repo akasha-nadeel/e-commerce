@@ -3,7 +3,6 @@ import Link from "next/link";
 import { CarouselRow } from "@/components/carousel-row";
 import { TileCarousel } from "@/components/tile-carousel";
 import { ProductCard } from "@/components/product-card";
-import { ActivitySwitch } from "@/components/activity-switch";
 import { LogoMarquee } from "@/components/logo-marquee";
 import { PromoBanner } from "@/components/promo-banner";
 import { Button } from "@/components/ui/button";
@@ -77,6 +76,13 @@ export default async function HomePage() {
       </div>
 
       {/* ---------------------------------------------------------------- */}
+      {/* First-order discount banner — surfaced early (right after the     */}
+      {/* first product row) so new visitors browse the whole site knowing  */}
+      {/* they'll save 20% on their first order.                            */}
+      {/* ---------------------------------------------------------------- */}
+      <PromoBanner />
+
+      {/* ---------------------------------------------------------------- */}
       {/* Shop by department — Women / Men                                 */}
       {/* ---------------------------------------------------------------- */}
       <section className="mx-auto max-w-[1400px] px-5 pb-4 pt-16 sm:px-8">
@@ -115,11 +121,6 @@ export default async function HomePage() {
       </section>
 
       {/* ---------------------------------------------------------------- */}
-      {/* First-order discount banner                                      */}
-      {/* ---------------------------------------------------------------- */}
-      <PromoBanner />
-
-      {/* ---------------------------------------------------------------- */}
       {/* Shop by category                                                 */}
       {/* ---------------------------------------------------------------- */}
       <TileCarousel
@@ -131,7 +132,7 @@ export default async function HomePage() {
           </Button>
         }
       >
-        <div className="w-[60%] shrink-0 snap-start sm:w-[42%] lg:w-[23.5%]">
+        <div className="w-[78%] shrink-0 snap-start sm:w-[45%] lg:w-[26%]">
           <CategoryTile
             name="T-Shirts"
             caption="Everyday Essentials"
@@ -144,7 +145,7 @@ export default async function HomePage() {
             bg="#123047"
           />
         </div>
-        <div className="w-[60%] shrink-0 snap-start sm:w-[42%] lg:w-[23.5%]">
+        <div className="w-[78%] shrink-0 snap-start sm:w-[45%] lg:w-[26%]">
           <CategoryTile
             name="Polo"
             caption="Smart Casual"
@@ -157,7 +158,7 @@ export default async function HomePage() {
             bg="#123047"
           />
         </div>
-        <div className="w-[60%] shrink-0 snap-start sm:w-[42%] lg:w-[23.5%]">
+        <div className="w-[78%] shrink-0 snap-start sm:w-[45%] lg:w-[26%]">
           <CategoryTile
             name="Hoodies"
             caption="Cozy Layers"
@@ -170,7 +171,7 @@ export default async function HomePage() {
             bg="#0a0a0a"
           />
         </div>
-        <div className="w-[60%] shrink-0 snap-start sm:w-[42%] lg:w-[23.5%]">
+        <div className="w-[78%] shrink-0 snap-start sm:w-[45%] lg:w-[26%]">
           <CategoryTile
             name="Tanks"
             caption="Summer Ready"
@@ -186,27 +187,34 @@ export default async function HomePage() {
       </TileCarousel>
 
       {/* ---------------------------------------------------------------- */}
-      {/* Train in Golden Eagle                                             */}
+      {/* Accessories                                                      */}
       {/* ---------------------------------------------------------------- */}
-      <TileCarousel title="Train In Golden Eagle" control={<ActivitySwitch />}>
+      <TileCarousel
+        title="Accessories"
+        control={
+          <Button href="/collections/accessories" size="sm" arrow>
+            View All
+          </Button>
+        }
+      >
         <div className="w-[78%] shrink-0 snap-start sm:w-[48%] lg:w-[32%]">
           <ActivityTile
-            name="Running"
-            href="/collections/all"
+            name="Caps"
+            href="/collections/accessories"
             bg="radial-gradient(120% 120% at 35% 25%,#33332f,#121210)"
           />
         </div>
         <div className="w-[78%] shrink-0 snap-start sm:w-[48%] lg:w-[32%]">
           <ActivityTile
-            name="Rest Day"
-            href="/collections/all"
+            name="Perfume"
+            href="/collections/accessories"
             bg="radial-gradient(120% 120% at 60% 30%,#3a3128,#161210)"
           />
         </div>
         <div className="w-[78%] shrink-0 snap-start sm:w-[48%] lg:w-[32%]">
           <ActivityTile
-            name="Studio"
-            href="/collections/all"
+            name="Socks"
+            href="/collections/accessories"
             bg="radial-gradient(120% 120% at 45% 30%,#2f3338,#101315)"
           />
         </div>

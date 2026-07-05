@@ -54,6 +54,11 @@ const COLLECTIONS: Record<string, Collection> = {
     tagline: "Built to move — train in Golden Eagle.",
     mixed: true,
   },
+  accessories: {
+    title: "Accessories",
+    tagline: "Caps, perfume and finishing touches.",
+    mixed: true,
+  },
 };
 
 export function generateStaticParams() {
