@@ -110,6 +110,7 @@ export default async function HomePage() {
             <DepartmentPanel
               eyebrow="Women's Collection"
               title="Shop Women"
+              caption="Elevated everyday styles, designed to move with you."
               href="/collections/women"
               image="/dept-women-wide-v2.jpg"
               imageClassName="object-cover object-center origin-bottom scale-[1.6] translate-x-[24%] translate-y-[26%] sm:scale-[1.3] sm:translate-x-[12%] sm:translate-y-[21%]"
@@ -124,6 +125,7 @@ export default async function HomePage() {
             <DepartmentPanel
               eyebrow="Men's Collection"
               title="Shop Men"
+              caption="Heavyweight essentials, built from the ground up."
               href="/collections/men"
               image="/dept-men-wide.png"
               imageClassName="object-cover object-center translate-x-[8%] sm:translate-x-0"
@@ -495,7 +497,7 @@ function DepartmentPanel({
             {title}
           </h3>
           {caption && (
-            <p className="mt-3.5 max-w-[300px] text-[14px] leading-relaxed text-white/65">
+            <p className="mt-2 max-w-[200px] text-[11px] leading-snug text-white/65 sm:mt-3.5 sm:max-w-[300px] sm:text-[14px] sm:leading-relaxed">
               {caption}
             </p>
           )}

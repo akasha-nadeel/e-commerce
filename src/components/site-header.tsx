@@ -15,9 +15,9 @@ import { useSheetDrag } from "@/lib/use-sheet-drag";
 
 const NAV = [
   { label: "HOME", href: "/", mega: false },
-  { label: "NEW IN", href: "/collections/new", mega: false },
   { label: "MEN", href: "/collections/men", mega: true },
   { label: "WOMEN", href: "/collections/women", mega: true },
+  { label: "ACCESSORIES", href: "/collections/accessories", mega: false },
   { label: "SHOP ALL", href: "/collections/all", mega: false },
   { label: "ABOUT", href: "/about", mega: false },
 ];

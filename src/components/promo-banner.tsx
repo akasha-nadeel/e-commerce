@@ -32,15 +32,18 @@ export function PromoBanner() {
   return (
     <section className="my-12">
       <div className="relative overflow-hidden bg-[#eaac33]">
-        {/* Lifestyle photo — models sit on the right; copy lives over the left */}
-        <Image
-          src="/promo-shopping.png"
-          alt="Two friends excitedly shopping online together"
-          fill
-          quality={100}
-          sizes="100vw"
-          className="object-cover object-[72%_center]"
-        />
+        {/* Lifestyle photo — models sit on the right; copy lives over the left.
+            Slides in from the left when the banner scrolls into view. */}
+        <Reveal x={-70} y={0} duration={0.9} className="absolute inset-0">
+          <Image
+            src="/promo-shopping.png"
+            alt="Two friends excitedly shopping online together"
+            fill
+            quality={100}
+            sizes="100vw"
+            className="object-cover object-[72%_center]"
+          />
+        </Reveal>
         {/* Yellow scrim keeps the dark copy legible over the photo on mobile,
             where the models fill the frame. Tablet/desktop show the photo with
             no overlay — there the copy sits over the empty yellow on the left. */}
@@ -50,24 +53,28 @@ export function PromoBanner() {
         />
 
         <div className="relative px-7 py-14 sm:px-12 sm:py-20 lg:py-24">
-          <Reveal className="max-w-[480px]">
-            <p
-              className="text-[12px] font-semibold uppercase tracking-[0.28em]"
-              style={{ color: INK, opacity: 0.7 }}
-            >
-              First Order Offer
-            </p>
+          <div className="max-w-[480px]">
+            {/* Title block — drops in from the top */}
+            <Reveal y={-34} duration={0.8} delay={0.15}>
+              <p
+                className="text-[12px] font-semibold uppercase tracking-[0.28em]"
+                style={{ color: INK, opacity: 0.7 }}
+              >
+                First Order Offer
+              </p>
 
-            <h2
-              className="mt-3 text-[clamp(30px,4.4vw,52px)] font-extrabold leading-[1.08]"
-              style={{ color: INK }}
-            >
-              Enjoy 20% Off
-              <br />
-              Your First Order
-            </h2>
+              <h2
+                className="mt-3 text-[clamp(30px,4.4vw,52px)] font-extrabold leading-[1.08]"
+                style={{ color: INK }}
+              >
+                Enjoy 20% Off
+                <br />
+                Your First Order
+              </h2>
+            </Reveal>
 
-            <div className="mt-7">
+            {/* CTA — rises up from the bottom */}
+            <Reveal y={34} duration={0.8} delay={0.35} className="mt-7">
               <button
                 type="button"
                 onClick={copy}
@@ -76,8 +83,8 @@ export function PromoBanner() {
               >
                 {copied ? "Code Copied ✓" : `Copy Code · ${CODE}`}
               </button>
-            </div>
-          </Reveal>
+            </Reveal>
+          </div>
         </div>
       </div>
     </section>

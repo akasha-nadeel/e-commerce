@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import { BackButton } from "@/components/back-button";
 import { CollectionBrowser } from "@/components/collection/collection-browser";
 import { Button } from "@/components/ui/button";
+import { PageTransition } from "@/components/ui/page-transition";
 import { getCollectionProducts } from "@/lib/products";
 
 /** Optional campaign hero banner shown at the top of a collection page. */
@@ -162,35 +163,37 @@ export default async function CollectionPage({
 
   return (
     <div className="w-full" style={{ background: c.hero?.bg ?? "#ffffff" }}>
-      {!bgHero && (
-        <div className="mx-auto max-w-[1400px] px-5 pt-5 sm:px-8">
-          <BackButton fallbackHref="/" />
-        </div>
-      )}
+      <PageTransition>
+        {!bgHero && (
+          <div className="mx-auto max-w-[1400px] px-5 pt-5 sm:px-8">
+            <BackButton fallbackHref="/" />
+          </div>
+        )}
 
-      {c.hero && <CollectionHero hero={c.hero} />}
+        {c.hero && <CollectionHero hero={c.hero} />}
 
-      {!c.hero && (
-        <section className="mx-auto max-w-[1400px] px-5 pb-6 pt-6 sm:px-8">
-          <h1 className="display-tight m-0 text-[clamp(34px,5vw,64px)] font-semibold leading-[0.95]">
-            {c.title}
-          </h1>
-          <p className="mt-3 max-w-[520px] text-[15px] text-[#8a8a8e]">
-            {c.tagline}
-          </p>
+        {!c.hero && (
+          <section className="mx-auto max-w-[1400px] px-5 pb-6 pt-6 sm:px-8">
+            <h1 className="display-tight m-0 text-[clamp(34px,5vw,64px)] font-semibold leading-[0.95]">
+              {c.title}
+            </h1>
+            <p className="mt-3 max-w-[520px] text-[15px] text-[#8a8a8e]">
+              {c.tagline}
+            </p>
+          </section>
+        )}
+
+        <section
+          id="products"
+          className={`mx-auto max-w-[1400px] scroll-mt-24 px-5 pb-20 sm:px-8 ${
+            c.hero ? "pt-6" : ""
+          }`}
+        >
+          <Suspense fallback={<GridSkeleton count={products.length} />}>
+            <CollectionBrowser products={products} showCategory={c.mixed} />
+          </Suspense>
         </section>
-      )}
-
-      <section
-        id="products"
-        className={`mx-auto max-w-[1400px] scroll-mt-24 px-5 pb-20 sm:px-8 ${
-          c.hero ? "pt-6" : ""
-        }`}
-      >
-        <Suspense fallback={<GridSkeleton count={products.length} />}>
-          <CollectionBrowser products={products} showCategory={c.mixed} />
-        </Suspense>
-      </section>
+      </PageTransition>
     </div>
   );
 }
