@@ -19,6 +19,12 @@ type Hero = {
   /** "cover" (default) fills the square for single centred products; "contain"
    *  shows a wide image (e.g. two products) in full without cropping. */
   imageFit?: "cover" | "contain";
+  /** "split" (default) = copy left / product right. "background" = full-bleed
+   *  lifestyle photo with the copy overlaid, for non-product shots. */
+  layout?: "split" | "background";
+  /** CSS object-position for the background layout, to frame the subject
+   *  (e.g. "70% 25%"). Defaults to "62% 28%". */
+  imagePosition?: string;
 };
 
 type Collection = {
@@ -56,12 +62,15 @@ const COLLECTIONS: Record<string, Collection> = {
     tagline: "Everyday heavyweight essentials.",
     mixed: true,
     hero: {
-      image: "/collection-hero-t-shirts-v3.webp",
+      image: "/collection-hero-t-shirts-bg.webp",
       title: "T-Shirts",
-      subtitle: "Everyday heavyweight essentials.",
+      subtitle:
+        "Heavyweight cotton tees cut for everyday wear. Bold graphics and clean staples, finished with the gold Golden Eagle mark. Built to last, wash after wash.",
       cta: "Shop The Collection",
       href: "#products",
       bg: "#ffffff",
+      layout: "background",
+      imagePosition: "50% 34%",
     },
   },
   polo: {
@@ -69,26 +78,31 @@ const COLLECTIONS: Record<string, Collection> = {
     tagline: "Smart-casual staples, refined.",
     mixed: true,
     hero: {
-      image: "/collection-hero-polo.webp",
+      image: "/collection-hero-polo-bg.webp",
       title: "Polo",
-      subtitle: "Smart-casual staples, refined.",
+      subtitle:
+        "Smart-casual polos in soft, breathable pique. Striped and solid styles finished with the gold Golden Eagle mark. Dress them up or keep it easy.",
       cta: "Shop The Collection",
       href: "#products",
       bg: "#ffffff",
-      imageFit: "contain",
+      layout: "background",
+      imagePosition: "70% 22%",
     },
   },
   hoody: {
-    title: "Hoody",
+    title: "Hoodies",
     tagline: "Cozy layers for every day.",
     mixed: true,
     hero: {
-      image: "/collection-hero-hoody.webp",
-      title: "Hoody",
-      subtitle: "Cozy layers for every day.",
+      image: "/collection-hero-hoody-bg.webp",
+      title: "Hoodies",
+      subtitle:
+        "Heavyweight fleece hoodies built for cold mornings and easy layering. Soft brushed interior and a relaxed fit, finished with the gold Golden Eagle mark.",
       cta: "Shop The Collection",
       href: "#products",
       bg: "#ffffff",
+      layout: "background",
+      imagePosition: "50% 42%",
     },
   },
   tanks: {
@@ -96,12 +110,14 @@ const COLLECTIONS: Record<string, Collection> = {
     tagline: "Built to move — train in Golden Eagle.",
     mixed: true,
     hero: {
-      image: "/collection-hero-tanks.webp",
+      image: "/collection-hero-tanks-bg.webp",
       title: "Tanks",
-      subtitle: "Built to move — train in Golden Eagle.",
+      subtitle:
+        "Lightweight, breathable tanks built for hot days and hard training. Cut for movement, finished with the gold Golden Eagle mark, and made to be worn anywhere.",
       cta: "Shop The Collection",
       href: "#products",
       bg: "#ffffff",
+      layout: "background",
     },
   },
   accessories: {
@@ -140,49 +156,19 @@ export default async function CollectionPage({
   if (!c) notFound();
 
   const products = await getCollectionProducts(slug);
+  // A full-bleed background hero carries its own overlaid Back button, so the
+  // usual padded Back row above the content is skipped for it.
+  const bgHero = c.hero?.layout === "background";
 
   return (
     <div className="w-full" style={{ background: c.hero?.bg ?? "#ffffff" }}>
-      <div className="mx-auto max-w-[1400px] px-5 pt-5 sm:px-8">
-        <BackButton fallbackHref="/" />
-      </div>
-
-      {c.hero && (
-        <section className="mx-auto max-w-[1400px] px-5 pt-2 sm:px-8">
-          {/* Split hero: copy left / product right on desktop; on mobile the
-              image stacks on top (flex-col-reverse) and the copy sits below. */}
-          <div className="flex flex-col-reverse items-center gap-1 lg:flex-row lg:gap-8">
-            <div className="w-full pb-8 pt-2 text-center lg:w-[42%] lg:py-10 lg:text-left">
-              <h1 className="display-tight m-0 text-[clamp(30px,4.6vw,60px)] font-semibold leading-[0.98] text-[#0c0c0d]">
-                {c.hero.title}
-              </h1>
-              <p className="mx-auto mt-3 max-w-[420px] text-[15px] text-[#0c0c0d]/70 sm:text-[17px] lg:mx-0">
-                {c.hero.subtitle}
-              </p>
-              <div className="mt-6">
-                <Button href={c.hero.href} size="lg" arrow>
-                  {c.hero.cta}
-                </Button>
-              </div>
-            </div>
-            <div className="relative aspect-square w-full lg:w-[58%]">
-              <Image
-                src={c.hero.image}
-                alt=""
-                fill
-                priority
-                quality={100}
-                sizes="(max-width: 1024px) 100vw, 780px"
-                className={`${
-                  c.hero.imageFit === "contain"
-                    ? "object-contain"
-                    : "object-cover"
-                } object-center`}
-              />
-            </div>
-          </div>
-        </section>
+      {!bgHero && (
+        <div className="mx-auto max-w-[1400px] px-5 pt-5 sm:px-8">
+          <BackButton fallbackHref="/" />
+        </div>
       )}
+
+      {c.hero && <CollectionHero hero={c.hero} />}
 
       {!c.hero && (
         <section className="mx-auto max-w-[1400px] px-5 pb-6 pt-6 sm:px-8">
@@ -206,6 +192,88 @@ export default async function CollectionPage({
         </Suspense>
       </section>
     </div>
+  );
+}
+
+function CollectionHero({ hero }: { hero: Hero }) {
+  // Full-bleed lifestyle background with overlaid copy (non-product shots).
+  if (hero.layout === "background") {
+    return (
+      <section className="relative h-[460px] overflow-hidden sm:h-[540px] lg:h-[620px]">
+        <Image
+          src={hero.image}
+          alt=""
+          fill
+          priority
+          quality={100}
+          sizes="100vw"
+          className="object-cover"
+          style={{ objectPosition: hero.imagePosition ?? "62% 28%" }}
+        />
+        {/* Dark bottom-left scrim keeps the white copy legible while leaving
+            the subject on the right of the photo clear. */}
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-gradient-to-tr from-black/70 via-black/20 to-transparent"
+        />
+        {/* Full-bleed hero, so Back is overlaid on the photo (top-left). */}
+        <div className="absolute left-4 top-4 z-10 sm:left-6 sm:top-6">
+          <BackButton fallbackHref="/" />
+        </div>
+        <div className="absolute inset-x-0 bottom-0 p-7 sm:p-10 lg:p-14">
+          <div className="mx-auto max-w-[1400px]">
+            <div className="max-w-[560px]">
+              <h1 className="display-tight m-0 text-[clamp(30px,4.6vw,60px)] font-semibold leading-[0.98] text-white">
+                {hero.title}
+              </h1>
+              <p className="mt-3 max-w-[400px] text-[13px] leading-relaxed text-white/80 sm:text-[14px]">
+                {hero.subtitle}
+              </p>
+              <div className="mt-5">
+                <Button href={hero.href} size="md" arrow>
+                  {hero.cta}
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Split hero: copy left / product right on desktop; on mobile the image
+  // stacks on top (flex-col-reverse) and the copy sits below.
+  return (
+    <section className="mx-auto max-w-[1400px] px-5 pt-2 sm:px-8">
+      <div className="flex flex-col-reverse items-center gap-1 lg:flex-row lg:gap-8">
+        <div className="w-full pb-8 pt-2 text-center lg:w-[42%] lg:py-10 lg:text-left">
+          <h1 className="display-tight m-0 text-[clamp(30px,4.6vw,60px)] font-semibold leading-[0.98] text-[#0c0c0d]">
+            {hero.title}
+          </h1>
+          <p className="mx-auto mt-3 max-w-[420px] text-[15px] text-[#0c0c0d]/70 sm:text-[17px] lg:mx-0">
+            {hero.subtitle}
+          </p>
+          <div className="mt-6">
+            <Button href={hero.href} size="lg" arrow>
+              {hero.cta}
+            </Button>
+          </div>
+        </div>
+        <div className="relative aspect-square w-full lg:w-[58%]">
+          <Image
+            src={hero.image}
+            alt=""
+            fill
+            priority
+            quality={100}
+            sizes="(max-width: 1024px) 100vw, 780px"
+            className={`${
+              hero.imageFit === "contain" ? "object-contain" : "object-cover"
+            } object-center`}
+          />
+        </div>
+      </div>
+    </section>
   );
 }
 

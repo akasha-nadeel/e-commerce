@@ -123,7 +123,7 @@ export function SiteHeader() {
     <header
       onMouseLeave={() => setMegaOpen(false)}
       className={`sticky top-0 z-50 text-[#0c0c0d] transition-colors duration-300 ${
-        solidBg ? "border-b border-[#e7e6e9] bg-white" : "bg-transparent"
+        solidBg ? "bg-white" : "bg-transparent"
       }`}
     >
       <div className="relative mx-auto flex max-w-[1400px] items-center justify-between gap-4 px-5 py-[10px] sm:px-8">
