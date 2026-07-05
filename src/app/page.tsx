@@ -6,6 +6,7 @@ import { ProductCard } from "@/components/product-card";
 import { LogoMarquee } from "@/components/logo-marquee";
 import { PromoBanner } from "@/components/promo-banner";
 import { Button } from "@/components/ui/button";
+import { Reveal } from "@/components/ui/reveal";
 import { getLatestStyles, getRecommendedProducts } from "@/lib/products";
 
 export default async function HomePage() {
@@ -30,28 +31,36 @@ export default async function HomePage() {
           /* Mobile crops a landscape image into a tall frame, so object-cover
              scales it up — request a larger candidate there to stay sharp. */
           sizes="(max-width: 1024px) 200vw, 100vw"
-          className="object-cover object-right lg:object-center"
+          className="animate-hero-img object-cover object-right lg:object-center"
         />
         <div className="relative mx-auto w-full max-w-[1400px] px-5 pb-14 sm:px-8 lg:pb-0">
           <div className="max-w-[540px]">
-            <h1 className="display-tight m-0 text-[clamp(44px,7vw,104px)] font-semibold leading-[0.95] text-white">
+            <h1
+              className="animate-rise display-tight m-0 text-[clamp(44px,7vw,104px)] font-semibold leading-[0.95] text-white"
+              style={{ animationDelay: "0.15s" }}
+            >
               Own
               <br />
               The Day
             </h1>
-            <p className="mb-8 mt-5 text-[clamp(15px,1.4vw,20px)] text-white/75">
+            <p
+              className="animate-rise mb-8 mt-5 text-[clamp(15px,1.4vw,20px)] text-white/75"
+              style={{ animationDelay: "0.3s" }}
+            >
               Explore the Golden Eagle collection.
             </p>
             <div className="flex flex-wrap gap-3.5">
               <Link
                 href="/collections/men"
-                className="rounded-none bg-[#eec449] px-9 py-4 text-[13px] font-semibold text-[#0c0c0d] no-underline transition-colors hover:bg-[#b3863a] hover:text-[#0c0c0d]"
+                className="animate-rise rounded-none bg-[#eec449] px-9 py-4 text-[13px] font-semibold text-[#0c0c0d] no-underline transition-colors hover:bg-[#b3863a] hover:text-[#0c0c0d]"
+                style={{ animationDelay: "0.45s" }}
               >
                 Shop Men
               </Link>
               <Link
                 href="/collections/women"
-                className="rounded-none border border-white bg-transparent px-9 py-4 text-[13px] font-semibold text-white no-underline transition-colors hover:bg-white hover:text-[#0c0c0d]"
+                className="animate-rise rounded-none border border-white bg-transparent px-9 py-4 text-[13px] font-semibold text-white no-underline transition-colors hover:bg-white hover:text-[#0c0c0d]"
+                style={{ animationDelay: "0.55s" }}
               >
                 Shop Women
               </Link>
@@ -69,8 +78,8 @@ export default async function HomePage() {
       {/* ---------------------------------------------------------------- */}
       <div className="pb-6 pt-16">
         <CarouselRow title="Shop The Latest Styles" shopAllHref="/collections/all">
-          {latestStyles.map((p) => (
-            <ProductCard key={p.slug} product={p} />
+          {latestStyles.map((p, i) => (
+            <ProductCard key={p.slug} product={p} delay={(i % 4) * 0.1} />
           ))}
         </CarouselRow>
       </div>
@@ -86,37 +95,45 @@ export default async function HomePage() {
       {/* Shop by department — Women / Men                                 */}
       {/* ---------------------------------------------------------------- */}
       <section className="mx-auto max-w-[1400px] px-5 pb-4 pt-16 sm:px-8">
-        <div className="mb-[26px]">
-          <div className="mb-1.5 text-[12px] font-bold uppercase tracking-[0.24em] text-[#8a8a8e]">
-            Find Your Fit
+        <Reveal x={-30} y={0} duration={0.9}>
+          <div className="mb-[26px]">
+            <div className="mb-1.5 text-[12px] font-bold uppercase tracking-[0.24em] text-[#8a8a8e]">
+              Find Your Fit
+            </div>
+            <h2 className="m-0 text-[clamp(26px,4vw,46px)] font-semibold tracking-[-0.01em]">
+              Shop By Department
+            </h2>
           </div>
-          <h2 className="m-0 text-[clamp(26px,4vw,46px)] font-semibold tracking-[-0.01em]">
-            Shop By Department
-          </h2>
-        </div>
+        </Reveal>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <DepartmentPanel
-            eyebrow="Women's Collection"
-            title="Shop Women"
-            href="/collections/women"
-            image="/dept-women-wide-v2.jpg"
-            imageClassName="object-cover object-center origin-bottom scale-[1.6] translate-x-[24%] translate-y-[26%] sm:scale-[1.3] sm:translate-x-[12%] sm:translate-y-[21%]"
-            align="top"
-            bg="#875ea0"
-            buttonHoverOnly
-            ctaClassName="bg-[#4f2c7c] text-white hover:bg-[#3d2161]"
-          />
-          <DepartmentPanel
-            eyebrow="Men's Collection"
-            title="Shop Men"
-            href="/collections/men"
-            image="/dept-men-wide.png"
-            imageClassName="object-cover object-center translate-x-[8%] sm:translate-x-0"
-            align="top"
-            bg="#0c0d0f"
-            buttonHoverOnly
-            ctaClassName="bg-[#cc1007] text-white hover:bg-[#a30c04]"
-          />
+          <Reveal y={-44} duration={1.05} delay={0.15}>
+            <DepartmentPanel
+              eyebrow="Women's Collection"
+              title="Shop Women"
+              href="/collections/women"
+              image="/dept-women-wide-v2.jpg"
+              imageClassName="object-cover object-center origin-bottom scale-[1.6] translate-x-[24%] translate-y-[26%] sm:scale-[1.3] sm:translate-x-[12%] sm:translate-y-[21%]"
+              align="top"
+              bg="#875ea0"
+              buttonHoverOnly
+              ctaClassName="bg-[#4f2c7c] text-white hover:bg-[#3d2161]"
+              textDelay={0.7}
+            />
+          </Reveal>
+          <Reveal y={-44} duration={1.05} delay={0.32}>
+            <DepartmentPanel
+              eyebrow="Men's Collection"
+              title="Shop Men"
+              href="/collections/men"
+              image="/dept-men-wide.png"
+              imageClassName="object-cover object-center translate-x-[8%] sm:translate-x-0"
+              align="top"
+              bg="#0c0d0f"
+              buttonHoverOnly
+              ctaClassName="bg-[#cc1007] text-white hover:bg-[#a30c04]"
+              textDelay={0.87}
+            />
+          </Reveal>
         </div>
       </section>
 
@@ -133,56 +150,68 @@ export default async function HomePage() {
         }
       >
         <div className="w-[78%] shrink-0 snap-start sm:w-[45%] lg:w-[26%]">
-          <CategoryTile
-            name="T-Shirts"
-            caption="Everyday Essentials"
-            href="/collections/t-shirts"
-            dark
-            image="/category-tshirt-v3.webp"
-            imageClassName="object-cover object-center"
-            nameTop
-            nameColor="#ffffff"
-            bg="#123047"
-          />
+          <Reveal y={-44} duration={1.05}>
+            <CategoryTile
+              name="T-Shirts"
+              caption="Everyday Essentials"
+              href="/collections/t-shirts"
+              dark
+              image="/category-tshirt-v3.webp"
+              imageClassName="object-cover object-center"
+              nameTop
+              nameColor="#ffffff"
+              bg="#123047"
+              textDelay={0.55}
+            />
+          </Reveal>
         </div>
         <div className="w-[78%] shrink-0 snap-start sm:w-[45%] lg:w-[26%]">
-          <CategoryTile
-            name="Polo"
-            caption="Smart Casual"
-            href="/collections/polo"
-            dark
-            image="/category-polo-v2.webp"
-            imageClassName="object-cover object-center"
-            nameTop
-            nameColor="#ffffff"
-            bg="#123047"
-          />
+          <Reveal y={-44} duration={1.05} delay={0.18}>
+            <CategoryTile
+              name="Polo"
+              caption="Smart Casual"
+              href="/collections/polo"
+              dark
+              image="/category-polo-v2.webp"
+              imageClassName="object-cover object-center"
+              nameTop
+              nameColor="#ffffff"
+              bg="#123047"
+              textDelay={0.73}
+            />
+          </Reveal>
         </div>
         <div className="w-[78%] shrink-0 snap-start sm:w-[45%] lg:w-[26%]">
-          <CategoryTile
-            name="Hoodies"
-            caption="Cozy Layers"
-            href="/collections/hoody"
-            dark
-            image="/category-hoody-v5.webp"
-            imageClassName="object-cover object-center scale-[1.15]"
-            nameTop
-            nameColor="#ffffff"
-            bg="#0a0a0a"
-          />
+          <Reveal y={-44} duration={1.05} delay={0.36}>
+            <CategoryTile
+              name="Hoodies"
+              caption="Cozy Layers"
+              href="/collections/hoody"
+              dark
+              image="/category-hoody-v5.webp"
+              imageClassName="object-cover object-center scale-[1.15]"
+              nameTop
+              nameColor="#ffffff"
+              bg="#0a0a0a"
+              textDelay={0.91}
+            />
+          </Reveal>
         </div>
         <div className="w-[78%] shrink-0 snap-start sm:w-[45%] lg:w-[26%]">
-          <CategoryTile
-            name="Tanks"
-            caption="Summer Ready"
-            href="/collections/tanks"
-            dark
-            image="/category-tank-v1.webp"
-            imageClassName="object-cover object-[58%_center]"
-            nameTop
-            nameColor="#ffffff"
-            bg="#123047"
-          />
+          <Reveal y={-44} duration={1.05} delay={0.54}>
+            <CategoryTile
+              name="Tanks"
+              caption="Summer Ready"
+              href="/collections/tanks"
+              dark
+              image="/category-tank-v1.webp"
+              imageClassName="object-cover object-[58%_center]"
+              nameTop
+              nameColor="#ffffff"
+              bg="#123047"
+              textDelay={1.09}
+            />
+          </Reveal>
         </div>
       </TileCarousel>
 
@@ -198,25 +227,31 @@ export default async function HomePage() {
         }
       >
         <div className="w-[78%] shrink-0 snap-start sm:w-[48%] lg:w-[32%]">
-          <ActivityTile
-            name="Caps"
-            href="/collections/accessories"
-            bg="radial-gradient(120% 120% at 35% 25%,#33332f,#121210)"
-          />
+          <Reveal>
+            <ActivityTile
+              name="Caps"
+              href="/collections/accessories"
+              bg="radial-gradient(120% 120% at 35% 25%,#33332f,#121210)"
+            />
+          </Reveal>
         </div>
         <div className="w-[78%] shrink-0 snap-start sm:w-[48%] lg:w-[32%]">
-          <ActivityTile
-            name="Perfume"
-            href="/collections/accessories"
-            bg="radial-gradient(120% 120% at 60% 30%,#3a3128,#161210)"
-          />
+          <Reveal delay={0.1}>
+            <ActivityTile
+              name="Perfume"
+              href="/collections/accessories"
+              bg="radial-gradient(120% 120% at 60% 30%,#3a3128,#161210)"
+            />
+          </Reveal>
         </div>
         <div className="w-[78%] shrink-0 snap-start sm:w-[48%] lg:w-[32%]">
-          <ActivityTile
-            name="Socks"
-            href="/collections/accessories"
-            bg="radial-gradient(120% 120% at 45% 30%,#2f3338,#101315)"
-          />
+          <Reveal delay={0.2}>
+            <ActivityTile
+              name="Socks"
+              href="/collections/accessories"
+              bg="radial-gradient(120% 120% at 45% 30%,#2f3338,#101315)"
+            />
+          </Reveal>
         </div>
       </TileCarousel>
 
@@ -237,7 +272,7 @@ export default async function HomePage() {
             on mobile the copy sits up top over the empty sky, no overlay. */}
         <div className="absolute inset-0 hidden bg-gradient-to-r from-white/35 via-white/5 to-transparent lg:block" />
         <div className="relative w-full px-8 py-10 sm:px-12 lg:py-16">
-          <div className="mx-auto flex max-w-[480px] flex-col items-center text-center lg:mx-0 lg:items-start lg:text-left">
+          <Reveal className="mx-auto flex max-w-[480px] flex-col items-center text-center lg:mx-0 lg:items-start lg:text-left">
             <h2 className="display-tight m-0 text-[clamp(34px,5vw,64px)] font-semibold leading-[1.02] text-[#0c0c0d]">
               <span className="block whitespace-nowrap">Built From</span>
               <span className="block whitespace-nowrap">The Ground Up</span>
@@ -251,7 +286,7 @@ export default async function HomePage() {
             >
               Shop Now
             </Link>
-          </div>
+          </Reveal>
         </div>
       </section>
       </div>
@@ -261,8 +296,8 @@ export default async function HomePage() {
       {/* ---------------------------------------------------------------- */}
       <div className="pb-20 pt-10">
         <CarouselRow title="You May Also Like" shopAllHref="/collections/all">
-          {recommended.map((p) => (
-            <ProductCard key={p.slug} product={p} />
+          {recommended.map((p, i) => (
+            <ProductCard key={p.slug} product={p} delay={(i % 4) * 0.1} />
           ))}
         </CarouselRow>
       </div>
@@ -281,6 +316,7 @@ function CategoryTile({
   imageClassName = "object-cover object-center",
   nameTop = false,
   nameColor,
+  textDelay = 0,
 }: {
   name: string;
   caption: string;
@@ -291,6 +327,9 @@ function CategoryTile({
   imageClassName?: string;
   nameTop?: boolean;
   nameColor?: string;
+  /** Delay (s) before the label slides in from the left — set > the card's own
+   *  reveal delay so the text lands after the card has dropped in. */
+  textDelay?: number;
 }) {
   const captionColor = dark ? "rgba(255,255,255,0.32)" : "rgba(0,0,0,0.3)";
   const resolvedNameColor = nameColor ?? (dark ? "#fff" : "#0c0c0d");
@@ -321,7 +360,13 @@ function CategoryTile({
         />
       )}
       {nameTop ? (
-        <div className="absolute left-5 right-5 top-5 z-10">
+        <Reveal
+          x={-26}
+          y={0}
+          delay={textDelay}
+          duration={0.9}
+          className="absolute left-5 right-5 top-5 z-10"
+        >
           <span className="block text-[10px] font-semibold uppercase tracking-[0.14em] text-white/85 sm:text-[12px]">
             {caption}
           </span>
@@ -331,7 +376,7 @@ function CategoryTile({
           >
             {name}
           </span>
-        </div>
+        </Reveal>
       ) : (
         <>
           <span
@@ -375,6 +420,7 @@ function DepartmentPanel({
   center = false,
   buttonHoverOnly = false,
   ctaClassName = "bg-white text-[#0c0c0d] group-hover:bg-[#eec449]",
+  textDelay = 0,
 }: {
   eyebrow: string;
   title: string;
@@ -387,6 +433,8 @@ function DepartmentPanel({
   center?: boolean;
   buttonHoverOnly?: boolean;
   ctaClassName?: string;
+  /** Delay (s) before the copy slides in from the left, after the card drops. */
+  textDelay?: number;
 }) {
   const top = align === "top";
   // When buttonHoverOnly is set, the CTA reacts to its own hover (not the whole
@@ -437,39 +485,49 @@ function DepartmentPanel({
           center ? "flex flex-col items-center text-center" : ""
         }`}
       >
-        {top && (
-          <span className="mb-1.5 block font-mono text-[10px] uppercase tracking-[0.18em] text-white/55 sm:mb-3">
-            {eyebrow}
-          </span>
-        )}
-        <h3 className="m-0 text-[clamp(26px,3.1vw,44px)] font-semibold leading-none text-white">
-          {title}
-        </h3>
-        {caption && (
-          <p className="mt-3.5 max-w-[300px] text-[14px] leading-relaxed text-white/65">
-            {caption}
-          </p>
-        )}
-        <span
-          className={`mt-3.5 inline-flex w-fit items-center gap-1.5 px-4 py-2.5 text-[12px] font-semibold transition-colors sm:mt-6 sm:gap-2 sm:px-6 sm:py-3 sm:text-[13px] ${
-            buttonHoverOnly ? "group/btn" : ""
-          } ${ctaClassName}`}
+        <Reveal x={-28} y={0} delay={textDelay} duration={0.9}>
+          {top && (
+            <span className="mb-1.5 block font-mono text-[10px] uppercase tracking-[0.18em] text-white/55 sm:mb-3">
+              {eyebrow}
+            </span>
+          )}
+          <h3 className="m-0 text-[clamp(26px,3.1vw,44px)] font-semibold leading-none text-white">
+            {title}
+          </h3>
+          {caption && (
+            <p className="mt-3.5 max-w-[300px] text-[14px] leading-relaxed text-white/65">
+              {caption}
+            </p>
+          )}
+        </Reveal>
+        {/* CTA rises up from the bottom, just after the copy slides in. */}
+        <Reveal
+          y={32}
+          delay={textDelay + 0.22}
+          duration={0.8}
+          className="mt-3.5 sm:mt-6"
         >
-          Shop Now
-          <svg
-            width="15"
-            height="15"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={2.2}
-            aria-hidden
-            className={`transition-transform duration-200 ${arrowHover}`}
+          <span
+            className={`inline-flex w-fit items-center gap-1.5 px-4 py-2.5 text-[12px] font-semibold transition-colors sm:gap-2 sm:px-6 sm:py-3 sm:text-[13px] ${
+              buttonHoverOnly ? "group/btn" : ""
+            } ${ctaClassName}`}
           >
-            <path d="M5 12h14" />
-            <path d="M13 6l6 6-6 6" />
-          </svg>
-        </span>
+            Shop Now
+            <svg
+              width="15"
+              height="15"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2.2}
+              aria-hidden
+              className={`transition-transform duration-200 ${arrowHover}`}
+            >
+              <path d="M5 12h14" />
+              <path d="M13 6l6 6-6 6" />
+            </svg>
+          </span>
+        </Reveal>
       </div>
     </Link>
   );

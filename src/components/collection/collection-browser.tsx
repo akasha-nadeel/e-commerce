@@ -89,8 +89,13 @@ export function CollectionBrowser({
       {/* Grid / empty state */}
       {results.length > 0 ? (
         <div className="grid grid-cols-2 gap-x-4 gap-y-10 sm:grid-cols-3 lg:grid-cols-4">
-          {results.map((p) => (
-            <ProductCard key={p.slug} product={p} inGrid />
+          {results.map((p, i) => (
+            <ProductCard
+              key={p.slug}
+              product={p}
+              inGrid
+              delay={(i % 4) * 0.1}
+            />
           ))}
         </div>
       ) : (

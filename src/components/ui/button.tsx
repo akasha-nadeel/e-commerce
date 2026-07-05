@@ -44,7 +44,7 @@ export function Button({
   className?: string;
   children: ReactNode;
 }) {
-  const cls = `group/btn inline-flex cursor-pointer items-center justify-center gap-2.5 font-semibold no-underline transition-colors disabled:cursor-default disabled:opacity-60 ${SIZES[size]} ${VARIANTS[variant]} ${className}`;
+  const cls = `group/btn inline-flex cursor-pointer items-center justify-center gap-2.5 font-semibold no-underline transition-[color,background-color,transform] duration-200 active:scale-[0.96] disabled:cursor-default disabled:opacity-60 ${SIZES[size]} ${VARIANTS[variant]} ${className}`;
 
   const inner = (
     <>

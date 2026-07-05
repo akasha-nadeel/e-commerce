@@ -1,0 +1,8 @@
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+/** Merge Tailwind class names (clsx + tailwind-merge) — the shadcn/Animate UI
+ *  `cn` helper. */
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}

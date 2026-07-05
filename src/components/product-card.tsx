@@ -1,27 +1,48 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { motion, useReducedMotion } from "motion/react";
 import type { Product } from "@/lib/catalog";
 import { formatLKR } from "@/lib/format";
 import { MediaTile } from "./media-tile";
+import { CountUpPrice } from "./ui/count-up-price";
+
+const EASE = [0.16, 1, 0.3, 1] as const;
 
 /**
  * Minimal PLP card: image, title, colourway, price and a row of colour chips.
- * No quick-add — the whole card links through to the PDP, keeping the grid calm
- * and letting the product photography do the work.
+ * The whole card reveals as ONE lightweight fade+rise when it scrolls into view
+ * (kept to a single motion layer so a full row/grid doesn't jank the scroll),
+ * and the price counts 0 → value once visible. `delay` staggers cards.
  */
 export function ProductCard({
   product,
   inGrid = false,
+  delay = 0,
 }: {
   product: Product;
   /** Fill the parent grid cell instead of the fixed carousel width. */
   inGrid?: boolean;
+  /** Stagger offset (s) added to this card's reveal. */
+  delay?: number;
 }) {
   const href = `/products/${product.slug}`;
   const onSale = !!product.compareAtLKR;
+  const reduce = useReducedMotion();
+
+  const anim = reduce
+    ? {}
+    : {
+        initial: { opacity: 0, y: 28 },
+        whileInView: { opacity: 1, y: 0 },
+        viewport: { once: true, margin: "0px 0px -60px 0px" as const },
+        transition: { duration: 0.6, delay, ease: EASE },
+      };
 
   return (
-    <div
+    <motion.div
+      {...anim}
       className={`group relative ${
         inGrid ? "w-full" : "w-[clamp(238px,25vw,300px)] shrink-0 snap-start"
       }`}
@@ -29,6 +50,7 @@ export function ProductCard({
       <MediaTile
         label={product.cardLabel}
         src={product.images[0]?.src}
+        hoverSrc={product.images[1]?.src}
         alt={product.name}
         aspect={product.square ? "1/1" : "3/4"}
         hoverZoom={false}
@@ -56,7 +78,7 @@ export function ProductCard({
           </span>
         )}
         <span className="font-medium text-[#0c0c0d]">
-          {formatLKR(product.priceLKR)}
+          <CountUpPrice value={product.priceLKR} />
         </span>
       </div>
 
@@ -85,6 +107,6 @@ export function ProductCard({
           ))}
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }

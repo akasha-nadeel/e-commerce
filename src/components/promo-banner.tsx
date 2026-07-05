@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { Reveal } from "@/components/ui/reveal";
 
 const CODE = "EAGLE20";
 
@@ -49,7 +50,7 @@ export function PromoBanner() {
         />
 
         <div className="relative px-7 py-14 sm:px-12 sm:py-20 lg:py-24">
-          <div className="max-w-[480px]">
+          <Reveal className="max-w-[480px]">
             <p
               className="text-[12px] font-semibold uppercase tracking-[0.28em]"
               style={{ color: INK, opacity: 0.7 }}
@@ -76,7 +77,7 @@ export function PromoBanner() {
                 {copied ? "Code Copied ✓" : `Copy Code · ${CODE}`}
               </button>
             </div>
-          </div>
+          </Reveal>
         </div>
       </div>
     </section>

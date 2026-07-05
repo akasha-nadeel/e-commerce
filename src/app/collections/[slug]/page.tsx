@@ -223,13 +223,19 @@ function CollectionHero({ hero }: { hero: Hero }) {
         <div className="absolute inset-x-0 bottom-0 p-7 sm:p-10 lg:p-14">
           <div className="mx-auto max-w-[1400px]">
             <div className="max-w-[560px]">
-              <h1 className="display-tight m-0 text-[clamp(30px,4.6vw,60px)] font-semibold leading-[0.98] text-white">
+              <h1
+                className="animate-rise display-tight m-0 text-[clamp(30px,4.6vw,60px)] font-semibold leading-[0.98] text-white"
+                style={{ animationDelay: "0.1s" }}
+              >
                 {hero.title}
               </h1>
-              <p className="mt-3 max-w-[400px] text-[13px] leading-relaxed text-white/80 sm:text-[14px]">
+              <p
+                className="animate-rise mt-3 max-w-[400px] text-[13px] leading-relaxed text-white/80 sm:text-[14px]"
+                style={{ animationDelay: "0.22s" }}
+              >
                 {hero.subtitle}
               </p>
-              <div className="mt-5">
+              <div className="animate-rise mt-5" style={{ animationDelay: "0.34s" }}>
                 <Button href={hero.href} size="md" arrow>
                   {hero.cta}
                 </Button>
@@ -247,13 +253,19 @@ function CollectionHero({ hero }: { hero: Hero }) {
     <section className="mx-auto max-w-[1400px] px-5 pt-2 sm:px-8">
       <div className="flex flex-col-reverse items-center gap-1 lg:flex-row lg:gap-8">
         <div className="w-full pb-8 pt-2 text-center lg:w-[42%] lg:py-10 lg:text-left">
-          <h1 className="display-tight m-0 text-[clamp(30px,4.6vw,60px)] font-semibold leading-[0.98] text-[#0c0c0d]">
+          <h1
+            className="animate-rise display-tight m-0 text-[clamp(30px,4.6vw,60px)] font-semibold leading-[0.98] text-[#0c0c0d]"
+            style={{ animationDelay: "0.1s" }}
+          >
             {hero.title}
           </h1>
-          <p className="mx-auto mt-3 max-w-[420px] text-[15px] text-[#0c0c0d]/70 sm:text-[17px] lg:mx-0">
+          <p
+            className="animate-rise mx-auto mt-3 max-w-[420px] text-[15px] text-[#0c0c0d]/70 sm:text-[17px] lg:mx-0"
+            style={{ animationDelay: "0.22s" }}
+          >
             {hero.subtitle}
           </p>
-          <div className="mt-6">
+          <div className="animate-rise mt-6" style={{ animationDelay: "0.34s" }}>
             <Button href={hero.href} size="lg" arrow>
               {hero.cta}
             </Button>

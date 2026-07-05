@@ -2,6 +2,7 @@
 
 import { useRef, type ReactNode } from "react";
 import { Button } from "./ui/button";
+import { Reveal } from "./ui/reveal";
 
 /**
  * Section header (italic title + optional "Shop All" + prev/next arrows) wrapping
@@ -33,9 +34,11 @@ export function CarouselRow({
   return (
     <section id={id} className="mx-auto max-w-[1400px] px-5 sm:px-8">
       <div className="mb-7 flex items-center justify-between gap-4">
-        <h2 className="m-0 text-[clamp(26px,4vw,46px)] font-semibold tracking-[-0.01em]">
-          {title}
-        </h2>
+        <Reveal x={-30} y={0} duration={0.8}>
+          <h2 className="m-0 text-[clamp(26px,4vw,46px)] font-semibold tracking-[-0.01em]">
+            {title}
+          </h2>
+        </Reveal>
         <div className="flex gap-2.5">
           <ArrowButton dir="prev" onClick={() => scroll(-1)} />
           <ArrowButton dir="next" onClick={() => scroll(1)} />

@@ -1,11 +1,16 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState, useSyncExternalStore } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+
+const EASE = [0.16, 1, 0.3, 1] as const;
 import { Logo } from "./logo";
 import { useCart } from "./cart-provider";
 import { SearchPanel } from "./search/search-panel";
+import { SlidingNumber } from "./ui/sliding-number";
 import { useSheetDrag } from "@/lib/use-sheet-drag";
 
 const NAV = [
@@ -17,23 +22,36 @@ const NAV = [
   { label: "ABOUT", href: "/about", mega: false },
 ];
 
-const FEATURED: { label: string; href: string }[] = [
-  { label: "New Arrivals", href: "/collections/new" },
+// Bold category grid shown in the MEN / WOMEN mega-menu (SPD-style).
+const MEGA_CATS: { label: string; href: string }[] = [
+  { label: "T-Shirts", href: "/collections/t-shirts" },
+  { label: "Polo", href: "/collections/polo" },
+  { label: "Hoodies", href: "/collections/hoody" },
+  { label: "Tanks", href: "/collections/tanks" },
+  { label: "New In", href: "/collections/new" },
   { label: "Best Sellers", href: "/collections/all" },
-  { label: "Essentials", href: "/collections/all" },
-  { label: "Premium Collection", href: "/collections/all" },
-  { label: "Oversize Collection", href: "/collections/all" },
+  { label: "Accessories", href: "/collections/accessories" },
+  { label: "Shop All", href: "/collections/all" },
 ];
 
-const EXPLORE: { label: string; href: string }[] = [
-  { label: "T-Shirts", href: "/collections/men" },
-  { label: "Oversized Tees", href: "/products/essential-oversized-tee" },
-  { label: "Jerseys", href: "/products/varsity-box-fit-jersey" },
-  { label: "Tanks", href: "/products/athlex-cross-back-tank" },
-  { label: "Shorts", href: "/collections/all" },
-  { label: "Hoodies & Jackets", href: "/collections/all" },
-  { label: "Joggers & Pants", href: "/collections/all" },
-];
+// Per-department "all products" link + lifestyle image on the mega-menu's right.
+const MEGA_DEPT: Record<
+  string,
+  { label: string; allHref: string; image: string; alt: string }
+> = {
+  MEN: {
+    label: "Men",
+    allHref: "/collections/men",
+    image: "/dept-men-wide.png",
+    alt: "Shop the men's collection",
+  },
+  WOMEN: {
+    label: "Women",
+    allHref: "/collections/women",
+    image: "/dept-women-wide-v2.jpg",
+    alt: "Shop the women's collection",
+  },
+};
 
 // Stable no-op subscribe for the hydration flag below.
 const emptySubscribe = () => () => {};
@@ -43,7 +61,7 @@ export function SiteHeader() {
   const pathname = usePathname();
   const isHome = pathname === "/";
 
-  const [megaOpen, setMegaOpen] = useState(false);
+  const [megaItem, setMegaItem] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -58,6 +76,7 @@ export function SiteHeader() {
     () => true,
     () => false,
   );
+  const reduce = useReducedMotion();
 
   const {
     style: menuDragStyle,
@@ -103,14 +122,15 @@ export function SiteHeader() {
   // The homepage hero is a dark studio image, so while the nav overlays it
   // (transparent) the text/logo/icons render light; once scrolled or a menu
   // opens the nav gains a solid white background and switches back to dark.
-  const atTopHero = isHome && !scrolled && !megaOpen && !mobileOpen;
-  // Apply the hero-overlay look only after mount. The home page is statically
-  // prerendered with usePathname === null (so isHome is false at build time),
-  // which would otherwise ship a white nav in the HTML and flash over the dark
-  // hero on load. Defaulting to transparent bg + dark text pre-mount avoids the
-  // flash and any hydration mismatch.
-  const lightText = mounted && atTopHero;
-  const solidBg = mounted && !atTopHero;
+  const atTopHero = isHome && !scrolled && !megaItem && !mobileOpen;
+  // The home page is statically prerendered with usePathname === null (isHome
+  // is false at build time), so the SSR HTML can't know the route. Default
+  // pre-mount to the dark-hero overlay look — transparent bg + light text/logo
+  // — so the home nav never flashes black over the hero on load. The bg stays
+  // transparent pre-mount (no white-nav flash); once mounted, the scroll/route
+  // logic takes over and content pages switch to the solid nav.
+  const lightText = mounted ? atTopHero : true;
+  const solidBg = mounted ? !atTopHero : false;
 
   // Nav links highlight with a solid ink box on hover; the active route keeps it.
   const navLinkBase =
@@ -121,7 +141,7 @@ export function SiteHeader() {
 
   return (
     <header
-      onMouseLeave={() => setMegaOpen(false)}
+      onMouseLeave={() => setMegaItem(null)}
       className={`sticky top-0 z-50 text-[#0c0c0d] transition-colors duration-300 ${
         solidBg ? "bg-white" : "bg-transparent"
       }`}
@@ -167,7 +187,7 @@ export function SiteHeader() {
               <Link
                 key={item.label}
                 href={item.href}
-                onMouseEnter={() => setMegaOpen(item.mega)}
+                onMouseEnter={() => setMegaItem(item.mega ? item.label : null)}
                 className={`${navLinkBase} ${
                   active && !lightText
                     ? "bg-[#0c0c0d] text-white"
@@ -276,45 +296,120 @@ export function SiteHeader() {
               <path d="M2.5 3.5h2.3l2.5 12.2a1.8 1.8 0 0 0 1.77 1.45h8a1.8 1.8 0 0 0 1.76-1.42L20.6 7H5.4" />
             </svg>
             <span className="absolute -right-[9px] -top-2 flex h-[17px] min-w-[17px] items-center justify-center rounded-[9px] bg-[#eec449] px-1 text-[10px] font-semibold text-[#0c0c0d]">
-              {count}
+              <SlidingNumber value={count} />
             </span>
           </button>
         </div>
       </div>
 
-      {/* Desktop mega-menu */}
-      {megaOpen && (
-        <div className="absolute left-0 top-full hidden w-full bg-white text-[#0c0c0d] shadow-[0_28px_50px_rgba(0,0,0,0.22)] md:block">
-          <div className="mx-auto grid max-w-[1400px] grid-cols-[0.9fr_0.9fr_1.4fr_1.4fr] gap-[34px] px-8 pb-12 pt-10">
-            <div>
-              <div className="mb-[18px] text-[13px] font-semibold uppercase tracking-[0.14em]">
-                Featured
-              </div>
-              <div className="flex flex-col gap-3.5">
-                {FEATURED.map((f) => (
-                  <Link key={f.label} href={f.href} className="text-[15px] text-[#0c0c0d] no-underline transition-colors hover:text-[#eec449]">
-                    {f.label}
-                  </Link>
+      {/* Desktop mega-menu — SPD-style, revealed in sequence. AnimatePresence
+          rolls the panel smoothly up only on true close (moving to a non-mega
+          link / off the nav). The panel container has a STABLE key so switching
+          MEN <-> WOMEN keeps it open (same height); the inner content is keyed
+          by department so ITS elements remount and replay their entrance while
+          the panel stays put. */}
+      <AnimatePresence>
+      {megaItem && MEGA_DEPT[megaItem] && (
+        <motion.div
+          key="mega"
+          initial={reduce ? false : { height: 0 }}
+          animate={{ height: "auto" }}
+          exit={reduce ? {} : { height: 0 }}
+          transition={{ duration: 0.4, ease: EASE }}
+          className="absolute left-0 top-full hidden w-full overflow-hidden border-t border-[#efeff0] bg-white text-[#0c0c0d] shadow-[0_28px_50px_rgba(0,0,0,0.22)] md:block"
+        >
+          <div
+            key={megaItem}
+            className="mx-auto flex min-h-[440px] max-w-[1400px] items-stretch gap-10 px-8 pb-12 pt-12"
+          >
+            <div className="flex flex-1 flex-col">
+              {/* 4. Category links — cascade top-left → bottom-right (last) */}
+              <div className="grid grid-cols-4 gap-x-6 gap-y-12">
+                {MEGA_CATS.map((c, i) => (
+                  <motion.div
+                    key={c.label}
+                    initial={reduce ? false : { opacity: 0, x: -32 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{
+                      duration: 0.38,
+                      delay: reduce ? 0 : 0.2 + i * 0.05,
+                      ease: EASE,
+                    }}
+                  >
+                    <Link
+                      href={c.href}
+                      onClick={() => setMegaItem(null)}
+                      className="justify-self-start text-[19px] font-bold tracking-[-0.01em] text-[#0c0c0d] no-underline transition-colors hover:text-[#eec449]"
+                    >
+                      {c.label}
+                    </Link>
+                  </motion.div>
                 ))}
               </div>
-            </div>
-            <div>
-              <div className="mb-[18px] text-[13px] font-semibold uppercase tracking-[0.14em]">
-                Explore
-              </div>
-              <div className="flex flex-col gap-3.5">
-                {EXPLORE.map((e) => (
-                  <Link key={e.label} href={e.href} className="text-[15px] text-[#0c0c0d] no-underline transition-colors hover:text-[#eec449]">
-                    {e.label}
+              <div className="mt-auto">
+                {/* 2. The line above the title — grows in from the left */}
+                <motion.div
+                  className="h-px w-full origin-left bg-[#0c0c0d]/15"
+                  initial={reduce ? false : { scaleX: 0 }}
+                  animate={{ scaleX: 1 }}
+                  transition={{ duration: 0.32, delay: reduce ? 0 : 0.86, ease: EASE }}
+                />
+                {/* 1. The "All Product" title — slides in from the left first */}
+                <motion.div
+                  className="pt-6"
+                  initial={reduce ? false : { opacity: 0, x: -44 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.4, delay: reduce ? 0 : 0.92, ease: EASE }}
+                >
+                  <Link
+                    href={MEGA_DEPT[megaItem].allHref}
+                    onClick={() => setMegaItem(null)}
+                    className="group/all flex items-center justify-between text-[21px] font-bold text-[#0c0c0d] no-underline transition-colors hover:text-[#eec449]"
+                  >
+                    {MEGA_DEPT[megaItem].label} All Product
+                    <svg
+                      width="26"
+                      height="26"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="transition-transform duration-200 group-hover/all:translate-x-1.5"
+                    >
+                      <line x1="4" y1="12" x2="20" y2="12" />
+                      <path d="M14 6l6 6-6 6" />
+                    </svg>
                   </Link>
-                ))}
+                </motion.div>
               </div>
             </div>
-            <PromoTile caption="PROMO · CAMPAIGN" title="Recommended For You" href="/collections/new" />
-            <PromoTile caption="PROMO · SHOP ALL" title="Best Sellers" href="/collections/all" />
+            {/* 3. Department image — slides in from the right */}
+            <motion.div
+              className="hidden w-[420px] shrink-0 overflow-hidden lg:block"
+              initial={reduce ? false : { opacity: 0, x: 60 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.45, delay: reduce ? 0 : 0.62, ease: EASE }}
+            >
+              <Link
+                href={MEGA_DEPT[megaItem].allHref}
+                onClick={() => setMegaItem(null)}
+                className="relative block h-full w-full"
+              >
+                <Image
+                  src={MEGA_DEPT[megaItem].image}
+                  alt={MEGA_DEPT[megaItem].alt}
+                  fill
+                  sizes="420px"
+                  className="object-cover object-center"
+                />
+              </Link>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       )}
+      </AnimatePresence>
 
       {/* Mobile menu — bottom sheet */}
       <div
@@ -339,20 +434,34 @@ export function SiteHeader() {
         </div>
         <div ref={menuScrollRef} className="flex-1 overflow-y-auto overscroll-contain px-6 pb-2 pt-3">
           <nav className="flex flex-col">
-            {NAV.map((item) => (
-              <Link
+            {NAV.map((item, i) => (
+              <motion.div
                 key={item.label}
-                href={item.href}
-                onClick={() => setMobileOpen(false)}
-                className="flex items-center justify-between border-b border-[#f0eff1] py-[15px] text-[17px] font-semibold tracking-[0.02em] text-[#0c0c0d] no-underline"
+                initial={false}
+                animate={
+                  mobileOpen
+                    ? { opacity: 1, x: 0 }
+                    : { opacity: 0, x: reduce ? 0 : -30 }
+                }
+                transition={{
+                  duration: reduce ? 0 : 0.35,
+                  delay: mobileOpen && !reduce ? 0.18 + i * 0.06 : 0,
+                  ease: EASE,
+                }}
               >
-                {item.label}
-                {item.mega && (
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0c0c0d" strokeWidth={2}>
-                    <path d="M9 6l6 6-6 6" />
-                  </svg>
-                )}
-              </Link>
+                <Link
+                  href={item.href}
+                  onClick={() => setMobileOpen(false)}
+                  className="flex items-center justify-between border-b border-[#f0eff1] py-[15px] text-[17px] font-semibold tracking-[0.02em] text-[#0c0c0d] no-underline"
+                >
+                  {item.label}
+                  {item.mega && (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0c0c0d" strokeWidth={2}>
+                      <path d="M9 6l6 6-6 6" />
+                    </svg>
+                  )}
+                </Link>
+              </motion.div>
             ))}
           </nav>
         </div>
@@ -412,27 +521,3 @@ export function SiteHeader() {
   );
 }
 
-function PromoTile({
-  caption,
-  title,
-  href,
-}: {
-  caption: string;
-  title: string;
-  href: string;
-}) {
-  return (
-    <Link
-      href={href}
-      className="tile-texture-dark relative aspect-[16/10] overflow-hidden no-underline"
-      style={{ background: "radial-gradient(120% 120% at 60% 30%,#2c2c30,#0d0d0f)" }}
-    >
-      <span className="absolute left-[18px] top-[14px] font-mono text-[9.5px] tracking-[0.12em] text-white/30">
-        {caption}
-      </span>
-      <span className="absolute inset-0 flex items-center justify-center text-[18px] font-semibold uppercase tracking-[0.12em] text-white">
-        {title}
-      </span>
-    </Link>
-  );
-}

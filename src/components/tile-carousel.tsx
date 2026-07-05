@@ -2,6 +2,7 @@
 
 import { useRef, type ReactNode } from "react";
 import { ArrowButton } from "./carousel-row";
+import { Reveal } from "./ui/reveal";
 
 /**
  * Section header that stacks on mobile — heading on its own line, then a row
@@ -36,7 +37,7 @@ export function TileCarousel({
   return (
     <section className="mx-auto max-w-[1400px] px-5 pb-2 pt-14 sm:px-8">
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <div>
+        <Reveal x={-30} y={0} duration={0.9}>
           {eyebrow && (
             <div className="mb-1.5 text-[12px] font-bold uppercase tracking-[0.24em] text-[#8a8a8e]">
               {eyebrow}
@@ -45,14 +46,20 @@ export function TileCarousel({
           <h2 className="m-0 text-[clamp(26px,4vw,46px)] font-semibold tracking-[-0.01em]">
             {title}
           </h2>
-        </div>
-        <div className="flex items-center justify-between gap-3 sm:justify-end">
+        </Reveal>
+        <Reveal
+          x={-30}
+          y={0}
+          duration={0.9}
+          delay={0.15}
+          className="flex items-center justify-between gap-3 sm:justify-end"
+        >
           {control}
           <div className="flex shrink-0 gap-2.5">
             <ArrowButton dir="prev" onClick={() => scroll(-1)} />
             <ArrowButton dir="next" onClick={() => scroll(1)} />
           </div>
-        </div>
+        </Reveal>
       </div>
 
       {/* Negative horizontal margins cancel the section's side padding so the

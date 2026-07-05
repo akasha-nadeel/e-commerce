@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { motion, useReducedMotion } from "motion/react";
 import { formatLKR } from "@/lib/format";
 import { useSheetDrag } from "@/lib/use-sheet-drag";
 
@@ -117,6 +118,22 @@ export function SearchPanel({
 
   const { style: dragStyle, handlers, scrollRef } = useSheetDrag(onClose);
 
+  // Once the panel has slid in (empty), its inner elements slide in from the
+  // right, staggered top-to-bottom. `i` is the top-to-bottom index.
+  const reduce = useReducedMotion();
+  const reveal = (i: number) =>
+    reduce
+      ? {}
+      : {
+          initial: { opacity: 0, x: 44 },
+          animate: open ? { opacity: 1, x: 0 } : { opacity: 0, x: 44 },
+          transition: {
+            duration: open ? 0.45 : 0.2,
+            delay: open ? 0.32 + i * 0.09 : 0,
+            ease: [0.16, 1, 0.3, 1] as const,
+          },
+        };
+
   return (
     <>
       <div
@@ -161,7 +178,7 @@ export function SearchPanel({
         </div>
 
         {/* Input */}
-        <div className="px-6 pt-2">
+        <motion.div className="px-6 pt-2" {...reveal(0)}>
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -195,21 +212,22 @@ export function SearchPanel({
               )}
             </div>
           </form>
-        </div>
+        </motion.div>
 
         {/* Content */}
         <div ref={scrollRef} className="flex-1 overflow-y-auto overscroll-contain px-6 pb-6 pt-5">
           {!query ? (
             <nav className="flex flex-col">
-              {QUICK_LINKS.map((l) => (
-                <Link
-                  key={l.label}
-                  href={l.href}
-                  onClick={onClose}
-                  className="border-b border-[#f0eff1] py-4 text-[16px] font-medium tracking-[0.03em] text-[#0c0c0d] no-underline transition-colors hover:text-[#eec449]"
-                >
-                  {l.label}
-                </Link>
+              {QUICK_LINKS.map((l, i) => (
+                <motion.div key={l.label} {...reveal(i + 1)}>
+                  <Link
+                    href={l.href}
+                    onClick={onClose}
+                    className="block border-b border-[#f0eff1] py-4 text-[16px] font-medium tracking-[0.03em] text-[#0c0c0d] no-underline transition-colors hover:text-[#eec449]"
+                  >
+                    {l.label}
+                  </Link>
+                </motion.div>
               ))}
             </nav>
           ) : (
