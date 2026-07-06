@@ -14,9 +14,10 @@ import { getLatestStyles, getRecommendedProducts } from "@/lib/products";
 const HERO_SLIDES: HeroSlide[] = [
   {
     image: "/hero-golden-eagle-v2.webp",
-    imageClassName: "object-cover object-right lg:object-center",
+    imageClassName: "object-cover object-right lg:object-[50%_72%]",
     titleLines: ["Own", "The Day"],
-    subtitle: "Explore the Golden Eagle collection.",
+    subtitle:
+      "Premium heavyweight essentials for men and women — built from the ground up to move with you, all day, every day.",
     ctas: [
       { label: "Shop Men", href: "/collections/men", variant: "solid" },
       { label: "Shop Women", href: "/collections/women", variant: "outline" },
@@ -26,21 +27,24 @@ const HERO_SLIDES: HeroSlide[] = [
     image: "/collection-hero-polo-bg.webp",
     imageClassName: "object-cover object-[68%_center]",
     titleLines: ["Smart", "Casual"],
-    subtitle: "Breathable piqué polos, made for the good days.",
+    subtitle:
+      "Breathable piqué polos in striped and solid styles, finished with the gold Golden Eagle mark — dress them up or keep it easy.",
     ctas: [{ label: "Shop Polos", href: "/collections/polo", variant: "solid" }],
   },
   {
     image: "/collection-hero-hoody-bg.webp",
     imageClassName: "object-cover object-center",
     titleLines: ["Cozy", "Layers"],
-    subtitle: "Heavyweight hoodies built for cold mornings.",
+    subtitle:
+      "Heavyweight fleece hoodies with a soft brushed interior and relaxed fit — built for cold mornings and easy everyday layering.",
     ctas: [{ label: "Shop Hoodies", href: "/collections/hoody", variant: "solid" }],
   },
   {
     image: "/collection-hero-tanks-bg.webp",
     imageClassName: "object-cover object-[60%_center]",
     titleLines: ["Summer", "Ready"],
-    subtitle: "Lightweight tanks, made to move.",
+    subtitle:
+      "Lightweight, breathable tanks cut for movement — built for hot days, hard training, and everywhere the summer takes you.",
     ctas: [{ label: "Shop Tanks", href: "/collections/tanks", variant: "solid" }],
   },
 ];
