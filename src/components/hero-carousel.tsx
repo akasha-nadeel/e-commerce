@@ -146,7 +146,7 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
             className="flex flex-col gap-5 lg:items-end lg:text-right"
           >
             <p
-              className="animate-rise max-w-[440px] text-[clamp(15px,1.4vw,19px)] text-white/85"
+              className="animate-rise max-w-[420px] text-[clamp(13px,1.1vw,16px)] text-white/85"
               style={{ animationDelay: "0.3s" }}
             >
               {active.subtitle}
@@ -228,7 +228,7 @@ function CtrlButton({
       type="button"
       aria-label={label}
       onClick={onClick}
-      className={`flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border transition-colors sm:h-11 sm:w-11 ${
+      className={`flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border transition-colors sm:h-10 sm:w-10 ${
         white
           ? "border-white bg-white text-[#0c0c0d] hover:bg-white/85"
           : "border-white/60 bg-black/20 text-white backdrop-blur-sm hover:border-white hover:bg-white hover:text-[#0c0c0d]"
