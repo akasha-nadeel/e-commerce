@@ -12,11 +12,13 @@ import { Reveal } from "./ui/reveal";
  * tiles on desktop, where everything fits without scrolling).
  */
 export function TileCarousel({
+  id,
   title,
   eyebrow,
   control,
   children,
 }: {
+  id?: string;
   title: string;
   eyebrow?: string;
   control?: ReactNode;
@@ -35,7 +37,10 @@ export function TileCarousel({
   };
 
   return (
-    <section className="mx-auto max-w-[1400px] px-5 pb-2 pt-14 sm:px-8">
+    <section
+      id={id}
+      className="mx-auto max-w-[1400px] scroll-mt-24 px-5 pb-2 pt-14 sm:px-8"
+    >
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <Reveal x={-30} y={0} duration={0.9}>
           {eyebrow && (
@@ -68,7 +73,7 @@ export function TileCarousel({
           card aligned with the header and leaves end-spacing after the last. */}
       <div
         ref={rowRef}
-        className="no-scrollbar -mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-2 sm:-mx-8 sm:px-8"
+        className="no-scrollbar -mx-5 flex snap-x snap-mandatory gap-1 overflow-x-auto px-5 pb-2 sm:-mx-8 sm:px-8"
       >
         {children}
       </div>

@@ -26,6 +26,9 @@ type Hero = {
   /** CSS object-position for the background layout, to frame the subject
    *  (e.g. "70% 25%"). Defaults to "62% 28%". */
   imagePosition?: string;
+  /** Where the hero's Back button goes (deterministic). Category pages point to
+   *  the home "Shop By Category" section they were opened from. */
+  backTo?: string;
 };
 
 type Collection = {
@@ -72,6 +75,7 @@ const COLLECTIONS: Record<string, Collection> = {
       bg: "#ffffff",
       layout: "background",
       imagePosition: "50% 34%",
+      backTo: "/#shop-by-category",
     },
   },
   polo: {
@@ -88,6 +92,7 @@ const COLLECTIONS: Record<string, Collection> = {
       bg: "#ffffff",
       layout: "background",
       imagePosition: "70% 22%",
+      backTo: "/#shop-by-category",
     },
   },
   hoody: {
@@ -104,6 +109,7 @@ const COLLECTIONS: Record<string, Collection> = {
       bg: "#ffffff",
       layout: "background",
       imagePosition: "50% 42%",
+      backTo: "/#shop-by-category",
     },
   },
   tanks: {
@@ -119,12 +125,64 @@ const COLLECTIONS: Record<string, Collection> = {
       href: "#products",
       bg: "#ffffff",
       layout: "background",
+      backTo: "/#shop-by-category",
     },
   },
   accessories: {
     title: "Accessories",
     tagline: "Caps, perfume and finishing touches.",
     mixed: true,
+  },
+  caps: {
+    title: "Caps",
+    tagline: "Finish the fit with a clean cap.",
+    mixed: true,
+    hero: {
+      image: "/collection-hero-caps-bg.webp",
+      title: "Caps",
+      subtitle:
+        "Structured and relaxed caps to top off any look. Clean silhouettes finished with the gold Golden Eagle mark — everyday headwear, done right.",
+      cta: "Shop The Collection",
+      href: "#products",
+      bg: "#ffffff",
+      layout: "background",
+      imagePosition: "62% 30%",
+      backTo: "/#accessories",
+    },
+  },
+  perfume: {
+    title: "Perfume",
+    tagline: "Signature scents for every day.",
+    mixed: true,
+    hero: {
+      image: "/collection-hero-perfume-bg.webp",
+      title: "Perfume",
+      subtitle:
+        "Bold, long-lasting fragrances built to leave an impression. A signature Golden Eagle scent for day or night — confidence in a bottle.",
+      cta: "Shop The Collection",
+      href: "#products",
+      bg: "#ffffff",
+      layout: "background",
+      imagePosition: "60% 45%",
+      backTo: "/#accessories",
+    },
+  },
+  bottles: {
+    title: "Bottles",
+    tagline: "Stay hydrated in style.",
+    mixed: true,
+    hero: {
+      image: "/collection-hero-bottles-bg.webp",
+      title: "Bottles",
+      subtitle:
+        "Insulated stainless-steel bottles that keep it cold all day. Built tough for training and the everyday — carry the Golden Eagle everywhere.",
+      cta: "Shop The Collection",
+      href: "#products",
+      bg: "#ffffff",
+      layout: "background",
+      imagePosition: "58% 35%",
+      backTo: "/#accessories",
+    },
   },
 };
 
@@ -221,9 +279,9 @@ function CollectionHero({ hero }: { hero: Hero }) {
         />
         {/* Full-bleed hero, so Back is overlaid on the photo (top-left). */}
         <div className="absolute left-4 top-4 z-10 sm:left-6 sm:top-6">
-          <BackButton fallbackHref="/" />
+          <BackButton fallbackHref="/" to={hero.backTo} />
         </div>
-        <div className="absolute inset-x-0 bottom-0 p-7 sm:p-10 lg:p-14">
+        <div className="absolute inset-x-0 bottom-0 p-7 pb-16 sm:p-10 sm:pb-24 lg:p-14 lg:pb-32">
           <div className="mx-auto max-w-[1400px]">
             <div className="max-w-[560px]">
               <h1
@@ -294,7 +352,7 @@ function CollectionHero({ hero }: { hero: Hero }) {
 
 function GridSkeleton({ count }: { count: number }) {
   return (
-    <div className="grid grid-cols-2 gap-x-4 gap-y-10 sm:grid-cols-3 lg:grid-cols-4">
+    <div className="grid grid-cols-2 gap-x-1 gap-y-8 sm:grid-cols-3 lg:grid-cols-4">
       {Array.from({ length: count }).map((_, i) => (
         <div key={i}>
           <div className="aspect-[3/4] w-full animate-pulse bg-[#eeedef]" />

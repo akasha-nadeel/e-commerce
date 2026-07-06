@@ -1,23 +1,23 @@
 "use client";
 
-import {
-  animate,
-  useInView,
-  useMotionValue,
-  useReducedMotion,
-} from "motion/react";
-import { useEffect, useRef } from "react";
+import { animate, useInView, useReducedMotion } from "motion/react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import { formatLKR } from "@/lib/format";
+
+// useLayoutEffect on the client, useEffect on the server (avoids the SSR warning).
+const useIsoLayoutEffect =
+  typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 /**
  * Price that counts up from 0 to `value` (LKR-formatted) the first time it
  * scrolls into view.
  *
- * Performance: the count is driven by a MotionValue that writes the text
- * imperatively (no React re-render), skips frames whose rounded value is
- * unchanged, and an invisible sizer reserves the final width so the changing
- * text never reflows the layout — otherwise the counter janks the scroll.
- * Detects its own visibility; honours prefers-reduced-motion.
+ * Correctness first: the JSX always renders the REAL price, so SSR ships the
+ * correct value and any React re-render safely falls back to it — the price can
+ * never get stuck at "LKR 0.00". Before the count starts we set the visible text
+ * to 0 imperatively (pre-paint, so there's no flash); the count then writes the
+ * text imperatively each frame (no per-frame re-render, no reflow — an invisible
+ * sizer reserves the final width). Honours prefers-reduced-motion.
  */
 export function CountUpPrice({
   value,
@@ -29,28 +29,32 @@ export function CountUpPrice({
   const reduce = useReducedMotion();
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, margin: "0px 0px -40px 0px" });
-  const count = useMotionValue(0);
+  const started = useRef(false);
+
+  // Before the count begins, show 0 (imperatively, pre-paint). Once started (or
+  // for reduced motion) this no-ops, so the real value from JSX stands.
+  useIsoLayoutEffect(() => {
+    if (reduce || started.current) return;
+    if (ref.current) ref.current.textContent = formatLKR(0);
+  });
 
   useEffect(() => {
     const el = ref.current;
-    if (!el || reduce || !inView) return;
-    let last = -1;
-    const unsub = count.on("change", (v) => {
-      const r = Math.round(v);
-      if (r === last) return;
-      last = r;
-      el.textContent = formatLKR(r);
-    });
-    const controls = animate(count, value, {
+    if (!el || reduce || !inView || started.current) return;
+    started.current = true;
+    const controls = animate(0, value, {
       duration: 1,
       delay,
       ease: [0.16, 1, 0.3, 1],
+      onUpdate: (v) => {
+        el.textContent = formatLKR(Math.round(v));
+      },
+      onComplete: () => {
+        el.textContent = formatLKR(value);
+      },
     });
-    return () => {
-      unsub();
-      controls.stop();
-    };
-  }, [inView, value, delay, reduce, count]);
+    return () => controls.stop();
+  }, [inView, value, delay, reduce]);
 
   return (
     <span className="relative inline-block whitespace-nowrap">
@@ -59,7 +63,7 @@ export function CountUpPrice({
         {formatLKR(value)}
       </span>
       <span ref={ref} className="absolute left-0 top-0">
-        {formatLKR(reduce ? value : 0)}
+        {formatLKR(value)}
       </span>
     </span>
   );

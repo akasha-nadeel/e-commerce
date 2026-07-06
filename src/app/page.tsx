@@ -143,6 +143,7 @@ export default async function HomePage() {
       {/* Shop by category                                                 */}
       {/* ---------------------------------------------------------------- */}
       <TileCarousel
+        id="shop-by-category"
         eyebrow="Build Your Style"
         title="Shop By Category"
         control={
@@ -151,7 +152,7 @@ export default async function HomePage() {
           </Button>
         }
       >
-        <div className="w-[78%] shrink-0 snap-start sm:w-[45%] lg:w-[26%]">
+        <div className="w-[78%] shrink-0 snap-start sm:w-[48%] lg:w-[32%]">
           <Reveal y={-44} duration={1.05}>
             <CategoryTile
               name="T-Shirts"
@@ -167,10 +168,10 @@ export default async function HomePage() {
             />
           </Reveal>
         </div>
-        <div className="w-[78%] shrink-0 snap-start sm:w-[45%] lg:w-[26%]">
+        <div className="w-[78%] shrink-0 snap-start sm:w-[48%] lg:w-[32%]">
           <Reveal y={-44} duration={1.05} delay={0.18}>
             <CategoryTile
-              name="Polo"
+              name="Polos"
               caption="Smart Casual"
               href="/collections/polo"
               dark
@@ -183,15 +184,15 @@ export default async function HomePage() {
             />
           </Reveal>
         </div>
-        <div className="w-[78%] shrink-0 snap-start sm:w-[45%] lg:w-[26%]">
+        <div className="w-[78%] shrink-0 snap-start sm:w-[48%] lg:w-[32%]">
           <Reveal y={-44} duration={1.05} delay={0.36}>
             <CategoryTile
               name="Hoodies"
               caption="Cozy Layers"
               href="/collections/hoody"
               dark
-              image="/category-hoody-v5.webp"
-              imageClassName="object-cover object-center scale-[1.15]"
+              image="/category-hoody-v7.webp"
+              imageClassName="object-cover object-[50%_35%]"
               nameTop
               nameColor="#ffffff"
               bg="#0a0a0a"
@@ -199,7 +200,7 @@ export default async function HomePage() {
             />
           </Reveal>
         </div>
-        <div className="w-[78%] shrink-0 snap-start sm:w-[45%] lg:w-[26%]">
+        <div className="w-[78%] shrink-0 snap-start sm:w-[48%] lg:w-[32%]">
           <Reveal y={-44} duration={1.05} delay={0.54}>
             <CategoryTile
               name="Tanks"
@@ -221,6 +222,7 @@ export default async function HomePage() {
       {/* Accessories                                                      */}
       {/* ---------------------------------------------------------------- */}
       <TileCarousel
+        id="accessories"
         title="Accessories"
         control={
           <Button href="/collections/accessories" size="sm" arrow>
@@ -232,8 +234,10 @@ export default async function HomePage() {
           <Reveal>
             <ActivityTile
               name="Caps"
-              href="/collections/accessories"
-              bg="radial-gradient(120% 120% at 35% 25%,#33332f,#121210)"
+              href="/collections/caps"
+              image="/accessory-cap.webp"
+              imageClassName="object-cover object-top"
+              bg="#d9d6d2"
             />
           </Reveal>
         </div>
@@ -241,17 +245,21 @@ export default async function HomePage() {
           <Reveal delay={0.1}>
             <ActivityTile
               name="Perfume"
-              href="/collections/accessories"
-              bg="radial-gradient(120% 120% at 60% 30%,#3a3128,#161210)"
+              href="/collections/perfume"
+              image="/accessory-perfume.webp"
+              imageClassName="object-cover object-center"
+              bg="#1b2530"
             />
           </Reveal>
         </div>
         <div className="w-[78%] shrink-0 snap-start sm:w-[48%] lg:w-[32%]">
           <Reveal delay={0.2}>
             <ActivityTile
-              name="Socks"
-              href="/collections/accessories"
-              bg="radial-gradient(120% 120% at 45% 30%,#2f3338,#101315)"
+              name="Bottles"
+              href="/collections/bottles"
+              image="/accessory-bottle.webp"
+              imageClassName="object-cover object-center"
+              bg="#3a7bd5"
             />
           </Reveal>
         </div>
@@ -338,7 +346,7 @@ function CategoryTile({
   return (
     <Link
       href={href}
-      className={`group block aspect-[3/4] w-full overflow-hidden no-underline relative ${
+      className={`group block aspect-[4/5] w-full overflow-hidden no-underline relative ${
         dark ? "tile-texture-dark" : "tile-texture-light"
       }`}
       style={{ background: bg }}
@@ -350,7 +358,10 @@ function CategoryTile({
             alt=""
             fill
             quality={100}
-            sizes="(max-width: 1024px) 50vw, 420px"
+            /* Generous sizes: a landscape image scaled to fill this tall card
+               (object-cover) renders ~1.8x the card width, so request a large
+               candidate to keep it sharp. */
+            sizes="(max-width: 1024px) 100vw, 820px"
             className={imageClassName}
           />
         </div>
@@ -539,17 +550,39 @@ function ActivityTile({
   name,
   bg,
   href,
+  image,
+  imageClassName = "object-cover object-center",
 }: {
   name: string;
   bg: string;
   href: string;
+  image?: string;
+  imageClassName?: string;
 }) {
   return (
     <Link
       href={href}
-      className="tile-texture-dark relative block aspect-[4/5] w-full overflow-hidden no-underline"
+      className="tile-texture-dark group relative block aspect-[4/5] w-full overflow-hidden no-underline"
       style={{ background: bg }}
     >
+      {image && (
+        <div className="absolute inset-0 transition-transform duration-500 ease-out group-hover:scale-105">
+          <Image
+            src={image}
+            alt=""
+            fill
+            quality={100}
+            sizes="(max-width: 1024px) 78vw, 460px"
+            className={imageClassName}
+          />
+        </div>
+      )}
+      {image && (
+        <div
+          aria-hidden
+          className="absolute inset-x-0 bottom-0 z-[5] h-2/5 bg-gradient-to-t from-black/70 via-black/25 to-transparent"
+        />
+      )}
       <span className="absolute bottom-5 left-[22px] z-10 text-[clamp(24px,2.6vw,40px)] font-semibold text-white">
         {name}
       </span>

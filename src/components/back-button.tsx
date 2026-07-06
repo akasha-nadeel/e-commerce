@@ -8,15 +8,21 @@ import { useRouter } from "next/navigation";
  */
 export function BackButton({
   fallbackHref = "/",
+  to,
   label = "Back",
 }: {
   fallbackHref?: string;
+  /** When set, always navigate here (deterministic) instead of browser history —
+   *  e.g. category pages return to the home "Shop By Category" section. */
+  to?: string;
   label?: string;
 }) {
   const router = useRouter();
 
   function goBack() {
-    if (typeof window !== "undefined" && window.history.length > 1) {
+    if (to) {
+      router.push(to);
+    } else if (typeof window !== "undefined" && window.history.length > 1) {
       router.back();
     } else {
       router.push(fallbackHref);
