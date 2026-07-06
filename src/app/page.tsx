@@ -7,7 +7,43 @@ import { LogoMarquee } from "@/components/logo-marquee";
 import { PromoBanner } from "@/components/promo-banner";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/ui/reveal";
+import { HeroCarousel, type HeroSlide } from "@/components/hero-carousel";
 import { getLatestStyles, getRecommendedProducts } from "@/lib/products";
+
+// Rotating hero slides — the studio image + garment lifestyle shots.
+const HERO_SLIDES: HeroSlide[] = [
+  {
+    image: "/hero-golden-eagle-v2.webp",
+    imageClassName: "object-cover object-right lg:object-center",
+    titleLines: ["Own", "The Day"],
+    subtitle: "Explore the Golden Eagle collection.",
+    ctas: [
+      { label: "Shop Men", href: "/collections/men", variant: "solid" },
+      { label: "Shop Women", href: "/collections/women", variant: "outline" },
+    ],
+  },
+  {
+    image: "/collection-hero-polo-bg.webp",
+    imageClassName: "object-cover object-[68%_center]",
+    titleLines: ["Smart", "Casual"],
+    subtitle: "Breathable piqué polos, made for the good days.",
+    ctas: [{ label: "Shop Polos", href: "/collections/polo", variant: "solid" }],
+  },
+  {
+    image: "/collection-hero-hoody-bg.webp",
+    imageClassName: "object-cover object-center",
+    titleLines: ["Cozy", "Layers"],
+    subtitle: "Heavyweight hoodies built for cold mornings.",
+    ctas: [{ label: "Shop Hoodies", href: "/collections/hoody", variant: "solid" }],
+  },
+  {
+    image: "/collection-hero-tanks-bg.webp",
+    imageClassName: "object-cover object-[60%_center]",
+    titleLines: ["Summer", "Ready"],
+    subtitle: "Lightweight tanks, made to move.",
+    ctas: [{ label: "Shop Tanks", href: "/collections/tanks", variant: "solid" }],
+  },
+];
 
 export default async function HomePage() {
   const [latestStyles, recommended] = await Promise.all([
@@ -17,57 +53,11 @@ export default async function HomePage() {
   return (
     <div className="w-full bg-white">
       {/* ---------------------------------------------------------------- */}
-      {/* Hero — full-screen studio image; nav overlays it transparently.   */}
+      {/* Hero — full-screen auto-rotating slideshow; nav overlays it.       */}
       {/* Kept OUTSIDE the overflow-x-hidden wrapper so its negative top     */}
       {/* margin can slide under the transparent nav without being clipped.  */}
       {/* ---------------------------------------------------------------- */}
-      <section className="relative -mt-[74px] flex min-h-screen items-end overflow-hidden bg-[#17120f] pt-[74px] lg:items-center">
-        <Image
-          src="/hero-golden-eagle-v2.webp"
-          alt="Golden Eagle black hoodie with gold eagle embroidery on a dark studio backdrop"
-          fill
-          priority
-          quality={100}
-          /* Mobile crops a landscape image into a tall frame, so object-cover
-             scales it up — request a larger candidate there to stay sharp. */
-          sizes="(max-width: 1024px) 200vw, 100vw"
-          className="animate-hero-img object-cover object-right lg:object-center"
-        />
-        <div className="relative mx-auto w-full max-w-[1400px] px-5 pb-14 sm:px-8 lg:pb-0">
-          <div className="max-w-[540px]">
-            <h1
-              className="animate-rise display-tight m-0 text-[clamp(44px,7vw,104px)] font-semibold leading-[0.95] text-white"
-              style={{ animationDelay: "0.15s" }}
-            >
-              Own
-              <br />
-              The Day
-            </h1>
-            <p
-              className="animate-rise mb-8 mt-5 text-[clamp(15px,1.4vw,20px)] text-white/75"
-              style={{ animationDelay: "0.3s" }}
-            >
-              Explore the Golden Eagle collection.
-            </p>
-            <div className="flex flex-wrap gap-3.5">
-              <Link
-                href="/collections/men"
-                className="animate-rise rounded-none bg-[#eec449] px-9 py-4 text-[13px] font-semibold text-[#0c0c0d] no-underline transition-colors hover:bg-[#b3863a] hover:text-[#0c0c0d]"
-                style={{ animationDelay: "0.45s" }}
-              >
-                Shop Men
-              </Link>
-              <Link
-                href="/collections/women"
-                className="animate-rise rounded-none border border-white bg-transparent px-9 py-4 text-[13px] font-semibold text-white no-underline transition-colors hover:bg-white hover:text-[#0c0c0d]"
-                style={{ animationDelay: "0.55s" }}
-              >
-                Shop Women
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+      <HeroCarousel slides={HERO_SLIDES} />
 
       {/* Everything below the hero keeps the horizontal-overflow guard. */}
       <div className="overflow-x-hidden">
