@@ -22,7 +22,7 @@ export const PRODUCT_FRAGMENT = /* GraphQL */ `
         swatch { color }
       }
     }
-    images(first: 8) {
+    images(first: 40) {
       edges { node { url altText } }
     }
     variants(first: 100) {
