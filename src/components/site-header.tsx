@@ -65,6 +65,9 @@ export function SiteHeader() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  // Mobile only: hide the top bar and reveal the bottom tab bar on scroll-down;
+  // reverse on scroll-up. Always show the top bar near the very top of the page.
+  const [hideTop, setHideTop] = useState(false);
   const [auth, setAuth] = useState<{ loggedIn: boolean; firstName?: string }>({
     loggedIn: false,
   });
@@ -93,6 +96,30 @@ export function SiteHeader() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, [isHome]);
+
+  // Directional scroll drives the mobile top/bottom nav swap (all routes):
+  // scrolling down past a small threshold hides the top bar (and shows the
+  // bottom tab bar); scrolling up — or being near the top — brings it back.
+  useEffect(() => {
+    let lastY = window.scrollY;
+    let ticking = false;
+    const update = () => {
+      const y = window.scrollY;
+      if (Math.abs(y - lastY) > 6) {
+        setHideTop(y > 80 && y > lastY);
+        lastY = y;
+      }
+      ticking = false;
+    };
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   // Auth state for the header (logged-in avatar vs sign-in icon).
   useEffect(() => {
@@ -134,7 +161,7 @@ export function SiteHeader() {
 
   // Nav links highlight with a solid ink box on hover; the active route keeps it.
   const navLinkBase =
-    "rounded-none px-3 py-2 text-[13px] font-medium tracking-[0.03em] no-underline transition-colors hover:bg-[#0c0c0d] hover:text-white";
+    "whitespace-nowrap rounded-none px-3 py-2 text-[13px] font-medium tracking-[0.03em] no-underline transition-colors hover:bg-[#0c0c0d] hover:text-white";
   const iconCls = `cursor-pointer transition-colors hover:text-[#eec449] ${
     lightText ? "text-white" : "text-[#0c0c0d]"
   }`;
@@ -142,19 +169,26 @@ export function SiteHeader() {
   return (
     <header
       onMouseLeave={() => setMegaItem(null)}
-      className={`sticky top-0 z-50 text-[#0c0c0d] transition-colors duration-300 ${
-        solidBg ? "bg-white" : "bg-transparent"
-      }`}
+      className="sticky top-0 z-50 text-[#0c0c0d]"
     >
-      <div className="relative mx-auto flex h-[var(--nav-h)] max-w-[1400px] items-center justify-between gap-4 px-5 sm:px-8">
-        {/* Left: mobile hamburger + logo (logo centres on mobile, sits left on desktop) */}
-        <div className="flex items-center gap-3">
+      {/* Top bar — full-width so its background spans the viewport. On mobile it
+          rolls up out of view on scroll-down (revealing the bottom tab bar) and
+          drops back in on scroll-up; desktop (lg+) always stays put. */}
+      <div
+        className={`transition-[transform,background-color] duration-300 ${
+          solidBg ? "bg-white" : "bg-transparent"
+        } ${hideTop ? "-translate-y-full lg:translate-y-0" : "translate-y-0"}`}
+      >
+        <div className="relative mx-auto flex h-[var(--nav-h)] max-w-[1400px] items-center justify-between gap-4 px-5 sm:px-8">
+        {/* Left: mobile hamburger + search; logo centres on mobile, sits left on
+            desktop (where search moves to the right utility cluster). */}
+        <div className="flex items-center gap-1.5 sm:gap-3">
           <button
             type="button"
             aria-label="Open menu"
             aria-expanded={mobileOpen}
             onClick={() => setMobileOpen((o) => !o)}
-            className={`-ml-1 flex h-9 w-9 items-center justify-center md:hidden ${iconCls}`}
+            className={`-ml-1 flex h-9 w-9 items-center justify-center lg:hidden ${iconCls}`}
           >
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
               {mobileOpen ? (
@@ -171,13 +205,27 @@ export function SiteHeader() {
               )}
             </svg>
           </button>
-          <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 md:static md:translate-x-0 md:translate-y-0">
+          {/* Search — sits next to the hamburger on mobile (left cluster);
+              hidden here at lg where it lives in the right cluster instead. */}
+          <button
+            type="button"
+            onClick={() => setSearchOpen(true)}
+            aria-label="Search products"
+            className={`flex h-9 w-9 items-center justify-center lg:hidden ${iconCls}`}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+              <circle cx="11" cy="11" r="7" />
+              <line x1="16.5" y1="16.5" x2="21" y2="21" />
+            </svg>
+          </button>
+          <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 lg:static lg:translate-x-0 lg:translate-y-0">
             <Logo variant={lightText ? "gold" : "onLight"} showText={false} markHeight={40} />
           </span>
         </div>
 
-        {/* Center: desktop nav */}
-        <nav className="hidden items-center gap-2 md:flex lg:gap-3">
+        {/* Center: desktop nav — horizontal only at lg+; the md/tablet band
+            uses the hamburger drawer so 6 links never cram or wrap. */}
+        <nav className="hidden items-center gap-2 lg:flex lg:gap-3">
           {NAV.map((item) => {
             const active =
               item.href === "/"
@@ -202,13 +250,14 @@ export function SiteHeader() {
           })}
         </nav>
 
-        {/* Right: utility icons */}
+        {/* Right: utility icons (search only shows here at lg+; on mobile it
+            sits in the left cluster next to the hamburger). */}
         <div className="flex items-center gap-5 sm:gap-[22px]">
           <button
             type="button"
             onClick={() => setSearchOpen(true)}
             aria-label="Search products"
-            className={iconCls}
+            className={`hidden lg:block ${iconCls}`}
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
               <circle cx="11" cy="11" r="7" />
@@ -301,6 +350,7 @@ export function SiteHeader() {
           </button>
         </div>
       </div>
+      </div>
 
       {/* Desktop mega-menu — SPD-style, revealed in sequence. AnimatePresence
           rolls the panel smoothly up only on true close (moving to a non-mega
@@ -316,7 +366,7 @@ export function SiteHeader() {
           animate={{ height: "auto" }}
           exit={reduce ? {} : { height: 0 }}
           transition={{ duration: 0.4, ease: EASE }}
-          className="absolute left-0 top-full hidden w-full overflow-hidden border-t border-[#efeff0] bg-white text-[#0c0c0d] shadow-[0_28px_50px_rgba(0,0,0,0.22)] md:block"
+          className="absolute left-0 top-full hidden w-full overflow-hidden border-t border-[#efeff0] bg-white text-[#0c0c0d] shadow-[0_28px_50px_rgba(0,0,0,0.22)] lg:block"
         >
           <div
             key={megaItem}
@@ -415,7 +465,7 @@ export function SiteHeader() {
       <div
         aria-hidden
         onClick={() => setMobileOpen(false)}
-        className={`fixed inset-0 z-[60] bg-black/50 transition-opacity duration-300 md:hidden ${
+        className={`fixed inset-0 z-[60] bg-black/50 transition-opacity duration-300 lg:hidden ${
           mobileOpen ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
       />
@@ -425,7 +475,7 @@ export function SiteHeader() {
         aria-hidden={!mobileOpen}
         style={menuDragStyle}
         {...menuHandlers}
-        className={`fixed inset-x-0 bottom-0 z-[70] flex h-[72vh] flex-col rounded-t-[22px] bg-white text-[#0c0c0d] shadow-[0_-10px_40px_rgba(0,0,0,0.22)] transition-transform duration-300 md:hidden ${
+        className={`fixed inset-x-0 bottom-0 z-[70] flex h-[72vh] flex-col rounded-t-[22px] bg-white text-[#0c0c0d] shadow-[0_-10px_40px_rgba(0,0,0,0.22)] transition-transform duration-300 lg:hidden ${
           mobileOpen ? "translate-y-0" : "translate-y-full"
         }`}
       >
@@ -516,8 +566,110 @@ export function SiteHeader() {
         </div>
       </div>
 
+      {/* Mobile bottom tab bar — mirrors the top nav's directional behaviour:
+          it slides up into view as the top bar rolls away on scroll-down, and
+          slides back down as the top bar returns on scroll-up. Mobile only. */}
+      <nav
+        aria-label="Quick navigation"
+        className={`fixed inset-x-0 bottom-0 z-40 text-[#0c0c0d] transition-transform duration-300 lg:hidden ${
+          hideTop ? "translate-y-0" : "translate-y-full"
+        }`}
+      >
+        <div className="flex items-stretch justify-around gap-1 rounded-t-[18px] border-t border-[#ededed] bg-white px-2 pb-[max(10px,env(safe-area-inset-bottom))] pt-2.5 shadow-[0_-8px_28px_rgba(0,0,0,0.12)]">
+          <BottomTab
+            label="Home"
+            href="/"
+            active={pathname === "/"}
+            icon={
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+                <path d="M4 11.5 12 5l8 6.5" />
+                <path d="M6 10.5V19h4v-5h4v5h4v-8.5" />
+              </svg>
+            }
+          />
+          <BottomTab
+            label="Menu"
+            onClick={() => setMobileOpen(true)}
+            icon={
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round">
+                <line x1="4" y1="7" x2="20" y2="7" />
+                <line x1="4" y1="12" x2="20" y2="12" />
+                <line x1="4" y1="17" x2="20" y2="17" />
+              </svg>
+            }
+          />
+          <BottomTab
+            label="Cart"
+            onClick={open}
+            badge={count}
+            icon={
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="9" cy="20.5" r="1.5" />
+                <circle cx="18" cy="20.5" r="1.5" />
+                <path d="M2.5 3.5h2.3l2.5 12.2a1.8 1.8 0 0 0 1.77 1.45h8a1.8 1.8 0 0 0 1.76-1.42L20.6 7H5.4" />
+              </svg>
+            }
+          />
+          <BottomTab
+            label="Account"
+            href={auth.loggedIn ? "/account" : "/login"}
+            active={pathname.startsWith("/account") || pathname.startsWith("/login")}
+            icon={
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="8" r="4" />
+                <path d="M5 21c0-4 3.5-6 7-6s7 2 7 6" />
+              </svg>
+            }
+          />
+        </div>
+      </nav>
+
       <SearchPanel open={searchOpen} onClose={() => setSearchOpen(false)} />
     </header>
+  );
+}
+
+/** A single item in the mobile bottom tab bar — icon + label, rendered as a
+    link (href) or an action button (onClick). Optional cart-style badge. */
+function BottomTab({
+  label,
+  icon,
+  href,
+  onClick,
+  active = false,
+  badge,
+}: {
+  label: string;
+  icon: React.ReactNode;
+  href?: string;
+  onClick?: () => void;
+  active?: boolean;
+  badge?: number;
+}) {
+  const cls = `relative flex flex-1 flex-col items-center gap-1 py-1 text-[10.5px] font-medium tracking-[0.01em] no-underline transition-colors ${
+    active ? "text-[#0c0c0d]" : "text-[#8a8a8e]"
+  }`;
+  const body = (
+    <>
+      <span className="relative flex h-[22px] w-[22px] items-center justify-center">
+        {icon}
+        {badge != null && badge > 0 && (
+          <span className="absolute -right-2.5 -top-1.5 flex h-[15px] min-w-[15px] items-center justify-center rounded-full bg-[#eec449] px-[3px] text-[9px] font-semibold leading-none text-[#0c0c0d]">
+            {badge}
+          </span>
+        )}
+      </span>
+      <span>{label}</span>
+    </>
+  );
+  return href ? (
+    <Link href={href} className={cls}>
+      {body}
+    </Link>
+  ) : (
+    <button type="button" onClick={onClick} className={cls}>
+      {body}
+    </button>
   );
 }
 

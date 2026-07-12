@@ -109,35 +109,15 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
         </h1>
 
         <div className="flex shrink-0 flex-col gap-5 lg:max-w-[440px] lg:items-end">
-          {/* Playback controls — tablet & desktop only, above the subtitle.
-              (Mobile uses the single play button pinned bottom-right below.) */}
-          <div className="hidden items-center gap-2.5 sm:flex">
-            <CtrlButton
-              white
-              label={playing ? "Pause slideshow" : "Play slideshow"}
-              onClick={togglePlay}
-            >
-              {playing ? (
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                  <rect x="6" y="5" width="4" height="14" rx="1" />
-                  <rect x="14" y="5" width="4" height="14" rx="1" />
-                </svg>
-              ) : (
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M7 5l12 7-12 7z" />
-                </svg>
-              )}
-            </CtrlButton>
-            <CtrlButton label="Previous slide" onClick={() => go(index - 1)}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
-                <path d="M15 6l-6 6 6 6" />
-              </svg>
-            </CtrlButton>
-            <CtrlButton label="Next slide" onClick={() => go(index + 1)}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
-                <path d="M9 6l6 6-6 6" />
-              </svg>
-            </CtrlButton>
+          {/* Playback controls — desktop only, above the subtitle on the right.
+              Tablet & mobile pin them to the bottom-right corner (below). */}
+          <div className="hidden items-center gap-2.5 lg:flex">
+            <PlaybackControls
+              playing={playing}
+              onToggle={togglePlay}
+              onPrev={() => go(index - 1)}
+              onNext={() => go(index + 1)}
+            />
           </div>
 
           {/* Subtitle + CTAs — re-mount per slide so they replay the entrance */}
@@ -187,8 +167,19 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
         ))}
       </div>
 
-      {/* Play / pause — bottom-right, mobile only (tablet+ show the full
-          controls above the subtitle). */}
+      {/* Playback controls — pinned to the bottom-right corner on tablet
+          (sm→lg). Desktop shows them inline above the subtitle instead. */}
+      <div className="absolute bottom-6 right-5 z-20 hidden items-center gap-2.5 sm:right-8 sm:flex lg:hidden">
+        <PlaybackControls
+          playing={playing}
+          onToggle={togglePlay}
+          onPrev={() => go(index - 1)}
+          onNext={() => go(index + 1)}
+        />
+      </div>
+
+      {/* Play / pause — bottom-right, mobile only (a single button to save
+          space; tablet+ show the full prev/play/next cluster). */}
       <div className="absolute bottom-6 right-5 z-20 sm:hidden">
         <CtrlButton
           white
@@ -208,6 +199,51 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
         </CtrlButton>
       </div>
     </section>
+  );
+}
+
+/** Prev / play-pause / next cluster, reused inline (desktop) and pinned
+    bottom-right (tablet). */
+function PlaybackControls({
+  playing,
+  onToggle,
+  onPrev,
+  onNext,
+}: {
+  playing: boolean;
+  onToggle: () => void;
+  onPrev: () => void;
+  onNext: () => void;
+}) {
+  return (
+    <>
+      <CtrlButton
+        white
+        label={playing ? "Pause slideshow" : "Play slideshow"}
+        onClick={onToggle}
+      >
+        {playing ? (
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+            <rect x="6" y="5" width="4" height="14" rx="1" />
+            <rect x="14" y="5" width="4" height="14" rx="1" />
+          </svg>
+        ) : (
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M7 5l12 7-12 7z" />
+          </svg>
+        )}
+      </CtrlButton>
+      <CtrlButton label="Previous slide" onClick={onPrev}>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
+          <path d="M15 6l-6 6 6 6" />
+        </svg>
+      </CtrlButton>
+      <CtrlButton label="Next slide" onClick={onNext}>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
+          <path d="M9 6l6 6-6 6" />
+        </svg>
+      </CtrlButton>
+    </>
   );
 }
 
