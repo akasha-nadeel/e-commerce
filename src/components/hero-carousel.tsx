@@ -76,7 +76,7 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
             alt=""
             fill
             priority={i === 0}
-            quality={100}
+            quality={95}
             /* A landscape image cropped into the tall mobile hero is scaled up,
                so request a larger candidate there to stay sharp. */
             sizes="(max-width: 1024px) 200vw, 100vw"

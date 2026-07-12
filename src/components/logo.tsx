@@ -48,7 +48,6 @@ export function Logo({
         width={Math.round(h * (590 / 360))}
         height={h}
         priority
-        unoptimized
         style={{ height: h, width: "auto", display: "block" }}
       />
       {showText && (

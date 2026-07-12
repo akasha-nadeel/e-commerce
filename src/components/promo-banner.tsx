@@ -39,7 +39,7 @@ export function PromoBanner() {
             src="/promo-shopping.png"
             alt="Two friends excitedly shopping online together"
             fill
-            quality={100}
+            quality={85}
             sizes="100vw"
             className="object-cover object-[72%_center]"
           />

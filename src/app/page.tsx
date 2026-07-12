@@ -473,7 +473,7 @@ function DepartmentPanel({
             alt=""
             fill
             quality={100}
-            sizes="100vw"
+            sizes="(max-width: 640px) 100vw, (max-width: 1400px) 48vw, 660px"
             className="object-cover object-center"
           />
           <Image
@@ -481,7 +481,7 @@ function DepartmentPanel({
             alt=""
             fill
             quality={100}
-            sizes="100vw"
+            sizes="(max-width: 640px) 100vw, (max-width: 1400px) 48vw, 660px"
             className={imageClassName}
           />
         </>
