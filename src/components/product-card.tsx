@@ -33,23 +33,12 @@ export function ProductCard({
   const reduce = useReducedMotion();
   const played = useIntroPlayed();
 
-  const anim =
-    reduce || played
-      ? {}
-      : {
-          initial: { opacity: 0, y: 28 },
-          whileInView: { opacity: 1, y: 0 },
-          viewport: { once: true, margin: "0px 0px -60px 0px" as const },
-          transition: { duration: 0.6, delay, ease: EASE },
-        };
+  const className = `group relative ${
+    inGrid ? "w-full" : "w-[clamp(238px,25vw,300px)] shrink-0 snap-start"
+  }`;
 
-  return (
-    <motion.div
-      {...anim}
-      className={`group relative ${
-        inGrid ? "w-full" : "w-[clamp(238px,25vw,300px)] shrink-0 snap-start"
-      }`}
-    >
+  const body = (
+    <>
       <MediaTile
         label={product.cardLabel}
         src={product.images[0]?.src}
@@ -110,6 +99,26 @@ export function ProductCard({
           ))}
         </div>
       )}
+    </>
+  );
+
+  // Static once the intro has already played this session (or for reduced
+  // motion): render a plain div so the card is visible immediately. A motion.div
+  // would otherwise keep the inline opacity:0 from its `initial` frozen when the
+  // animation props drop on the mid-session `played` flip (see `MotionGate`).
+  if (reduce || played) {
+    return <div className={className}>{body}</div>;
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "0px 0px -60px 0px" }}
+      transition={{ duration: 0.6, delay, ease: EASE }}
+      className={className}
+    >
+      {body}
     </motion.div>
   );
 }

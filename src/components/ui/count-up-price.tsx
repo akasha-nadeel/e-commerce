@@ -36,11 +36,14 @@ export function CountUpPrice({
   const inView = useInView(ref, { once: true, margin: "0px 0px -40px 0px" });
   const started = useRef(false);
 
-  // Before the count begins, show 0 (imperatively, pre-paint). Once started (or
-  // when skipping) this no-ops, so the real value from JSX stands.
+  // Before the count begins, show 0 (imperatively, pre-paint) so there's no
+  // flash. When skipping — reduced motion, or the intro already played this
+  // session — force the REAL value instead: a mid-session `played` flip (see
+  // `MotionGate`) can leave "0" on screen from an earlier render, and React
+  // won't rewrite identical text, so the price would otherwise stick at 0.
   useIsoLayoutEffect(() => {
-    if (skip || started.current) return;
-    if (ref.current) ref.current.textContent = formatLKR(0);
+    if (started.current || !ref.current) return;
+    ref.current.textContent = skip ? formatLKR(value) : formatLKR(0);
   });
 
   useEffect(() => {
