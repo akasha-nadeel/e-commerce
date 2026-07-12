@@ -47,7 +47,7 @@ export function CarouselRow({
 
       <div
         ref={rowRef}
-        className="no-scrollbar flex snap-x snap-mandatory gap-1 overflow-x-auto pb-2"
+        className="no-scrollbar flex touch-pan-y snap-x snap-mandatory gap-1 overflow-x-auto pb-2"
       >
         {children}
       </div>
