@@ -646,20 +646,33 @@ function BottomTab({
   active?: boolean;
   badge?: number;
 }) {
-  const cls = `relative flex flex-1 flex-col items-center gap-1 py-1 text-[10.5px] font-medium tracking-[0.01em] no-underline transition-colors ${
-    active ? "text-[#0c0c0d]" : "text-[#8a8a8e]"
-  }`;
+  const cls =
+    "relative flex flex-1 flex-col items-center gap-1 py-1 no-underline";
   const body = (
     <>
-      <span className="relative flex h-[22px] w-[22px] items-center justify-center">
-        {icon}
-        {badge != null && badge > 0 && (
-          <span className="absolute -right-2.5 -top-1.5 flex h-[15px] min-w-[15px] items-center justify-center rounded-full bg-[#eec449] px-[3px] text-[9px] font-semibold leading-none text-[#0c0c0d]">
-            {badge}
-          </span>
-        )}
+      {/* Active tab gets a filled gold pill behind the icon (dark icon on
+          gold); inactive tabs are plain grey icons. */}
+      <span
+        className={`flex h-9 w-9 items-center justify-center rounded-full transition-colors ${
+          active ? "bg-[#eec449] text-[#0c0c0d]" : "text-[#8a8a8e]"
+        }`}
+      >
+        <span className="relative flex h-[22px] w-[22px] items-center justify-center">
+          {icon}
+          {badge != null && badge > 0 && (
+            <span className="absolute -right-2.5 -top-1.5 flex h-[15px] min-w-[15px] items-center justify-center rounded-full bg-[#eec449] px-[3px] text-[9px] font-semibold leading-none text-[#0c0c0d]">
+              {badge}
+            </span>
+          )}
+        </span>
       </span>
-      <span>{label}</span>
+      <span
+        className={`text-[10.5px] font-medium tracking-[0.01em] transition-colors ${
+          active ? "text-[#0c0c0d]" : "text-[#8a8a8e]"
+        }`}
+      >
+        {label}
+      </span>
     </>
   );
   return href ? (
