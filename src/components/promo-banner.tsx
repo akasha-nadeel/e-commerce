@@ -32,26 +32,22 @@ export function PromoBanner() {
   return (
     <section className="mx-auto my-12 max-w-[1400px] px-5 sm:px-8">
       <div className="relative overflow-hidden bg-black">
-        {/* Lifestyle photo — model on the right; copy over the black left. */}
+        {/* Lifestyle photo — models on the right; copy over the empty black
+            left. No overlay: the photo's own black keeps the white copy legible.
+            The crop leans left on mobile so the text always sits over black,
+            and shows both models on tablet/desktop. */}
         <Reveal className="absolute inset-0">
           <Image
-            src="/promo-shopping-v2.webp"
-            alt="Smiling woman in a light-blue dress holding shopping bags"
+            src="/promo-shopping-v3.webp"
+            alt="Two smiling women in dresses holding shopping bags"
             fill
             quality={85}
             sizes="100vw"
-            className="object-cover object-[72%_40%]"
+            className="object-cover object-[28%_center] sm:object-[72%_40%]"
           />
         </Reveal>
-        {/* Black scrim keeps the white copy legible over the photo on mobile,
-            where the model fills the frame. Tablet/desktop already have empty
-            black on the left, so the gradient just reinforces it. */}
-        <div
-          aria-hidden
-          className="absolute inset-0 bg-gradient-to-r from-black via-black/85 to-black/10"
-        />
 
-        <div className="relative px-7 py-14 sm:px-12 sm:py-20 lg:py-24">
+        <div className="relative px-7 py-20 sm:px-12 sm:py-32 lg:py-44">
           <div className="max-w-[480px]">
             <Reveal delay={0.1}>
               <p className="text-[12px] font-semibold uppercase tracking-[0.28em] text-white/70">
