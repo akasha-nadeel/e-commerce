@@ -3,6 +3,7 @@
 import { useRef, type ReactNode } from "react";
 import { Button } from "./ui/button";
 import { Reveal } from "./ui/reveal";
+import { useCarouselDrag } from "@/lib/use-carousel-drag";
 
 /**
  * Section header (italic title + optional "Shop All" + prev/next arrows) wrapping
@@ -20,6 +21,7 @@ export function CarouselRow({
   children: ReactNode;
 }) {
   const rowRef = useRef<HTMLDivElement>(null);
+  useCarouselDrag(rowRef);
 
   const scroll = (dir: 1 | -1) => {
     const el = rowRef.current;
@@ -45,14 +47,12 @@ export function CarouselRow({
         </div>
       </div>
 
-      {/* On touch devices (coarse pointer) the row ignores finger drags —
-          overflow-x-hidden makes it a non-scrollable touch surface, so touches
-          scroll the PAGE natively (smooth, no diagonal jank) and the arrows
-          drive the carousel programmatically (scrollBy still works on hidden
-          overflow). Desktop/trackpad keeps normal scrolling. */}
+      {/* touch-pan-y hands vertical swipes to the browser (native page
+          scroll); useCarouselDrag drives horizontal finger drags with an axis
+          lock so the row never wanders diagonally. Desktop is unchanged. */}
       <div
         ref={rowRef}
-        className="no-scrollbar flex snap-x snap-mandatory gap-1 overflow-x-auto pb-2 [@media(pointer:coarse)]:overflow-x-hidden"
+        className="no-scrollbar flex touch-pan-y snap-x snap-mandatory gap-1 overflow-x-auto overscroll-x-contain pb-2"
       >
         {children}
       </div>

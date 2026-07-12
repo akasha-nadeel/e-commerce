@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import type { ProductImage } from "@/lib/catalog";
 import { MediaTile } from "@/components/media-tile";
+import { useCarouselDrag } from "@/lib/use-carousel-drag";
 
 /**
  * Editorial gallery (SPD / Gymshark style): a two-column image grid on desktop
@@ -23,6 +24,8 @@ export function ProductGallery({
   activeColor?: string;
 }) {
   const [zoom, setZoom] = useState<number | null>(null);
+  const mobileRowRef = useRef<HTMLDivElement>(null);
+  useCarouselDrag(mobileRowRef);
 
   // Only the selected colour's shots; if that colour has none tagged, show all.
   const forColor = activeColor
@@ -52,8 +55,13 @@ export function ProductGallery({
 
   return (
     <div>
-      {/* Mobile: swipeable carousel */}
-      <div className="-mx-5 flex snap-x snap-mandatory gap-3 overflow-x-auto px-5 pb-1 [scrollbar-width:none] sm:-mx-8 sm:px-8 lg:hidden [&::-webkit-scrollbar]:hidden">
+      {/* Mobile: swipeable carousel — touch-pan-y + useCarouselDrag lock each
+          gesture to one axis (horizontal drags swipe photos, vertical drags
+          scroll the page) so the row never wanders diagonally. */}
+      <div
+        ref={mobileRowRef}
+        className="-mx-5 flex touch-pan-y snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain px-5 pb-1 [scrollbar-width:none] sm:-mx-8 sm:px-8 lg:hidden [&::-webkit-scrollbar]:hidden"
+      >
         {shown.map((img, i) => (
           <button
             key={img.src ?? `img-${i}`}

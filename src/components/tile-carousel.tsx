@@ -3,6 +3,7 @@
 import { useRef, type ReactNode } from "react";
 import { ArrowButton } from "./carousel-row";
 import { Reveal } from "./ui/reveal";
+import { useCarouselDrag } from "@/lib/use-carousel-drag";
 
 /**
  * Section header that stacks on mobile — heading on its own line, then a row
@@ -25,6 +26,7 @@ export function TileCarousel({
   children: ReactNode;
 }) {
   const rowRef = useRef<HTMLDivElement>(null);
+  useCarouselDrag(rowRef);
 
   const scroll = (dir: 1 | -1) => {
     const el = rowRef.current;
@@ -71,12 +73,12 @@ export function TileCarousel({
           row bleeds to both viewport edges (cards run off-screen on both sides
           like a long carousel); the matching horizontal padding keeps the first
           card aligned with the header and leaves end-spacing after the last.
-          On touch devices (coarse pointer) overflow-x-hidden makes the row
-          inert to finger drags — touches scroll the page natively and the
-          arrows drive the carousel (scrollBy works on hidden overflow). */}
+          touch-pan-y hands vertical swipes to the browser (native page scroll);
+          useCarouselDrag drives horizontal finger drags with an axis lock so
+          the row never wanders diagonally. Desktop is unchanged. */}
       <div
         ref={rowRef}
-        className="no-scrollbar -mx-5 flex snap-x snap-mandatory gap-1 overflow-x-auto px-5 pb-2 sm:-mx-8 sm:px-8 [@media(pointer:coarse)]:overflow-x-hidden"
+        className="no-scrollbar -mx-5 flex touch-pan-y snap-x snap-mandatory gap-1 overflow-x-auto overscroll-x-contain px-5 pb-2 sm:-mx-8 sm:px-8"
       >
         {children}
       </div>
