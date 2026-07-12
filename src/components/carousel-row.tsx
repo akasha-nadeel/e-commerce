@@ -3,7 +3,7 @@
 import { useRef, type ReactNode } from "react";
 import { Button } from "./ui/button";
 import { Reveal } from "./ui/reveal";
-import { useCarouselDrag } from "@/lib/use-carousel-drag";
+import { glideBy, useCarouselDrag } from "@/lib/use-carousel-drag";
 
 /**
  * Section header (italic title + optional "Shop All" + prev/next arrows) wrapping
@@ -23,14 +23,11 @@ export function CarouselRow({
   const rowRef = useRef<HTMLDivElement>(null);
   useCarouselDrag(rowRef);
 
+  // Arrows ride the same ease-out glide as touch flings (see glideBy) so the
+  // cards move with one consistent, soft animation everywhere.
   const scroll = (dir: 1 | -1) => {
     const el = rowRef.current;
-    if (el) {
-      el.scrollBy({
-        left: dir * Math.min(el.clientWidth * 0.9, 720),
-        behavior: "smooth",
-      });
-    }
+    if (el) glideBy(el, dir * Math.min(el.clientWidth * 0.9, 720));
   };
 
   return (

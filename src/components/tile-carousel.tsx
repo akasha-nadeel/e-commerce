@@ -3,7 +3,7 @@
 import { useRef, type ReactNode } from "react";
 import { ArrowButton } from "./carousel-row";
 import { Reveal } from "./ui/reveal";
-import { useCarouselDrag } from "@/lib/use-carousel-drag";
+import { glideBy, useCarouselDrag } from "@/lib/use-carousel-drag";
 
 /**
  * Section header that stacks on mobile — heading on its own line, then a row
@@ -28,14 +28,11 @@ export function TileCarousel({
   const rowRef = useRef<HTMLDivElement>(null);
   useCarouselDrag(rowRef);
 
+  // Arrows ride the same ease-out glide as touch flings (see glideBy) so the
+  // tiles move with one consistent, soft animation everywhere.
   const scroll = (dir: 1 | -1) => {
     const el = rowRef.current;
-    if (el) {
-      el.scrollBy({
-        left: dir * Math.min(el.clientWidth * 0.85, 600),
-        behavior: "smooth",
-      });
-    }
+    if (el) glideBy(el, dir * Math.min(el.clientWidth * 0.85, 600));
   };
 
   return (
