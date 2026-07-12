@@ -654,7 +654,7 @@ function BottomTab({
           gold); inactive tabs are plain grey icons. */}
       <span
         className={`flex h-9 w-9 items-center justify-center rounded-full transition-colors ${
-          active ? "bg-[#eec449] text-[#0c0c0d]" : "text-[#8a8a8e]"
+          active ? "bg-[#eec449] text-[#0c0c0d]" : "text-[#5f5f63]"
         }`}
       >
         <span className="relative flex h-[22px] w-[22px] items-center justify-center">
@@ -668,7 +668,7 @@ function BottomTab({
       </span>
       <span
         className={`text-[10.5px] font-medium tracking-[0.01em] transition-colors ${
-          active ? "text-[#0c0c0d]" : "text-[#8a8a8e]"
+          active ? "text-[#0c0c0d]" : "text-[#5f5f63]"
         }`}
       >
         {label}
