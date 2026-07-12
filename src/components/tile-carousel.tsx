@@ -70,10 +70,13 @@ export function TileCarousel({
       {/* Negative horizontal margins cancel the section's side padding so the
           row bleeds to both viewport edges (cards run off-screen on both sides
           like a long carousel); the matching horizontal padding keeps the first
-          card aligned with the header and leaves end-spacing after the last. */}
+          card aligned with the header and leaves end-spacing after the last.
+          On touch devices (coarse pointer) overflow-x-hidden makes the row
+          inert to finger drags — touches scroll the page natively and the
+          arrows drive the carousel (scrollBy works on hidden overflow). */}
       <div
         ref={rowRef}
-        className="no-scrollbar -mx-5 flex touch-pan-y snap-x snap-mandatory gap-1 overflow-x-auto px-5 pb-2 sm:-mx-8 sm:px-8"
+        className="no-scrollbar -mx-5 flex snap-x snap-mandatory gap-1 overflow-x-auto px-5 pb-2 sm:-mx-8 sm:px-8 [@media(pointer:coarse)]:overflow-x-hidden"
       >
         {children}
       </div>

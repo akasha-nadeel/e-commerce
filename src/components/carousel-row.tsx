@@ -45,9 +45,14 @@ export function CarouselRow({
         </div>
       </div>
 
+      {/* On touch devices (coarse pointer) the row ignores finger drags —
+          overflow-x-hidden makes it a non-scrollable touch surface, so touches
+          scroll the PAGE natively (smooth, no diagonal jank) and the arrows
+          drive the carousel programmatically (scrollBy still works on hidden
+          overflow). Desktop/trackpad keeps normal scrolling. */}
       <div
         ref={rowRef}
-        className="no-scrollbar flex touch-pan-y snap-x snap-mandatory gap-1 overflow-x-auto pb-2"
+        className="no-scrollbar flex snap-x snap-mandatory gap-1 overflow-x-auto pb-2 [@media(pointer:coarse)]:overflow-x-hidden"
       >
         {children}
       </div>
