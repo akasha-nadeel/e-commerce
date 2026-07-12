@@ -2,6 +2,7 @@
 
 import { motion, useReducedMotion } from "motion/react";
 import type { ReactNode } from "react";
+import { useIntroPlayed } from "@/components/motion-gate";
 
 type RevealProps = {
   children: ReactNode;
@@ -19,7 +20,8 @@ type RevealProps = {
 /**
  * Scroll-triggered reveal — fades + slides its children into view the first time
  * they enter the viewport, then leaves them put. Built on `motion` (the engine
- * Animate UI uses). Honours prefers-reduced-motion by rendering statically.
+ * Animate UI uses). Renders statically when prefers-reduced-motion is set, or
+ * once the scroll intro has already played this session (see `MotionGate`).
  */
 export function Reveal({
   children,
@@ -30,8 +32,9 @@ export function Reveal({
   className,
 }: RevealProps) {
   const reduce = useReducedMotion();
+  const played = useIntroPlayed();
 
-  if (reduce) {
+  if (reduce || played) {
     return <div className={className}>{children}</div>;
   }
 

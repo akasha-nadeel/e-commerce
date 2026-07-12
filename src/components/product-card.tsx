@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion, useReducedMotion } from "motion/react";
 import type { Product } from "@/lib/catalog";
 import { formatLKR } from "@/lib/format";
+import { useIntroPlayed } from "./motion-gate";
 import { MediaTile } from "./media-tile";
 import { CountUpPrice } from "./ui/count-up-price";
 
@@ -30,15 +31,17 @@ export function ProductCard({
   const href = `/products/${product.slug}`;
   const onSale = !!product.compareAtLKR;
   const reduce = useReducedMotion();
+  const played = useIntroPlayed();
 
-  const anim = reduce
-    ? {}
-    : {
-        initial: { opacity: 0, y: 28 },
-        whileInView: { opacity: 1, y: 0 },
-        viewport: { once: true, margin: "0px 0px -60px 0px" as const },
-        transition: { duration: 0.6, delay, ease: EASE },
-      };
+  const anim =
+    reduce || played
+      ? {}
+      : {
+          initial: { opacity: 0, y: 28 },
+          whileInView: { opacity: 1, y: 0 },
+          viewport: { once: true, margin: "0px 0px -60px 0px" as const },
+          transition: { duration: 0.6, delay, ease: EASE },
+        };
 
   return (
     <motion.div

@@ -2,6 +2,7 @@
 
 import { animate, useInView, useReducedMotion } from "motion/react";
 import { useEffect, useLayoutEffect, useRef } from "react";
+import { useIntroPlayed } from "@/components/motion-gate";
 import { formatLKR } from "@/lib/format";
 
 // useLayoutEffect on the client, useEffect on the server (avoids the SSR warning).
@@ -27,20 +28,24 @@ export function CountUpPrice({
   delay?: number;
 }) {
   const reduce = useReducedMotion();
+  const played = useIntroPlayed();
+  // Skip the count entirely for reduced motion, or once the scroll intro has
+  // already played this session (see `MotionGate`) — the real value just stands.
+  const skip = reduce || played;
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, margin: "0px 0px -40px 0px" });
   const started = useRef(false);
 
   // Before the count begins, show 0 (imperatively, pre-paint). Once started (or
-  // for reduced motion) this no-ops, so the real value from JSX stands.
+  // when skipping) this no-ops, so the real value from JSX stands.
   useIsoLayoutEffect(() => {
-    if (reduce || started.current) return;
+    if (skip || started.current) return;
     if (ref.current) ref.current.textContent = formatLKR(0);
   });
 
   useEffect(() => {
     const el = ref.current;
-    if (!el || reduce || !inView || started.current) return;
+    if (!el || skip || !inView || started.current) return;
     started.current = true;
     const controls = animate(0, value, {
       duration: 1,
@@ -54,7 +59,7 @@ export function CountUpPrice({
       },
     });
     return () => controls.stop();
-  }, [inView, value, delay, reduce]);
+  }, [inView, value, delay, skip]);
 
   return (
     <span className="relative inline-block whitespace-nowrap">

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/components/cart-provider";
+import { MotionGate } from "@/components/motion-gate";
 import { CartDrawer } from "@/components/cart-drawer";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
@@ -51,7 +52,8 @@ export const metadata: Metadata = {
     description:
       "Premium heavyweight tees, jerseys and athleisure for men and women.",
   },
-  icons: { icon: "/logo-eagle-black-v2.png" },
+  // Icons come from the file conventions in this directory (favicon.ico,
+  // icon.png, apple-icon.png) — Next emits the <link> tags automatically.
 };
 
 export default function RootLayout({
@@ -63,14 +65,16 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} h-full`}>
       <body className="min-h-full flex flex-col overflow-x-clip bg-white">
         <CartProvider>
-          <ChromeGate>
-            <SiteHeader />
-          </ChromeGate>
-          <main className="flex-1">{children}</main>
-          <ChromeGate>
-            <SiteFooter />
-          </ChromeGate>
-          <CartDrawer />
+          <MotionGate>
+            <ChromeGate>
+              <SiteHeader />
+            </ChromeGate>
+            <main className="flex-1">{children}</main>
+            <ChromeGate>
+              <SiteFooter />
+            </ChromeGate>
+            <CartDrawer />
+          </MotionGate>
         </CartProvider>
       </body>
     </html>
