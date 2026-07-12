@@ -53,7 +53,7 @@ export function ProductGallery({
   return (
     <div>
       {/* Mobile: swipeable carousel */}
-      <div className="-mx-5 flex touch-pan-x snap-x snap-mandatory gap-3 overflow-x-auto px-5 pb-1 [scrollbar-width:none] sm:-mx-8 sm:px-8 lg:hidden [&::-webkit-scrollbar]:hidden">
+      <div className="-mx-5 flex snap-x snap-mandatory gap-3 overflow-x-auto px-5 pb-1 [scrollbar-width:none] sm:-mx-8 sm:px-8 lg:hidden [&::-webkit-scrollbar]:hidden">
         {shown.map((img, i) => (
           <button
             key={img.src ?? `img-${i}`}

@@ -73,7 +73,7 @@ export function TileCarousel({
           card aligned with the header and leaves end-spacing after the last. */}
       <div
         ref={rowRef}
-        className="no-scrollbar -mx-5 flex touch-pan-x snap-x snap-mandatory gap-1 overflow-x-auto px-5 pb-2 sm:-mx-8 sm:px-8"
+        className="no-scrollbar -mx-5 flex snap-x snap-mandatory gap-1 overflow-x-auto px-5 pb-2 sm:-mx-8 sm:px-8"
       >
         {children}
       </div>
