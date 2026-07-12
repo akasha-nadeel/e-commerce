@@ -1,78 +1,13 @@
-"use client";
-
-import { animate, useInView, useReducedMotion } from "motion/react";
-import { useEffect, useLayoutEffect, useRef } from "react";
-import { useIntroPlayed } from "@/components/motion-gate";
 import { formatLKR } from "@/lib/format";
 
-// useLayoutEffect on the client, useEffect on the server (avoids the SSR warning).
-const useIsoLayoutEffect =
-  typeof window !== "undefined" ? useLayoutEffect : useEffect;
-
 /**
- * Price that counts up from 0 to `value` (LKR-formatted) the first time it
- * scrolls into view.
+ * Product price, LKR-formatted.
  *
- * Correctness first: the JSX always renders the REAL price, so SSR ships the
- * correct value and any React re-render safely falls back to it — the price can
- * never get stuck at "LKR 0.00". Before the count starts we set the visible text
- * to 0 imperatively (pre-paint, so there's no flash); the count then writes the
- * text imperatively each frame (no per-frame re-render, no reflow — an invisible
- * sizer reserves the final width). Honours prefers-reduced-motion.
+ * The count-up-on-scroll animation was removed in favour of the site-wide
+ * apple.com-style fade-up (see `Reveal`): the price now simply renders and
+ * fades in with its card. Kept as a named component so callers are unchanged;
+ * `delay` is accepted but unused.
  */
-export function CountUpPrice({
-  value,
-  delay = 0,
-}: {
-  value: number;
-  delay?: number;
-}) {
-  const reduce = useReducedMotion();
-  const played = useIntroPlayed();
-  // Skip the count entirely for reduced motion, or once the scroll intro has
-  // already played this session (see `MotionGate`) — the real value just stands.
-  const skip = reduce || played;
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "0px 0px -40px 0px" });
-  const started = useRef(false);
-
-  // Before the count begins, show 0 (imperatively, pre-paint) so there's no
-  // flash. When skipping — reduced motion, or the intro already played this
-  // session — force the REAL value instead: a mid-session `played` flip (see
-  // `MotionGate`) can leave "0" on screen from an earlier render, and React
-  // won't rewrite identical text, so the price would otherwise stick at 0.
-  useIsoLayoutEffect(() => {
-    if (started.current || !ref.current) return;
-    ref.current.textContent = skip ? formatLKR(value) : formatLKR(0);
-  });
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el || skip || !inView || started.current) return;
-    started.current = true;
-    const controls = animate(0, value, {
-      duration: 1,
-      delay,
-      ease: [0.16, 1, 0.3, 1],
-      onUpdate: (v) => {
-        el.textContent = formatLKR(Math.round(v));
-      },
-      onComplete: () => {
-        el.textContent = formatLKR(value);
-      },
-    });
-    return () => controls.stop();
-  }, [inView, value, delay, skip]);
-
-  return (
-    <span className="relative inline-block whitespace-nowrap">
-      {/* Reserves the final width so the counting text never reflows. */}
-      <span aria-hidden className="invisible">
-        {formatLKR(value)}
-      </span>
-      <span ref={ref} className="absolute left-0 top-0">
-        {formatLKR(value)}
-      </span>
-    </span>
-  );
+export function CountUpPrice({ value }: { value: number; delay?: number }) {
+  return <>{formatLKR(value)}</>;
 }

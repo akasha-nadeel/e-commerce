@@ -106,10 +106,6 @@ export function glideBy(el: HTMLElement, delta: number) {
  * settles on the nearest card edge. CSS snap is suspended mid-gesture so it
  * can't fight the finger.
  *
- * It also adds a light "cards slide in" touch: children that are off-screen
- * within the row fade/slide in the first time they scroll into view (skipped
- * under prefers-reduced-motion).
- *
  * A click right after a real drag is suppressed so a swipe never activates the
  * card under the finger. Mouse/pen pointers are ignored — desktop behaviour
  * (trackpad scroll + arrow buttons) is unchanged.
@@ -208,60 +204,6 @@ export function useCarouselDrag(ref: RefObject<HTMLElement | null>) {
       el.removeEventListener("pointerup", onEnd);
       el.removeEventListener("pointercancel", onEnd);
       el.removeEventListener("click", onClick, true);
-    };
-  }, [ref]);
-
-  // "Cards slide in" — children beyond the row's right edge fade/slide in the
-  // first time they enter view (via drag, fling or the arrows). Cards already
-  // visible on mount are left untouched so nothing double-animates with the
-  // section's own entrance reveal.
-  useEffect(() => {
-    const el = ref.current;
-    if (!el || reduceMotion()) return;
-
-    const primed: HTMLElement[] = [];
-    const rowRect = el.getBoundingClientRect();
-    if (rowRect.width === 0) return; // hidden variant (e.g. desktop gallery)
-
-    for (const node of Array.from(el.children) as HTMLElement[]) {
-      const r = node.getBoundingClientRect();
-      const visible = r.left < rowRect.right && r.right > rowRect.left;
-      if (visible) continue;
-      node.style.opacity = "0.35";
-      node.style.transform = "translateX(28px)";
-      primed.push(node);
-    }
-    if (primed.length === 0) return;
-
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (!entry.isIntersecting) continue;
-          const t = entry.target as HTMLElement;
-          t.style.transition =
-            "opacity 0.5s cubic-bezier(0.22,1,0.36,1), transform 0.5s cubic-bezier(0.22,1,0.36,1)";
-          t.style.opacity = "1";
-          t.style.transform = "translateX(0)";
-          io.unobserve(t);
-          // Drop the inline styles once the transition has played out.
-          window.setTimeout(() => {
-            t.style.transition = "";
-            t.style.opacity = "";
-            t.style.transform = "";
-          }, 550);
-        }
-      },
-      { root: el, threshold: 0.2 },
-    );
-    for (const node of primed) io.observe(node);
-
-    return () => {
-      io.disconnect();
-      for (const node of primed) {
-        node.style.transition = "";
-        node.style.opacity = "";
-        node.style.transform = "";
-      }
     };
   }, [ref]);
 }

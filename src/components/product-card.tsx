@@ -8,14 +8,13 @@ import { formatLKR } from "@/lib/format";
 import { useIntroPlayed } from "./motion-gate";
 import { MediaTile } from "./media-tile";
 import { CountUpPrice } from "./ui/count-up-price";
-
-const EASE = [0.16, 1, 0.3, 1] as const;
+import { APPLE_EASE } from "./ui/reveal";
 
 /**
  * Minimal PLP card: image, title, colourway, price and a row of colour chips.
  * The whole card reveals as ONE lightweight fade+rise when it scrolls into view
  * (kept to a single motion layer so a full row/grid doesn't jank the scroll),
- * and the price counts 0 → value once visible. `delay` staggers cards.
+ * matching the site-wide apple.com-style reveal. `delay` staggers cards.
  */
 export function ProductCard({
   product,
@@ -112,10 +111,10 @@ export function ProductCard({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 28 }}
+      initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "0px 0px -60px 0px" }}
-      transition={{ duration: 0.6, delay, ease: EASE }}
+      viewport={{ once: true, margin: "0px 0px -80px 0px" }}
+      transition={{ duration: 0.8, delay: Math.min(delay, 0.22), ease: APPLE_EASE }}
       className={className}
     >
       {body}
