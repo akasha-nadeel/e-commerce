@@ -30,7 +30,7 @@ export function PromoBanner() {
   };
 
   return (
-    <section className="my-12">
+    <section className="mx-auto my-12 max-w-[1400px] px-5 sm:px-8">
       <div className="relative overflow-hidden bg-[#eaac33]">
         {/* Lifestyle photo — models sit on the right; copy lives over the left.
             Slides in from the left when the banner scrolls into view. */}

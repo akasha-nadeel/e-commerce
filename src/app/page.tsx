@@ -104,7 +104,6 @@ export default async function HomePage() {
             <DepartmentPanel
               eyebrow="Women's Collection"
               title="Shop Women"
-              caption="Elevated everyday styles, designed to move with you."
               href="/collections/women"
               image="/dept-women-wide-v2.jpg"
               imageClassName="object-cover object-center origin-bottom scale-[1.6] translate-x-[24%] translate-y-[26%] sm:scale-[1.3] sm:translate-x-[12%] sm:translate-y-[21%]"
@@ -119,7 +118,6 @@ export default async function HomePage() {
             <DepartmentPanel
               eyebrow="Men's Collection"
               title="Shop Men"
-              caption="Heavyweight essentials, built from the ground up."
               href="/collections/men"
               image="/dept-men-wide.png"
               imageClassName="object-cover object-center translate-x-[8%] sm:translate-x-0"
@@ -152,12 +150,12 @@ export default async function HomePage() {
               name="T-Shirts"
               caption="Everyday Essentials"
               href="/collections/t-shirts"
-              dark
-              image="/category-tshirt-v3.webp"
+              image="/category-tshirt-v6.webp"
               imageClassName="object-cover object-center"
               nameTop
-              nameColor="#ffffff"
-              bg="#123047"
+              overlay={false}
+              nameColor="#0c0c0d"
+              bg="#d8d6d2"
               textDelay={0.55}
             />
           </Reveal>
@@ -168,12 +166,12 @@ export default async function HomePage() {
               name="Polos"
               caption="Smart Casual"
               href="/collections/polo"
-              dark
-              image="/category-polo-v2.webp"
+              image="/category-polo-v3.webp"
               imageClassName="object-cover object-center"
               nameTop
-              nameColor="#ffffff"
-              bg="#123047"
+              overlay={false}
+              nameColor="#0c0c0d"
+              bg="#bcd8ea"
               textDelay={0.73}
             />
           </Reveal>
@@ -184,12 +182,12 @@ export default async function HomePage() {
               name="Hoodies"
               caption="Cozy Layers"
               href="/collections/hoody"
-              dark
-              image="/category-hoody-v7.webp"
-              imageClassName="object-cover object-[50%_35%]"
+              image="/category-hoody-v8.webp"
+              imageClassName="object-cover object-center"
               nameTop
-              nameColor="#ffffff"
-              bg="#0a0a0a"
+              overlay={false}
+              nameColor="#0c0c0d"
+              bg="#e7e5e0"
               textDelay={0.91}
             />
           </Reveal>
@@ -200,12 +198,12 @@ export default async function HomePage() {
               name="Tanks"
               caption="Summer Ready"
               href="/collections/tanks"
-              dark
-              image="/category-tank-v1.webp"
-              imageClassName="object-cover object-[58%_center]"
+              image="/category-tank-v2.webp"
+              imageClassName="object-cover object-center"
               nameTop
-              nameColor="#ffffff"
-              bg="#123047"
+              overlay={false}
+              nameColor="#0c0c0d"
+              bg="#d8c9c1"
               textDelay={1.09}
             />
           </Reveal>
@@ -319,6 +317,7 @@ function CategoryTile({
   image,
   imageClassName = "object-cover object-center",
   nameTop = false,
+  overlay = true,
   nameColor,
   textDelay = 0,
 }: {
@@ -330,6 +329,9 @@ function CategoryTile({
   image?: string;
   imageClassName?: string;
   nameTop?: boolean;
+  /** Dark top gradient behind top-aligned labels (default true). Turn off when
+   *  the image is light where the label sits and the text is dark. */
+  overlay?: boolean;
   nameColor?: string;
   /** Delay (s) before the label slides in from the left — set > the card's own
    *  reveal delay so the text lands after the card has dropped in. */
@@ -360,7 +362,7 @@ function CategoryTile({
           />
         </div>
       )}
-      {image && nameTop && (
+      {image && nameTop && overlay && (
         <div
           aria-hidden
           className="absolute inset-x-0 top-0 z-[5] h-1/2 bg-gradient-to-b from-black/55 via-black/15 to-transparent"
@@ -374,7 +376,11 @@ function CategoryTile({
           duration={0.9}
           className="absolute left-5 right-5 top-5 z-10"
         >
-          <span className="block text-[10px] font-semibold uppercase tracking-[0.14em] text-white/85 sm:text-[12px]">
+          <span
+            className={`block text-[10px] font-semibold uppercase tracking-[0.14em] sm:text-[12px] ${
+              dark ? "text-white/85" : "text-black/55"
+            }`}
+          >
             {caption}
           </span>
           <span
@@ -494,7 +500,7 @@ function DepartmentPanel({
       >
         <Reveal x={-28} y={0} delay={textDelay} duration={0.9}>
           {top && (
-            <span className="mb-1.5 block font-mono text-[10px] uppercase tracking-[0.18em] text-white/55 sm:mb-3">
+            <span className="mb-1.5 block font-mono text-[10px] uppercase tracking-[0.18em] text-white/90 sm:mb-3">
               {eyebrow}
             </span>
           )}
