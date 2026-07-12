@@ -61,7 +61,7 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
   const active = slides[index];
 
   return (
-    <section className="relative -mt-[74px] flex min-h-screen items-end overflow-hidden bg-[#17120f] pt-[74px]">
+    <section className="relative mt-[calc(var(--nav-h)_*_-1)] flex min-h-screen items-end overflow-hidden bg-[#17120f] pt-[var(--nav-h)]">
       {/* Image layers — crossfade between slides */}
       {slides.map((s, i) => (
         <div

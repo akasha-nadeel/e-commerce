@@ -20,6 +20,14 @@
   --font-display: var(--font-sans);
 }
 
+:root {
+  /* Sticky header height. Single source of truth: the header sizes itself to
+     this, and the home hero offsets (negative margin + top padding) read it so
+     the hero fills the viewport exactly behind the transparent nav — no white
+     seam at the bottom. Change the nav height here, not in component classes. */
+  --nav-h: 52px;
+}
+
 * {
   box-sizing: border-box;
 }

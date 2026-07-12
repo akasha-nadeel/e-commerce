@@ -146,7 +146,7 @@ export function SiteHeader() {
         solidBg ? "bg-white" : "bg-transparent"
       }`}
     >
-      <div className="relative mx-auto flex max-w-[1400px] items-center justify-between gap-4 px-5 py-[10px] sm:px-8">
+      <div className="relative mx-auto flex h-[var(--nav-h)] max-w-[1400px] items-center justify-between gap-4 px-5 sm:px-8">
         {/* Left: mobile hamburger + logo (logo centres on mobile, sits left on desktop) */}
         <div className="flex items-center gap-3">
           <button
@@ -172,7 +172,7 @@ export function SiteHeader() {
             </svg>
           </button>
           <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 md:static md:translate-x-0 md:translate-y-0">
-            <Logo variant={lightText ? "gold" : "onLight"} showText={false} markHeight={54} />
+            <Logo variant={lightText ? "gold" : "onLight"} showText={false} markHeight={40} />
           </span>
         </div>
 
