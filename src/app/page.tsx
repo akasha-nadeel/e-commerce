@@ -261,19 +261,19 @@ export default async function HomePage() {
       {/* Campaign banner — closing CTA above the footer                   */}
       {/* ---------------------------------------------------------------- */}
       <div className="mb-2 mt-12 px-5 sm:px-8">
-      <section className="relative mx-auto flex min-h-[58vh] max-w-[1280px] items-start overflow-hidden rounded-3xl bg-[#b4d0eb] lg:items-center">
+      <section className="relative mx-auto flex min-h-[74vh] max-w-[1280px] items-start overflow-hidden rounded-3xl bg-[#a4cbe9] lg:items-center">
         <Image
-          src="/campaign-v2.png"
-          alt="Golden Eagle campaign — model in the graphic tee on a studio plinth"
+          src="/campaign-v3.webp"
+          alt="Golden Eagle campaign — model in the samurai graphic tee against a blue wall"
           fill
           quality={100}
           sizes="(max-width: 1280px) 100vw, 1280px"
-          className="object-cover object-[72%_top] translate-y-[42%] lg:translate-y-0 lg:object-[72%_22%]"
+          className="object-cover object-[68%_top] translate-y-[38%] lg:translate-y-0 lg:object-[center_18%]"
         />
         {/* White scrim only on desktop, where the dark copy sits over the photo;
             on mobile the copy sits up top over the empty sky, no overlay. */}
         <div className="absolute inset-0 hidden bg-gradient-to-r from-white/35 via-white/5 to-transparent lg:block" />
-        <div className="relative w-full px-8 py-10 sm:px-12 lg:py-16">
+        <div className="relative w-full px-8 py-12 sm:px-14 lg:py-20">
           <Reveal className="mx-auto flex max-w-[480px] flex-col items-center text-center lg:mx-0 lg:items-start lg:text-left">
             <h2 className="display-tight m-0 text-[clamp(34px,5vw,64px)] font-semibold leading-[1.02] text-[#0c0c0d]">
               <span className="block whitespace-nowrap">Built From</span>
