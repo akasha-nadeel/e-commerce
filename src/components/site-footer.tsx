@@ -15,9 +15,9 @@ const SHOP: FooterLink[] = [
 
 const INFORMATION: FooterLink[] = [
   { label: "About", href: "/about" },
-  { label: "Track Order", href: "/account#track" },
-  { label: "Returns & Exchanges", href: "/account#returns" },
-  { label: "Size Guide", href: "/account#size-guide" },
+  { label: "Track Order", href: "/account" },
+  { label: "Shipping & Returns", href: "/shipping-returns" },
+  { label: "Size Guide", href: "/size-guide" },
   { label: "Privacy Policy", href: "/privacy" },
   { label: "Contact Us", href: "mailto:hello@goldeneagleclothing.com" },
 ];

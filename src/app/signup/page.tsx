@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   description:
     "Create your Golden Eagle account — own the day with premium tees and athleisure.",
   alternates: { canonical: "/signup" },
+  robots: { index: false, follow: true },
 };
 
 export default async function SignupPage() {

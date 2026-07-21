@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { CarouselRow } from "@/components/carousel-row";
@@ -9,6 +10,22 @@ import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/ui/reveal";
 import { HeroCarousel, type HeroSlide } from "@/components/hero-carousel";
 import { getLatestStyles, getRecommendedProducts } from "@/lib/products";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE } from "@/lib/seo";
+
+// The homepage targets the brand name plus the head category terms; deeper
+// intent ("oversized tee", "polo") is served by the collection pages so the
+// two don't compete for the same query.
+export const metadata: Metadata = {
+  title: `${SITE_NAME} — Premium T-Shirts & Athleisure in Sri Lanka`,
+  description: SITE_DESCRIPTION,
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    title: `${SITE_NAME} — ${SITE_TAGLINE}`,
+    description: SITE_DESCRIPTION,
+    url: "/",
+  },
+};
 
 // Rotating hero slides — the studio image + garment lifestyle shots.
 const HERO_SLIDES: HeroSlide[] = [

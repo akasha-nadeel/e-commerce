@@ -13,6 +13,7 @@ export const PRODUCT_FRAGMENT = /* GraphQL */ `
     productType
     tags
     availableForSale
+    updatedAt
     priceRange { minVariantPrice { amount currencyCode } }
     compareAtPriceRange { minVariantPrice { amount currencyCode } }
     options {

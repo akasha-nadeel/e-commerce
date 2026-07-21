@@ -7,6 +7,16 @@ import { CartDrawer } from "@/components/cart-drawer";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { ChromeGate } from "@/components/chrome-gate";
+import { JsonLd } from "@/components/json-ld";
+import {
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_TAGLINE,
+  SITE_URL,
+  jsonLdGraph,
+  organizationNode,
+  websiteNode,
+} from "@/lib/seo";
 
 // Apple's typography — San Francisco (SF Pro). It ships via the system font
 // stack and isn't licensable as a webfont, so the CSS stack leads with
@@ -19,41 +29,52 @@ const inter = Inter({
   weight: ["400", "500", "600", "700", "800", "900"],
 });
 
-const SITE_URL = "https://goldeneagleclothing.com";
-
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Golden Eagle — Premium T-Shirts for Men & Women",
-    template: "%s · Golden Eagle",
+    default: `${SITE_NAME} — Premium T-Shirts & Athleisure in Sri Lanka`,
+    template: `%s · ${SITE_NAME}`,
   },
-  description:
-    "Premium heavyweight tees, jerseys and athleisure for men and women. Built from the ground up — own the day. Free island-wide shipping over LKR 20,000.",
-  keywords: [
-    "Golden Eagle",
-    "premium t-shirts Sri Lanka",
-    "oversized tees",
-    "jerseys",
-    "athleisure",
-    "men's t-shirts",
-    "women's t-shirts",
-  ],
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
+  // Every page inherits a self-referencing canonical relative to its own
+  // route; pages with query params (collections, search) override this.
+  alternates: { canonical: "/" },
+  authors: [{ name: SITE_NAME, url: SITE_URL }],
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
+  category: "shopping",
+  // Tell crawlers they may show full-size image previews and untruncated
+  // snippets — without this Google caps product image previews.
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
   openGraph: {
     type: "website",
-    siteName: "Golden Eagle",
-    title: "Golden Eagle — Own The Day",
-    description:
-      "Premium heavyweight tees, jerseys and athleisure for men and women.",
+    siteName: SITE_NAME,
+    title: `${SITE_NAME} — ${SITE_TAGLINE}`,
+    description: SITE_DESCRIPTION,
     url: SITE_URL,
+    locale: "en_LK",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Golden Eagle — Own The Day",
-    description:
-      "Premium heavyweight tees, jerseys and athleisure for men and women.",
+    title: `${SITE_NAME} — ${SITE_TAGLINE}`,
+    description: SITE_DESCRIPTION,
   },
+  // Phone-number autolinking mangles product copy and sizes on iOS Safari.
+  formatDetection: { telephone: false, address: false, email: false },
   // Icons come from the file conventions in this directory (favicon.ico,
   // icon.png, apple-icon.png) — Next emits the <link> tags automatically.
+  // The share card comes from `opengraph-image.tsx` alongside this file.
 };
 
 export default function RootLayout({
@@ -62,8 +83,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} h-full`}>
+    <html lang="en-LK" className={`${inter.variable} h-full`}>
+      <head>
+        {/* Product photography streams from the Shopify CDN — warming the
+            connection early protects LCP, which is itself a ranking signal. */}
+        <link rel="preconnect" href="https://cdn.shopify.com" />
+        <link rel="dns-prefetch" href="https://cdn.shopify.com" />
+      </head>
       <body className="min-h-full flex flex-col overflow-x-clip bg-white">
+        {/* Site-wide entity graph. Page-level structured data references these
+            nodes by @id rather than redeclaring the brand on every page. */}
+        <JsonLd data={jsonLdGraph(organizationNode, websiteNode)} />
         <CartProvider>
           <MotionGate>
             <ChromeGate>

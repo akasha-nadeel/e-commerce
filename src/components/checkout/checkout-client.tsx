@@ -6,6 +6,7 @@ import { useMemo, useState } from "react";
 import { useCart } from "@/components/cart-provider";
 import { Logo } from "@/components/logo";
 import { formatLKR } from "@/lib/format";
+import { COD_COUNTRY, SHIPPING, shippingCost } from "@/lib/shipping";
 import {
   AcceptedPayments,
   VisaMark,
@@ -38,7 +39,6 @@ const COUNTRIES = [
   "Singapore",
 ];
 
-const FREE_SHIP_THRESHOLD = 20000;
 const DISCOUNTS: Record<string, number> = { WELCOME10: 0.1, GOLDEN15: 0.15 };
 
 type Payment = "cod" | "card" | "paypal";
@@ -59,15 +59,12 @@ export function CheckoutClient() {
 
   const [placed, setPlaced] = useState(false);
 
-  const isLocal = country === "Sri Lanka";
+  const isLocal = country === COD_COUNTRY;
+  const rates = SHIPPING[isLocal ? "local" : "international"];
 
   const shipping = useMemo(() => {
     if (count === 0) return 0;
-    if (isLocal) {
-      if (shipMethod === "express") return 900;
-      return subtotal >= FREE_SHIP_THRESHOLD ? 0 : 350;
-    }
-    return shipMethod === "express" ? 7500 : 4500;
+    return shippingCost(isLocal, shipMethod, subtotal);
   }, [isLocal, subtotal, count, shipMethod]);
 
   const discount = useMemo(
@@ -277,19 +274,19 @@ export function CheckoutClient() {
               checked={shipMethod === "standard"}
               onSelect={() => setShipMethod("standard")}
               title="Standard"
-              sub={isLocal ? "2–4 business days" : "7–14 business days"}
+              sub={rates.standard.estimate}
               price={
-                isLocal && subtotal >= FREE_SHIP_THRESHOLD
+                shippingCost(isLocal, "standard", subtotal) === 0
                   ? "Free"
-                  : formatLKR(isLocal ? 350 : 4500)
+                  : formatLKR(rates.standard.rateLKR)
               }
             />
             <ShipOption
               checked={shipMethod === "express"}
               onSelect={() => setShipMethod("express")}
               title="Express"
-              sub={isLocal ? "1–2 business days" : "3–5 business days"}
-              price={formatLKR(isLocal ? 900 : 7500)}
+              sub={rates.express.estimate}
+              price={formatLKR(rates.express.rateLKR)}
             />
           </Step>
 

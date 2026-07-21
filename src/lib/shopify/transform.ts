@@ -20,6 +20,7 @@ export type ShopifyProduct = {
   productType: string;
   tags: string[];
   availableForSale: boolean;
+  updatedAt?: string;
   priceRange: { minVariantPrice: { amount: string; currencyCode: string } };
   compareAtPriceRange?: {
     minVariantPrice: { amount: string; currencyCode: string };
@@ -164,7 +165,14 @@ export function transformProduct(p: ShopifyProduct): Product {
     selectedOptions: e.node.selectedOptions,
   }));
 
-  const category = p.productType || p.tags[0] || "Men";
+  // Shopify product types arrive however the merchant typed them ("men",
+  // "t-shirts"). Category is display copy — it lands in page titles, breadcrumb
+  // rich results and filter chips — so normalise it to match the mock catalog.
+  // `\b` fires after hyphens too, so "t-shirts" becomes "T-Shirts".
+  const category = (p.productType || p.tags[0] || "Men").replace(
+    /\b[a-z]/g,
+    (c) => c.toUpperCase(),
+  );
   const price = toLKR(p.priceRange.minVariantPrice.amount);
   const compareAt = p.compareAtPriceRange
     ? toLKR(p.compareAtPriceRange.minVariantPrice.amount)
@@ -192,5 +200,6 @@ export function transformProduct(p: ShopifyProduct): Product {
     fit: p.fit?.value || undefined,
     fabrication: p.fabrication?.value || undefined,
     variants,
+    updatedAt: p.updatedAt,
   };
 }

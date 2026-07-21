@@ -69,6 +69,8 @@ export interface Product {
   fabrication?: string;
   /** Shopify variants (id + option values) for cart/checkout. Absent in mock mode. */
   variants?: ProductVariant[];
+  /** ISO timestamp of the last Shopify edit; drives sitemap `lastmod`. Absent in mock mode. */
+  updatedAt?: string;
 }
 
 const CLOTHING_SIZES: ProductSize[] = [

@@ -194,7 +194,7 @@ export function PurchasePanel({
               <span className="text-[#3a3a3e]">{size}</span>
             </div>
             <Link
-              href="/account#size-guide"
+              href="/size-guide"
               className="flex items-center gap-1.5 text-[13px] font-medium text-[#0c0c0d] no-underline hover:text-[#eec449]"
             >
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>

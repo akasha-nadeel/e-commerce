@@ -5,80 +5,19 @@ import { BackButton } from "@/components/back-button";
 import { CollectionBrowser } from "@/components/collection/collection-browser";
 import { PageTransition } from "@/components/ui/page-transition";
 import { getCollectionProducts } from "@/lib/products";
-
-type Collection = {
-  title: string;
-  tagline: string;
-  /** Mixed collections expose the Category facet. */
-  mixed?: boolean;
-};
-
-const COLLECTIONS: Record<string, Collection> = {
-  all: {
-    title: "All Products",
-    tagline: "The full Golden Eagle collection.",
-    mixed: true,
-  },
-  new: {
-    title: "New In",
-    tagline: "The latest drops, fresh off the press.",
-    mixed: true,
-  },
-  men: {
-    title: "Men",
-    tagline: "Built from the ground up — own the day.",
-  },
-  women: {
-    title: "Women",
-    tagline: "Premium tees and jerseys, engineered to move.",
-  },
-  // Garment-type collections (the Shop By Category cards). Populate by creating
-  // Smart collections with these handles in Shopify. `mixed` shows the gender
-  // facet, since a garment type spans men/women.
-  "t-shirts": {
-    title: "T-Shirts",
-    tagline: "Everyday heavyweight essentials.",
-    mixed: true,
-  },
-  polo: {
-    title: "Polo",
-    tagline: "Smart-casual staples, refined.",
-    mixed: true,
-  },
-  hoody: {
-    title: "Hoodies",
-    tagline: "Cozy layers for every day.",
-    mixed: true,
-  },
-  tanks: {
-    title: "Tanks",
-    tagline: "Built to move — train in Golden Eagle.",
-    mixed: true,
-  },
-  accessories: {
-    title: "Accessories",
-    tagline: "Caps, perfume and finishing touches.",
-    mixed: true,
-  },
-  caps: {
-    title: "Caps",
-    tagline: "Finish the fit with a clean cap.",
-    mixed: true,
-  },
-  perfume: {
-    title: "Perfume",
-    tagline: "Signature scents for every day.",
-    mixed: true,
-  },
-  bottles: {
-    title: "Bottles",
-    tagline: "Stay hydrated in style.",
-    mixed: true,
-  },
-};
+import { COLLECTIONS, COLLECTION_SLUGS } from "@/lib/collections";
+import { JsonLd } from "@/components/json-ld";
+import {
+  FALLBACK_OG_IMAGE,
+  SITE_NAME,
+  WEBSITE_ID,
+  absoluteUrl,
+  breadcrumbNode,
+  jsonLdGraph,
+} from "@/lib/seo";
 
 export function generateStaticParams() {
-  return Object.keys(COLLECTIONS).map((slug) => ({ slug }));
+  return COLLECTION_SLUGS.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
@@ -88,11 +27,36 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const c = COLLECTIONS[slug];
-  if (!c) return { title: "Collection" };
+  if (!c) return { title: "Collection", robots: { index: false } };
+
+  const title = `${c.title} — Shop ${c.title} Online in Sri Lanka`;
+  const description = `${c.tagline} Shop ${c.title.toLowerCase()} from ${SITE_NAME} with free island-wide delivery on orders over LKR 20,000.`;
+
+  // Lead the share card with a real garment from the collection — far better
+  // than a generic brand card. Defining `openGraph` below replaces the root's
+  // inherited image, so this must always resolve to something.
+  const products = await getCollectionProducts(slug);
+  const hero = products.find((p) => p.images[0]?.src)?.images[0]?.src;
+
   return {
     title: c.title,
-    description: c.tagline,
+    description,
+    // Filters and sorting are query params on this same route; the canonical
+    // always points at the bare collection URL so faceted permutations
+    // consolidate here instead of competing with each other.
     alternates: { canonical: `/collections/${slug}` },
+    openGraph: {
+      type: "website",
+      title,
+      description,
+      url: absoluteUrl(`/collections/${slug}`),
+      images: [
+        {
+          url: hero ?? FALLBACK_OG_IMAGE,
+          alt: `${c.title} — ${SITE_NAME}`,
+        },
+      ],
+    },
   };
 }
 
@@ -106,9 +70,37 @@ export default async function CollectionPage({
   if (!c) notFound();
 
   const products = await getCollectionProducts(slug);
+  const url = absoluteUrl(`/collections/${slug}`);
+
+  // CollectionPage + ItemList: tells Google this URL is a product listing and
+  // which PDPs it links to, which is what surfaces collection-level sitelinks.
+  const collectionNode = {
+    "@type": "CollectionPage",
+    "@id": `${url}#collection`,
+    url,
+    name: c.title,
+    description: c.tagline,
+    isPartOf: { "@id": WEBSITE_ID },
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfItems: products.length,
+      itemListElement: products.map((p, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        name: p.name,
+        url: absoluteUrl(`/products/${p.slug}`),
+      })),
+    },
+  };
+
+  const breadcrumbs = breadcrumbNode([
+    { name: "Home", path: "/" },
+    { name: c.title, path: `/collections/${slug}` },
+  ]);
 
   return (
     <div className="w-full bg-white">
+      <JsonLd data={jsonLdGraph(collectionNode, breadcrumbs)} />
       <PageTransition>
         <div className="mx-auto max-w-[1400px] px-5 pt-5 sm:px-8">
           <BackButton fallbackHref="/" />

@@ -9,6 +9,8 @@ export const metadata: Metadata = {
   description:
     "Sign in to your Golden Eagle account to track orders, manage returns and check out faster.",
   alternates: { canonical: "/login" },
+  // Account funnels carry no search value and dilute crawl budget.
+  robots: { index: false, follow: true },
 };
 
 export default async function LoginPage() {
