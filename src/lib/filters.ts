@@ -140,9 +140,26 @@ export function computeFacets(products: Product[]): Facets {
   return {
     sizes: SIZE_ORDER.filter((s) => sizes.has(s)),
     colors: COLOR_FAMILIES.map((c) => c.key).filter((c) => colors.has(c)),
-    categories: ["Men", "Women", "Accessories"].filter((c) => categories.has(c)),
+    categories: orderCategories(categories),
     prices: PRICE_BUCKETS.map((b) => b.key).filter((k) => prices.has(k)),
   };
+}
+
+/** Preferred display order for the Category facet. */
+const CATEGORY_ORDER = ["Men", "Women", "Unisex", "Accessories"];
+
+/**
+ * Category facet values, in a sensible order.
+ *
+ * Anything not in `CATEGORY_ORDER` is appended rather than dropped. Category
+ * comes from Shopify's free-text `productType`, so an allowlist here would
+ * silently hide a whole department from the filters the moment someone added a
+ * new one — the filter would just never appear, with nothing to debug.
+ */
+function orderCategories(found: Set<string>): string[] {
+  const known = CATEGORY_ORDER.filter((c) => found.has(c));
+  const extra = [...found].filter((c) => !CATEGORY_ORDER.includes(c)).sort();
+  return [...known, ...extra];
 }
 
 /* ---------------------------- Apply + sort ------------------------------- */

@@ -10,6 +10,7 @@ import {
   getProductBySlug,
   getRelatedProducts,
 } from "@/lib/products";
+import { collectionHrefForCategory } from "@/lib/collections";
 import { getProductReviews } from "@/lib/reviews";
 import { formatLKR } from "@/lib/format";
 import { JsonLd } from "@/components/json-ld";
@@ -169,7 +170,7 @@ export default async function ProductPage({
     { name: "Home", path: "/" },
     {
       name: product.category,
-      path: `/collections/${product.category.toLowerCase()}`,
+      path: collectionHrefForCategory(product.category),
     },
     { name: product.name, path: `/products/${product.slug}` },
   ]);
@@ -180,9 +181,7 @@ export default async function ProductPage({
 
       {/* Back */}
       <div className="mx-auto max-w-[1400px] px-5 pt-3 sm:px-8">
-        <BackButton
-          fallbackHref={`/collections/${product.category.toLowerCase()}`}
-        />
+        <BackButton fallbackHref={collectionHrefForCategory(product.category)} />
       </div>
 
       {/* Gallery + purchase (shared colour state) */}

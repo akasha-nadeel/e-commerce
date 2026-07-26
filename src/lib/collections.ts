@@ -77,3 +77,22 @@ export const COLLECTIONS: Record<string, Collection> = {
 };
 
 export const COLLECTION_SLUGS = Object.keys(COLLECTIONS);
+
+/**
+ * A `/collections/...` href that is guaranteed to resolve, derived from a
+ * product's Category.
+ *
+ * Category is Shopify's free-text `productType`, so lowercasing it does **not**
+ * reliably produce a registered route — "Unisex" products are the live example:
+ * they belong under both Men and Women and have no collection page of their own,
+ * so `/collections/unisex` 404s. Anything unrecognised falls back to `all`,
+ * which always exists.
+ *
+ * Use this anywhere a category becomes a link, including structured data — a
+ * breadcrumb pointing at a 404 is worse than a broken button, because it gets
+ * indexed and reported in Search Console rather than noticed.
+ */
+export function collectionHrefForCategory(category: string): string {
+  const slug = category.trim().toLowerCase();
+  return `/collections/${COLLECTION_SLUGS.includes(slug) ? slug : "all"}`;
+}
