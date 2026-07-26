@@ -41,18 +41,20 @@ export default async function StudioLayout({
   return (
     <div className="min-h-dvh bg-white text-[#0c0c0d]">
       <header className="sticky top-0 z-50 border-b border-[#e7e6e9] bg-white/95 backdrop-blur">
-        <div className="mx-auto flex max-w-[1100px] items-center justify-between gap-4 px-5 py-3 sm:px-8">
+        <div className="mx-auto flex max-w-[1100px] items-center justify-between gap-2 px-4 py-3 sm:gap-4 sm:px-8">
           {/* `Logo` renders its own <Link>, so it takes the href directly — do
               not wrap it, or you get an <a> inside an <a> and a hydration error
               with no visible symptom until you read the console. */}
-          <div className="flex shrink-0 items-center gap-2.5">
+          <div className="flex min-w-0 shrink items-center gap-2 sm:gap-2.5">
             <Logo
               variant="onLight"
               showText={false}
-              markHeight={30}
+              markHeight={26}
               href="/studio"
             />
-            <span className="text-[12px] font-bold uppercase tracking-[0.18em] text-[#0c0c0d]">
+            {/* Hidden on phones: the eagle already identifies the brand, and
+                this wordmark is what tipped the row into overflow at 390px. */}
+            <span className="hidden text-[12px] font-bold uppercase tracking-[0.18em] text-[#0c0c0d] sm:inline">
               Studio
             </span>
           </div>

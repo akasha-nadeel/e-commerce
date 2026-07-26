@@ -468,6 +468,7 @@ export function StudioButton({
   disabled,
   loading,
   full,
+  compact,
 }: {
   children: ReactNode;
   onClick?: () => void;
@@ -476,6 +477,9 @@ export function StudioButton({
   disabled?: boolean;
   loading?: boolean;
   full?: boolean;
+  /** Tighter padding on phones — for the fixed action bar, where the default
+   *  `px-7` leaves the status text almost no room at 390px. */
+  compact?: boolean;
 }) {
   const variants = {
     solid:
@@ -494,9 +498,9 @@ export function StudioButton({
       type={type}
       onClick={onClick}
       disabled={disabled || loading}
-      className={`inline-flex cursor-pointer items-center justify-center gap-2 rounded-none px-7 py-3.5 text-[13px] font-semibold transition-colors active:scale-[0.98] disabled:cursor-not-allowed ${
-        full ? "w-full" : ""
-      } ${variants[variant]}`}
+      className={`inline-flex cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-none text-[13px] font-semibold transition-colors active:scale-[0.98] disabled:cursor-not-allowed ${
+        compact ? "px-4 py-3 sm:px-7 sm:py-3.5" : "px-7 py-3.5"
+      } ${full ? "w-full" : ""} ${variants[variant]}`}
     >
       {loading && <Spinner />}
       {children}

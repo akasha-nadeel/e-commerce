@@ -421,7 +421,10 @@ export function ProductForm({
   /* --- form ------------------------------------------------------- */
 
   return (
-    <div className="mx-auto max-w-[1100px] px-5 pb-32 pt-10 sm:px-8">
+    // pb-36 clears the fixed action bar (~68px) plus the iPhone home indicator,
+    // so the last photo is fully scrollable into view rather than trapped
+    // behind the bar. Keep these two in step if the bar's padding changes.
+    <div className="mx-auto max-w-[1100px] px-4 pb-36 pt-8 sm:px-8 sm:pt-10">
       <PageHeading
         title={initial ? "Edit product" : "Add a product"}
         subtitle={
@@ -431,7 +434,7 @@ export function ProductForm({
         }
       />
 
-      <div className="grid grid-cols-1 gap-y-12 lg:grid-cols-[1.25fr_0.95fr] lg:gap-x-14">
+      <div className="grid grid-cols-1 gap-y-10 lg:grid-cols-[1.25fr_0.95fr] lg:gap-x-14 lg:gap-y-12">
         {/* ---------------- steps ---------------- */}
         <div>
           <Step n={1} title="Name" done={Boolean(name.trim())}>
@@ -484,12 +487,12 @@ export function ProductForm({
 
           <Step n={3} title="Price" done={Number(price) > 0}>
             <div className="flex flex-wrap gap-4">
-              <div className="min-w-[150px] flex-1">
+              <div className="min-w-[136px] flex-1">
                 <Field label="Price" required>
                   <MoneyInput value={price} onChange={setPrice} placeholder="4500" />
                 </Field>
               </div>
-              <div className="min-w-[150px] flex-1">
+              <div className="min-w-[136px] flex-1">
                 <Field label="Was" hint="Only if it's on sale.">
                   <MoneyInput
                     value={wasPrice}
@@ -567,7 +570,7 @@ export function ProductForm({
             </div>
 
             {photos.length > 0 && (
-              <div className="mt-5 grid grid-cols-2 gap-4 sm:grid-cols-3">
+              <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
                 {photos.map((p, i) => (
                   <figure
                     key={p.key}
@@ -618,7 +621,7 @@ export function ProductForm({
                                 aria-label={`Tag as ${c}`}
                                 aria-pressed={on}
                                 onClick={() => tagPhoto(p.key, c)}
-                                className={`h-6 w-6 rounded-full border-2 transition-all ${
+                                className={`h-[22px] w-[22px] shrink-0 rounded-full border-2 transition-all sm:h-6 sm:w-6 ${
                                   on
                                     ? "scale-110 border-[#eec449] shadow-[0_0_0_2px_rgba(238,196,73,0.32)]"
                                     : "border-black/10 hover:border-[#8a8a8e]"
@@ -865,11 +868,19 @@ export function ProductForm({
         </div>
       )}
 
-      {/* Sticky action bar — ink surface, so it reads as a fixed piece of chrome
-          rather than more page, and the gold CTA is unmissable against it. */}
-      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-[#0c0c0d]/95 backdrop-blur">
-        <div className="mx-auto flex max-w-[1100px] items-center justify-between gap-4 px-5 py-3.5 sm:px-8">
-          <p className="min-w-0 flex-1 text-[13px] leading-snug text-white/60">
+      {/* Action bar — always pinned to the bottom of the viewport, on every
+          screen size. Ink surface so it reads as fixed chrome rather than more
+          page, with the gold CTA unmissable against it.
+          `pb-[env(safe-area-inset-bottom)]` lifts it clear of the iPhone home
+          indicator, which would otherwise sit on top of the button. The page
+          container's matching bottom padding (see `pb-36`) is what lets you
+          still scroll to the very last photo instead of it hiding under here. */}
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-[#0c0c0d]/95 pb-[env(safe-area-inset-bottom)] backdrop-blur">
+        <div className="mx-auto flex max-w-[1100px] items-center justify-between gap-3 px-4 py-3 sm:gap-4 sm:px-8 sm:py-3.5">
+          {/* One line, always: `truncate` keeps the bar a constant height, so
+              the page's bottom padding can't be wrong on a narrow screen. The
+              full list of what's outstanding lives in the preview checklist. */}
+          <p className="min-w-0 flex-1 truncate text-[12px] leading-snug text-white/60 sm:text-[13px]">
             {uploading ? (
               <span className="flex items-center gap-2 text-white/80">
                 <Spinner /> Waiting for photos…
@@ -890,20 +901,23 @@ export function ProductForm({
               "Ready to save as a draft."
             )}
           </p>
-          <StudioButton
-            variant="gold"
-            onClick={handleSave}
-            disabled={uploading || blockers.length > 0}
-            loading={pending}
-          >
-            {pending
-              ? "Saving"
-              : initial
-                ? "Save changes"
-                : visible
-                  ? "Publish product"
-                  : "Save draft"}
-          </StudioButton>
+          <div className="shrink-0">
+            <StudioButton
+              variant="gold"
+              onClick={handleSave}
+              disabled={uploading || blockers.length > 0}
+              loading={pending}
+              compact
+            >
+              {pending
+                ? "Saving"
+                : initial
+                  ? "Save changes"
+                  : visible
+                    ? "Publish"
+                    : "Save draft"}
+            </StudioButton>
+          </div>
         </div>
       </div>
     </div>
