@@ -44,9 +44,29 @@ const H = 630;
 // where the client picked the brighter tone in this source. Their choice wins.)
 const INK = { r: 0, g: 0, b: 0 };
 
-// The eagle must fit the centre square so a square crop never clips it.
-// 0.78 of the 630px square leaves a comfortable margin on all four sides.
-const SAFE = Math.round(H * 0.78);
+// Brand gold, matching `globals.css` --color-gold.
+const GOLD = "#eec449";
+
+// The eagle AND the tagline must both fit the centre square, so the square crop
+// never clips either. The eagle is narrowed from 0.78 to 0.68 of the square to
+// buy vertical room for the type beneath it.
+const SAFE = Math.round(H * 0.68);
+
+// Tagline. Small, uppercase and widely tracked — the brand's label treatment
+// (cf. the wide `tracking-[0.18em]` uppercase labels across the site), not its
+// tight display treatment. The eagle is the hero here; the type supports it,
+// so it must not compete.
+const TAGLINE = "OWN THE DAY";
+const TAG_SIZE = 34;
+const TAG_TRACKING = 11;
+// Arial, deliberately. The site leads with SF Pro and falls back to Inter, but
+// neither is installed for librsvg to use — asking for "Inter" here silently
+// falls back to a default serif-ish face (proven by identical inked-pixel counts
+// for Inter and Helvetica). Arial is the nearest neutral grotesque that is
+// actually present, and is indistinguishable at this size.
+const TAG_FONT = "Arial, 'Segoe UI', sans-serif";
+// Space between the eagle's baseline and the cap-height of the type.
+const GAP = 46;
 
 mkdirSync("src/app", { recursive: true });
 
@@ -70,14 +90,54 @@ const eagle = await sharp(trimmed)
 const e = await sharp(eagle).metadata();
 console.log(`Eagle placed at: ${e.width}x${e.height}`);
 
-// 3) Composite dead-centre on the ink canvas. The source's own black merges
-//    into the background, so the bird reads as floating on the brand field.
+// 3) Render the tagline on its own transparent layer.
+const tagH = TAG_SIZE * 1.4;
+const tagSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${Math.round(tagH)}">
+  <text x="50%" y="${Math.round(TAG_SIZE)}" text-anchor="middle"
+        font-family="${TAG_FONT}" font-size="${TAG_SIZE}" font-weight="700"
+        letter-spacing="${TAG_TRACKING}" fill="${GOLD}"
+        >${TAGLINE}</text>
+</svg>`;
+const tag = await sharp(Buffer.from(tagSvg)).png().toBuffer();
+
+// Guard: if the font ever goes missing the text renders blank, and a silently
+// wordless card would ship unnoticed. Fail loudly instead.
+const tagPixels = await sharp(tag)
+  .ensureAlpha()
+  .raw()
+  .toBuffer({ resolveWithObject: true })
+  .then(({ data }) => {
+    let lit = 0;
+    for (let i = 3; i < data.length; i += 4) if (data[i] > 10) lit++;
+    return lit;
+  });
+if (tagPixels < 1500) {
+  throw new Error(
+    `Tagline rendered blank (${tagPixels} inked pixels) — the font "${TAG_FONT}" is unavailable to librsvg.`,
+  );
+}
+console.log(`Tagline rendered: ${tagPixels} inked pixels`);
+
+// 4) Centre the eagle+type group as one block, so the pair reads as balanced
+//    rather than the eagle being centred with type hanging off the bottom.
+const groupH = e.height + GAP + Math.round(tagH);
+const top = Math.round((H - groupH) / 2);
+
 await sharp({
   create: { width: W, height: H, channels: 3, background: INK },
 })
-  .composite([{ input: eagle, gravity: "centre" }])
+  .composite([
+    // The source's own black merges into the background, so the bird reads as
+    // floating on the brand field rather than sitting in a box.
+    { input: eagle, left: Math.round((W - e.width) / 2), top },
+    { input: tag, left: 0, top: top + e.height + GAP },
+  ])
   .png({ quality: 100, compressionLevel: 9 })
   .toFile(OUT);
+
+console.log(
+  `Group height ${groupH}px, centred at y=${top} — inside the ${H}px safe square.`,
+);
 
 const o = await sharp(OUT).metadata();
 const { size } = await sharp(OUT).toBuffer({ resolveWithObject: true }).then((r) => r.info);
