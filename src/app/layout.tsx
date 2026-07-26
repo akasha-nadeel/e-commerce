@@ -75,7 +75,11 @@ export const metadata: Metadata = {
   formatDetection: { telephone: false, address: false, email: false },
   // Icons come from the file conventions in this directory (favicon.ico,
   // icon.png, apple-icon.png) — Next emits the <link> tags automatically.
-  // The share card comes from `opengraph-image.tsx` alongside this file.
+  // The share card is the static `opengraph-image.png` alongside this file
+  // (built by `scripts/process-og-image.mjs`); `opengraph-image.alt.txt`
+  // supplies its alt text. Deliberately not set as `openGraph.images` here —
+  // doing so would override the file convention and lose the auto-emitted
+  // dimensions.
 };
 
 export default function RootLayout({
