@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { CartProvider } from "@/components/cart-provider";
 import { MotionGate } from "@/components/motion-gate";
@@ -106,6 +107,13 @@ export default function RootLayout({
             <CartDrawer />
           </MotionGate>
         </CartProvider>
+
+        {/* Vercel Web Analytics — cookieless page/referrer counts, no
+            cross-site tracking and no persistent identifier, which is why it
+            needs no consent banner. Last in <body> so it never delays paint.
+            Disabled automatically outside production by the package itself, so
+            local page views don't pollute the numbers. */}
+        <Analytics />
       </body>
     </html>
   );

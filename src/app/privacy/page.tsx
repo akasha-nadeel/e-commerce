@@ -54,9 +54,12 @@ export default function PrivacyPolicyPage() {
                 Accounts.
               </li>
               <li>
-                <strong>Usage data</strong> — pages viewed, device and browser
-                information, collected via cookies to help the site work and
-                improve.
+                <strong>Usage data</strong> — pages viewed, referring site,
+                country, and device and browser type, measured in aggregate by
+                Vercel Web Analytics to help us improve the store. This is
+                cookieless: it does not use a persistent identifier, does not
+                follow you across other websites, and is not used to build a
+                profile of you.
               </li>
             </ul>
           </Section>
@@ -91,17 +94,19 @@ export default function PrivacyPolicyPage() {
           <Section title="Sharing your information">
             <p>
               We only share what is necessary to run the store — for example
-              with our payment gateway, delivery partners and the platforms that
-              power our checkout and accounts (Shopify). We never sell your
-              personal information.
+              with our payment gateway, delivery partners, the platforms that
+              power our checkout and accounts (Shopify), and our hosting and
+              visitor-measurement provider (Vercel). We never sell your personal
+              information.
             </p>
           </Section>
 
           <Section title="Cookies">
             <p>
-              We use cookies to keep items in your cart, remember your session,
-              and understand how the site is used. You can control cookies
-              through your browser settings, though some features may not work
+              We use cookies and similar browser storage to keep items in your
+              cart and to remember you when you sign in. Our visitor
+              measurement is cookieless. You can control cookies through your
+              browser settings, though your cart and sign-in will not work
               without them.
             </p>
           </Section>
