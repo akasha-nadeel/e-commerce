@@ -19,6 +19,8 @@ export default function robots(): MetadataRoute.Robots {
           "/checkout",
           "/login",
           "/signup",
+          // Internal product manager — never for crawlers.
+          "/studio",
           // Faceted/sorted variants duplicate the canonical collection page.
           "/collections/*?",
           // Search results are noindex; keep crawlers out of the query space.

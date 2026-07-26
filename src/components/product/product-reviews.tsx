@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { submitReview } from "@/lib/actions/review";
+import { resizeImage } from "@/lib/image-resize";
 
 /**
  * Per-product "Ratings & Reviews" — real reviews from Shopify (metaobjects),
@@ -22,25 +23,6 @@ interface ReviewItem {
 }
 
 const MAX_PHOTOS = 4;
-
-/** Downscale + compress an image client-side before upload (keeps it small). */
-async function resizeImage(file: File, max = 1400, quality = 0.85): Promise<Blob> {
-  const bitmap = await createImageBitmap(file);
-  let { width, height } = bitmap;
-  if (width > max || height > max) {
-    const scale = Math.min(max / width, max / height);
-    width = Math.round(width * scale);
-    height = Math.round(height * scale);
-  }
-  const canvas = document.createElement("canvas");
-  canvas.width = width;
-  canvas.height = height;
-  const ctx = canvas.getContext("2d");
-  ctx?.drawImage(bitmap, 0, 0, width, height);
-  return new Promise((resolve) =>
-    canvas.toBlob((b) => resolve(b ?? file), "image/jpeg", quality),
-  );
-}
 
 interface Summary {
   count: number;

@@ -3,13 +3,21 @@ import "server-only";
 import { adminFetch } from "./admin";
 
 /**
- * Upload an image to Shopify Files via the Admin API and return its MediaImage
- * GID. Three steps: create a staged upload target, PUT the bytes there, then
- * fileCreate from the staged resource. Requires the app's `write_files` scope.
+ * Push an image's bytes to Shopify's staging bucket and return the
+ * `resourceUrl` that identifies it.
+ *
+ * This is step 1–2 of Shopify's upload dance; what you do with the resource
+ * afterwards differs by caller. `fileCreate` turns it into a standalone
+ * Files entry (reviews), while `productSet` accepts the same URL directly as
+ * `originalSource` and attaches it as product media (the Studio). Requires the
+ * app's `write_files` scope.
  */
-export async function uploadReviewImage(file: File): Promise<string> {
+export async function stageUpload(
+  file: File,
+  fallbackName = "upload.jpg",
+): Promise<string> {
   const bytes = Buffer.from(await file.arrayBuffer());
-  const filename = file.name || "review.jpg";
+  const filename = file.name || fallbackName;
   const mimeType = file.type || "image/jpeg";
 
   // 1) staged upload target
@@ -53,6 +61,17 @@ export async function uploadReviewImage(file: File): Promise<string> {
     throw new Error(`Staged upload failed (${up.status}).`);
   }
 
+  return target.resourceUrl;
+}
+
+/**
+ * Upload a review photo and return its MediaImage GID — the staged upload
+ * above followed by `fileCreate`, which is what promotes the staged resource
+ * into a permanent Files entry the review metaobject can reference.
+ */
+export async function uploadReviewImage(file: File): Promise<string> {
+  const resourceUrl = await stageUpload(file, "review.jpg");
+
   // 3) create the Shopify file from the staged resource
   const created = await adminFetch<{
     fileCreate: {
@@ -71,7 +90,7 @@ export async function uploadReviewImage(file: File): Promise<string> {
     variables: {
       files: [
         {
-          originalSource: target.resourceUrl,
+          originalSource: resourceUrl,
           contentType: "IMAGE",
           alt: "Product review photo",
         },
