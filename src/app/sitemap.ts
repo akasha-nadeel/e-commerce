@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { COLLECTION_SLUGS } from "@/lib/collections";
-import { getAllProducts } from "@/lib/products";
+import { getAllProducts, getNonEmptyCollectionSlugs } from "@/lib/products";
 import { SITE_URL } from "@/lib/seo";
 
 /**
@@ -18,7 +18,10 @@ import { SITE_URL } from "@/lib/seo";
 const PRIORITY_COLLECTIONS = new Set(["all", "new", "men", "women"]);
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const products = await getAllProducts();
+  const [products, populated] = await Promise.all([
+    getAllProducts(),
+    getNonEmptyCollectionSlugs(),
+  ]);
   const now = new Date();
 
   const home: MetadataRoute.Sitemap = [
@@ -30,7 +33,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  const collections: MetadataRoute.Sitemap = COLLECTION_SLUGS.map((slug) => ({
+  // Only collections that actually have products. A category page with nothing
+  // on it reads to Google as thin content or a soft 404, and this store has
+  // genuinely empty ones — the routes for hoodies, tanks, caps, perfume and
+  // bottles exist before the stock does. They re-enter the sitemap on their own
+  // as soon as a product lands in them, since this is computed from live data.
+  const collections: MetadataRoute.Sitemap = COLLECTION_SLUGS.filter((slug) =>
+    populated.has(slug),
+  ).map((slug) => ({
     url: `${SITE_URL}/collections/${slug}`,
     lastModified: now,
     changeFrequency: "daily",

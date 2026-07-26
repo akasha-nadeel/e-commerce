@@ -10,6 +10,7 @@ import {
   CART_CREATE,
   GET_ALL_PRODUCT_HANDLES,
   GET_COLLECTION_PRODUCTS,
+  GET_COLLECTIONS_WITH_PRODUCTS,
   GET_PRODUCT_BY_HANDLE,
   GET_PRODUCTS,
 } from "./queries";
@@ -68,6 +69,30 @@ export async function fetchCollectionProducts(
   return data.collection
     ? data.collection.products.edges.map((e) => transformProduct(e.node))
     : [];
+}
+
+/**
+ * Handles of collections that currently hold at least one product.
+ *
+ * One request for the whole store (see `GET_COLLECTIONS_WITH_PRODUCTS`). Tagged
+ * `products` so it is busted by the same revalidation as everything else — a
+ * collection's population changes when products change, not on its own.
+ */
+export async function fetchNonEmptyCollectionHandles(
+  first = 100,
+): Promise<Set<string>> {
+  const data = await shopifyFetch<{
+    collections: Edges<{ handle: string; products: Edges<{ id: string }> }>;
+  }>({
+    query: GET_COLLECTIONS_WITH_PRODUCTS,
+    variables: { first },
+    tags: ["products", "collections"],
+  });
+  return new Set(
+    data.collections.edges
+      .filter((e) => e.node.products.edges.length > 0)
+      .map((e) => e.node.handle),
+  );
 }
 
 /** All product handles — for `generateStaticParams`. */

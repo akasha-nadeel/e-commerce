@@ -18,6 +18,7 @@ import {
 import {
   fetchAllHandles,
   fetchCollectionProducts,
+  fetchNonEmptyCollectionHandles,
   fetchProductByHandle,
   fetchProducts,
   isShopifyConfigured,
@@ -103,4 +104,38 @@ export async function getAccessoryProducts(first = 8): Promise<Product[]> {
 export async function getRecommendedProducts(first = 6): Promise<Product[]> {
   if (isShopifyConfigured) return fetchProducts({ first });
   return mockRecommended;
+}
+
+/**
+ * Registered collection slugs that currently have something to show.
+ *
+ * Used to keep empty collections out of `sitemap.xml` and to `noindex` them.
+ * Submitting a category page with no products invites Google to classify it as
+ * thin content or a soft 404, which costs crawl budget and drags on site
+ * quality — and this store legitimately has empty collections, since the
+ * routes for hoodies, tanks, caps, perfume and bottles exist before the stock
+ * does.
+ *
+ * `all` and `new` are query-based rather than real Shopify collections, so they
+ * count as populated whenever the catalog has any product at all.
+ */
+export async function getNonEmptyCollectionSlugs(): Promise<Set<string>> {
+  const QUERY_BASED = ["all", "new"];
+
+  if (isShopifyConfigured) {
+    const [live, anyProduct] = await Promise.all([
+      fetchNonEmptyCollectionHandles(),
+      fetchProducts({ first: 1 }),
+    ]);
+    if (anyProduct.length > 0) for (const s of QUERY_BASED) live.add(s);
+    return live;
+  }
+
+  // Mock mode: membership is by category, which is all the mocks model.
+  const slugs = new Set<string>();
+  if (mockProducts.length > 0) for (const s of QUERY_BASED) slugs.add(s);
+  for (const [slug, category] of Object.entries(MOCK_CATEGORY)) {
+    if (mockProducts.some((p) => p.category === category)) slugs.add(slug);
+  }
+  return slugs;
 }

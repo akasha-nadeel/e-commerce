@@ -41,6 +41,13 @@ export async function generateMetadata({
   return {
     title: c.title,
     description,
+    // An empty category page is thin content, and keeping it out of the sitemap
+    // isn't enough — the home page's Shop By Category cards link to every
+    // collection, so Google will find it anyway. `follow` stays on so link
+    // equity still flows through the page's own nav.
+    ...(products.length === 0
+      ? { robots: { index: false, follow: true } }
+      : {}),
     // Filters and sorting are query params on this same route; the canonical
     // always points at the bare collection URL so faceted permutations
     // consolidate here instead of competing with each other.

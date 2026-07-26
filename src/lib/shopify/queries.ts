@@ -77,6 +77,29 @@ export const GET_COLLECTION_PRODUCTS = /* GraphQL */ `
   ${PRODUCT_FRAGMENT}
 `;
 
+/**
+ * Which collections currently hold at least one product.
+ *
+ * Deliberately one request for the whole store rather than a count per
+ * collection: it only asks for a single product per collection, so the cost is
+ * flat regardless of catalog size. Used to keep empty collections out of the
+ * sitemap.
+ */
+export const GET_COLLECTIONS_WITH_PRODUCTS = /* GraphQL */ `
+  query CollectionsWithProducts($first: Int!) {
+    collections(first: $first) {
+      edges {
+        node {
+          handle
+          products(first: 1) {
+            edges { node { id } }
+          }
+        }
+      }
+    }
+  }
+`;
+
 export const GET_ALL_PRODUCT_HANDLES = /* GraphQL */ `
   query AllHandles($first: Int!) {
     products(first: $first) {
