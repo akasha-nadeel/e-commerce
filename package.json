@@ -12,10 +12,10 @@
     "@vercel/analytics": "^2.0.1",
     "clsx": "^2.1.1",
     "motion": "^12.42.2",
-    "next": "16.2.9",
+    "next": "^16.2.12",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "sharp": "^0.35.1",
+    "sharp": "^0.35.3",
     "tailwind-merge": "^3.6.0"
   },
   "devDependencies": {
@@ -24,8 +24,17 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.2.9",
+    "eslint-config-next": "^16.2.12",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "//overrides": "Security patches for transitive deps whose parents pin them to vulnerable versions. Next pins postcss 8.4.31 exactly and sharp ^0.34.5, so they can only be raised from here; each stays within the same major, so no API change. brace-expansion is scoped to typescript-estree on purpose - it is the only consumer on minimatch 10, which can take v5. A blanket override breaks ESLint, because minimatch 3 (eslint-plugin-import/react/jsx-a11y, @eslint/config-array) needs the v1 API and v1 has no patched release. Do NOT run `npm audit fix --force`: npm 'fixes' these by downgrading next to 9.3.3, which would destroy the app.",
+  "overrides": {
+    "postcss": "^8.5.23",
+    "sharp": "$sharp",
+    "js-yaml": "^4.3.0",
+    "@typescript-eslint/typescript-estree": {
+      "brace-expansion": "^5.0.8"
+    }
   }
 }
