@@ -65,7 +65,7 @@ export function MediaTile({
         />
       )}
       {label && !src && (
-        <span className="absolute bottom-[13px] left-[13px] z-10 font-mono text-[9.5px] tracking-[0.1em] text-black/35">
+        <span className="absolute bottom-[13px] left-[13px] z-10 font-mono text-[9.5px] tracking-[0.1em] text-fg/35">
           {label}
         </span>
       )}

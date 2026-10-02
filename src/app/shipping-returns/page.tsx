@@ -58,7 +58,7 @@ export default function ShippingReturnsPage() {
   );
 
   return (
-    <div className="w-full bg-white">
+    <div className="w-full bg-canvas">
       <JsonLd data={jsonLd} />
 
       <div className="mx-auto max-w-[820px] px-5 pt-5 sm:px-8">
@@ -69,14 +69,14 @@ export default function ShippingReturnsPage() {
         <h1 className="display-tight m-0 text-[clamp(34px,5vw,56px)] font-semibold leading-[0.95]">
           Shipping &amp; Returns
         </h1>
-        <p className="mt-3 max-w-[560px] text-[15px] leading-[1.7] text-[#8a8a8e]">
+        <p className="mt-3 max-w-[560px] text-[15px] leading-[1.7] text-muted">
           Everything about how your order reaches you, and what happens if
           something isn&rsquo;t right.
         </p>
       </section>
 
       <section className="mx-auto max-w-[820px] px-5 pb-24 sm:px-8">
-        <div className="rich-text text-[15px] leading-[1.75] text-[#4a4a4e]">
+        <div className="rich-text text-[15px] leading-[1.75] text-fg-2">
           <Section title="Delivery within Sri Lanka">
             <RateTable
               rows={[
@@ -231,7 +231,7 @@ function RateTable({
     <div className="my-6 overflow-x-auto">
       <table className="w-full min-w-[420px] border-collapse text-left text-[14px]">
         <thead>
-          <tr className="border-b border-[#e5e4e6]">
+          <tr className="border-b border-line">
             <Th>Method</Th>
             <Th>Estimated delivery</Th>
             <Th>Cost</Th>
@@ -239,15 +239,15 @@ function RateTable({
         </thead>
         <tbody>
           {rows.map((r) => (
-            <tr key={r.method} className="border-b border-[#efeef0]">
-              <td className="py-3 pr-4 font-medium text-[#0c0c0d]">
+            <tr key={r.method} className="border-b border-line-soft">
+              <td className="py-3 pr-4 font-medium text-fg">
                 {r.method}
               </td>
-              <td className="py-3 pr-4 text-[#4a4a4e]">{r.estimate}</td>
-              <td className="py-3 text-[#4a4a4e]">
+              <td className="py-3 pr-4 text-fg-2">{r.estimate}</td>
+              <td className="py-3 text-fg-2">
                 {r.price}
                 {r.note && (
-                  <span className="block text-[13px] text-[#8a8a8e]">
+                  <span className="block text-[13px] text-muted">
                     {r.note}
                   </span>
                 )}
@@ -262,7 +262,7 @@ function RateTable({
 
 function Th({ children }: { children: React.ReactNode }) {
   return (
-    <th className="py-2 pr-4 text-[12px] font-semibold uppercase tracking-[0.12em] text-[#8a8a8e]">
+    <th className="py-2 pr-4 text-[12px] font-semibold uppercase tracking-[0.12em] text-muted">
       {children}
     </th>
   );

@@ -16,7 +16,7 @@ export default async function SearchPage({
   const { q } = await searchParams;
   const products = await getAllProducts();
   return (
-    <div className="w-full bg-white">
+    <div className="w-full bg-canvas">
       <SearchClient products={products} initialQuery={q ?? ""} />
     </div>
   );

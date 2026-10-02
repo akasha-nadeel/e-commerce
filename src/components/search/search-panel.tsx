@@ -149,25 +149,25 @@ export function SearchPanel({
         aria-hidden={!open}
         style={dragStyle}
         {...handlers}
-        className={`fixed z-[90] flex flex-col bg-white shadow-[0_-10px_40px_rgba(0,0,0,0.2)] transition-transform duration-300 ease-out
+        className={`fixed z-[90] flex flex-col bg-elevated shadow-[0_-10px_40px_rgba(0,0,0,0.2)] transition-[transform,visibility] duration-300 ease-out
           inset-x-0 bottom-0 h-[72vh] rounded-t-[22px]
           sm:inset-y-0 sm:left-auto sm:right-0 sm:h-full sm:w-[440px] sm:rounded-none sm:shadow-[-20px_0_60px_rgba(0,0,0,0.22)]
           ${
             open
               ? "translate-y-0 sm:translate-x-0"
-              : "translate-y-full sm:translate-y-0 sm:translate-x-full"
+              : "invisible translate-y-full sm:translate-y-0 sm:translate-x-full"
           }`}
       >
         <div className="shrink-0">
-          <div className="mx-auto mt-3 h-1 w-10 rounded-full bg-[#d7d6d9] sm:hidden" />
+          <div className="mx-auto mt-3 h-1 w-10 rounded-full bg-line-strong sm:hidden" />
 
-          <div className="flex items-center justify-between px-6 py-5 sm:border-b sm:border-[#e7e6e9]">
+          <div className="flex items-center justify-between px-6 py-5 sm:border-b sm:border-line">
           <h2 className="m-0 text-[22px] font-semibold tracking-[0.01em]">Search</h2>
           <button
             type="button"
             aria-label="Close search"
             onClick={onClose}
-            className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-[#e7e6e9] text-[#0c0c0d] transition-colors hover:border-[#0c0c0d]"
+            className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-line text-fg transition-colors hover:border-fg"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
               <line x1="6" y1="6" x2="18" y2="18" />
@@ -185,8 +185,8 @@ export function SearchPanel({
               goToSearch();
             }}
           >
-            <div className="flex items-center gap-3 bg-[#f5f5f6] px-4 focus-within:bg-[#efeff0]">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8a8a8e" strokeWidth={2} className="shrink-0">
+            <div className="flex items-center gap-3 bg-surface px-4 focus-within:bg-surface-2">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="shrink-0 text-muted">
                 <circle cx="11" cy="11" r="7" />
                 <line x1="16.5" y1="16.5" x2="21" y2="21" />
               </svg>
@@ -196,7 +196,7 @@ export function SearchPanel({
                 onChange={(e) => setQ(e.target.value)}
                 placeholder="Search for ..."
                 aria-label="Search for products"
-                className="flex-1 bg-transparent py-4 text-[15px] text-[#0c0c0d] outline-none placeholder:text-[#8a8a8e]"
+                className="flex-1 bg-transparent py-4 text-[15px] text-fg outline-none placeholder:text-muted"
               />
               {q && (
                 <button
@@ -205,7 +205,7 @@ export function SearchPanel({
                     setQ("");
                     inputRef.current?.focus();
                   }}
-                  className="shrink-0 cursor-pointer text-[13px] font-semibold text-[#6a6a6e] transition-colors hover:text-[#0c0c0d]"
+                  className="shrink-0 cursor-pointer text-[13px] font-semibold text-fg-3 transition-colors hover:text-fg"
                 >
                   Clear
                 </button>
@@ -223,7 +223,7 @@ export function SearchPanel({
                   <Link
                     href={l.href}
                     onClick={onClose}
-                    className="block border-b border-[#f0eff1] py-4 text-[16px] font-medium tracking-[0.03em] text-[#0c0c0d] no-underline transition-colors hover:text-[#eec449]"
+                    className="block border-b border-line-soft py-4 text-[16px] font-medium tracking-[0.03em] text-fg no-underline transition-colors hover:text-[#eec449]"
                   >
                     {l.label}
                   </Link>
@@ -241,7 +241,7 @@ export function SearchPanel({
                         key={s}
                         type="button"
                         onClick={() => setQ(s)}
-                        className="cursor-pointer text-left text-[17px] capitalize text-[#0c0c0d]"
+                        className="cursor-pointer text-left text-[17px] capitalize text-fg"
                       >
                         <Highlight text={s} query={query} />
                       </button>
@@ -253,9 +253,9 @@ export function SearchPanel({
               <section>
                 <SectionTitle>Products</SectionTitle>
                 {items === null ? (
-                  <p className="py-4 text-[14px] text-[#8a8a8e]">Searching…</p>
+                  <p className="py-4 text-[14px] text-muted">Searching…</p>
                 ) : results.length === 0 ? (
-                  <p className="py-4 text-[14px] text-[#8a8a8e]">
+                  <p className="py-4 text-[14px] text-muted">
                     No products match “{q.trim()}”.
                   </p>
                 ) : (
@@ -273,9 +273,9 @@ export function SearchPanel({
                           key={p.slug}
                           href={`/products/${p.slug}`}
                           onClick={onClose}
-                          className="flex items-center gap-4 border-b border-[#f0eff1] py-3 no-underline"
+                          className="flex items-center gap-4 border-b border-line-soft py-3 no-underline"
                         >
-                          <div className="relative h-[76px] w-[58px] shrink-0 overflow-hidden bg-[#eeedef]">
+                          <div className="relative h-[76px] w-[58px] shrink-0 overflow-hidden bg-surface-2">
                             {img && (
                               <Image
                                 src={img}
@@ -288,16 +288,16 @@ export function SearchPanel({
                             )}
                           </div>
                           <div className="min-w-0 flex-1">
-                            <div className="truncate text-[14px] font-semibold uppercase tracking-[0.01em] text-[#0c0c0d]">
+                            <div className="truncate text-[14px] font-semibold uppercase tracking-[0.01em] text-fg">
                               {p.name}
                             </div>
                             <div className="mt-1 flex items-center gap-2 text-[13px]">
                               {onSale && (
-                                <span className="text-[#9a9a9e] line-through">
+                                <span className="text-muted-soft line-through">
                                   {formatLKR(p.compareAtLKR!)}
                                 </span>
                               )}
-                              <span className="font-medium text-[#0c0c0d]">
+                              <span className="font-medium text-fg">
                                 {formatLKR(p.priceLKR)}
                               </span>
                             </div>
@@ -317,7 +317,7 @@ export function SearchPanel({
           <button
             type="button"
             onClick={goToSearch}
-            className="flex shrink-0 items-center justify-center gap-2 bg-[#0c0c0d] py-[18px] text-[14px] font-semibold uppercase tracking-[0.1em] text-white transition-colors hover:bg-[#eec449] hover:text-[#0c0c0d]"
+            className="flex shrink-0 items-center justify-center gap-2 bg-fg py-[18px] text-[14px] font-semibold uppercase tracking-[0.1em] text-canvas transition-colors hover:bg-[#eec449] hover:text-ink"
           >
             See all results
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
@@ -333,7 +333,7 @@ export function SearchPanel({
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
-    <h3 className="mb-4 border-b border-[#f0eff1] pb-3 text-[12px] font-semibold uppercase tracking-[0.16em] text-[#8a8a8e]">
+    <h3 className="mb-4 border-b border-line-soft pb-3 text-[12px] font-semibold uppercase tracking-[0.16em] text-muted">
       {children}
     </h3>
   );
@@ -345,7 +345,7 @@ function Highlight({ text, query }: { text: string; query: string }) {
   return (
     <>
       {text.slice(0, i)}
-      <span className="text-[#b3b3b8]">{text.slice(i, i + query.length)}</span>
+      <span className="text-faint-soft">{text.slice(i, i + query.length)}</span>
       {text.slice(i + query.length)}
     </>
   );

@@ -63,9 +63,9 @@ export function FilterControls({
                   onClick={() => onChange({ ...filters, sizes: toggle(filters.sizes, s) })}
                   className="min-w-[46px] cursor-pointer px-3 py-2.5 text-[13px] font-bold transition-colors"
                   style={{
-                    background: on ? "#0c0c0d" : "#fff",
-                    color: on ? "#fff" : "#0c0c0d",
-                    border: `1.5px solid ${on ? "#0c0c0d" : "#d7d6d9"}`,
+                    background: on ? "var(--fg)" : "var(--canvas)",
+                    color: on ? "var(--canvas)" : "var(--fg)",
+                    border: `1.5px solid ${on ? "var(--fg)" : "var(--line-strong)"}`,
                   }}
                 >
                   {SIZE_DISPLAY[s] ?? s}
@@ -98,7 +98,9 @@ export function FilterControls({
                     className="inline-block h-6 w-6 rounded-full border"
                     style={{
                       background: c.hex,
-                      borderColor: on ? "#0c0c0d" : "rgba(0,0,0,0.18)",
+                      borderColor: on
+                        ? "var(--fg)"
+                        : "color-mix(in srgb, var(--fg) 18%, transparent)",
                       outline: on ? "2px solid #0c0c0d" : "none",
                       outlineOffset: 1,
                     }}
@@ -139,14 +141,14 @@ export function FilterControls({
 function Accordion({ title, children }: { title: string; children: React.ReactNode }) {
   const [open, setOpen] = useState(true);
   return (
-    <div className="border-b border-[#e7e6e9]">
+    <div className="border-b border-line">
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
         className="flex w-full cursor-pointer items-center justify-between py-4 text-left"
       >
-        <span className="text-[13px] font-semibold uppercase tracking-[0.14em] text-[#0c0c0d]">
+        <span className="text-[13px] font-semibold uppercase tracking-[0.14em] text-fg">
           {title}
         </span>
         <svg
@@ -154,7 +156,7 @@ function Accordion({ title, children }: { title: string; children: React.ReactNo
           height="16"
           viewBox="0 0 24 24"
           fill="none"
-          stroke="#0c0c0d"
+          stroke="currentColor"
           strokeWidth={2}
           className="shrink-0 transition-transform duration-200"
           style={{ transform: open ? "rotate(180deg)" : "none" }}
@@ -182,7 +184,7 @@ function Check({
         type="checkbox"
         checked={checked}
         onChange={onChange}
-        className="h-4 w-4 accent-[#0c0c0d]"
+        className="h-4 w-4 accent-fg"
       />
       <span style={{ fontWeight: checked ? 700 : 400 }}>{label}</span>
     </label>

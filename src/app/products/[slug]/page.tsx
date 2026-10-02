@@ -176,7 +176,7 @@ export default async function ProductPage({
   ]);
 
   return (
-    <div className="w-full overflow-x-clip bg-white">
+    <div className="w-full overflow-x-clip bg-canvas">
       <JsonLd data={jsonLdGraph(productNode, breadcrumbs)} />
 
       {/* Back */}

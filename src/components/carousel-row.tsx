@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, type ReactNode } from "react";
-import { Button } from "./ui/button";
+import { ViewAll } from "./ui/button";
 import { Reveal } from "./ui/reveal";
 import { glideBy, useCarouselDrag } from "@/lib/use-carousel-drag";
 
@@ -54,13 +54,7 @@ export function CarouselRow({
         {children}
       </div>
 
-      {shopAllHref && (
-        <div className="mt-9 flex justify-center">
-          <Button href={shopAllHref} arrow>
-            View All
-          </Button>
-        </div>
-      )}
+      {shopAllHref && <ViewAll href={shopAllHref} />}
     </section>
   );
 }
@@ -80,8 +74,8 @@ export function ArrowButton({
       onClick={onClick}
       className={`flex h-[46px] w-[46px] cursor-pointer items-center justify-center rounded-full border-[1.5px] transition-colors ${
         next
-          ? "border-[#0c0c0d] bg-[#0c0c0d] hover:border-[#eec449] hover:bg-[#eec449]"
-          : "border-[#d7d6d9] bg-white hover:border-[#0c0c0d]"
+          ? "border-fg bg-fg hover:border-[#eec449] hover:bg-[#eec449]"
+          : "border-line-strong bg-canvas hover:border-fg"
       }`}
     >
       <svg
@@ -89,7 +83,7 @@ export function ArrowButton({
         height="16"
         viewBox="0 0 24 24"
         fill="none"
-        stroke={next ? "#fff" : "#0c0c0d"}
+        style={{ stroke: next ? "var(--canvas)" : "var(--fg)" }}
         strokeWidth={2.4}
       >
         {next ? <path d="M9 5l7 7-7 7" /> : <path d="M15 5l-7 7 7 7" />}

@@ -6,8 +6,8 @@ import { TileCarousel } from "@/components/tile-carousel";
 import { ProductCard } from "@/components/product-card";
 import { LogoMarquee } from "@/components/logo-marquee";
 import { PromoBanner } from "@/components/promo-banner";
-import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/ui/reveal";
+import { ViewAll } from "@/components/ui/button";
 import { HeroCarousel, type HeroSlide } from "@/components/hero-carousel";
 import { getLatestStyles, getRecommendedProducts } from "@/lib/products";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE } from "@/lib/seo";
@@ -72,7 +72,7 @@ export default async function HomePage() {
     getRecommendedProducts(),
   ]);
   return (
-    <div className="w-full bg-white">
+    <div className="w-full bg-canvas">
       {/* ---------------------------------------------------------------- */}
       {/* Hero — full-screen auto-rotating slideshow; nav overlays it.       */}
       {/* Kept OUTSIDE the overflow-x-hidden wrapper so its negative top     */}
@@ -108,7 +108,7 @@ export default async function HomePage() {
       <section className="mx-auto max-w-[1400px] px-5 pb-4 pt-16 sm:px-8">
         <Reveal x={-30} y={0} duration={0.9}>
           <div className="mb-[26px]">
-            <div className="mb-1.5 text-[12px] font-bold uppercase tracking-[0.24em] text-[#8a8a8e]">
+            <div className="mb-1.5 text-[12px] font-bold uppercase tracking-[0.24em] text-muted">
               Find Your Fit
             </div>
             <h2 className="m-0 text-[clamp(26px,4vw,46px)] font-semibold tracking-[-0.01em]">
@@ -155,11 +155,7 @@ export default async function HomePage() {
         id="shop-by-category"
         eyebrow="Build Your Style"
         title="Shop By Category"
-        control={
-          <Button href="/collections/all" size="sm" arrow>
-            View All
-          </Button>
-        }
+        shopAllHref="/collections/all"
       >
         <div className="w-[78%] shrink-0 snap-start sm:w-[48%] lg:w-[32%]">
           <Reveal y={-44} duration={1.05}>
@@ -171,7 +167,6 @@ export default async function HomePage() {
               imageClassName="object-cover object-center"
               nameTop
               overlay={false}
-              nameColor="#0c0c0d"
               bg="#d8d6d2"
               textDelay={0.55}
             />
@@ -187,7 +182,6 @@ export default async function HomePage() {
               imageClassName="object-cover object-center"
               nameTop
               overlay={false}
-              nameColor="#0c0c0d"
               bg="#bcd8ea"
               textDelay={0.73}
             />
@@ -203,7 +197,6 @@ export default async function HomePage() {
               imageClassName="object-cover object-center"
               nameTop
               overlay={false}
-              nameColor="#0c0c0d"
               bg="#e7e5e0"
               textDelay={0.91}
             />
@@ -219,7 +212,6 @@ export default async function HomePage() {
               imageClassName="object-cover object-center"
               nameTop
               overlay={false}
-              nameColor="#0c0c0d"
               bg="#d8c9c1"
               textDelay={1.09}
             />
@@ -228,18 +220,20 @@ export default async function HomePage() {
       </TileCarousel>
 
       {/* ---------------------------------------------------------------- */}
-      {/* Accessories                                                      */}
+      {/* Accessories — a static two-up grid sized exactly like Shop By     */}
+      {/* Department above (4:3 cards); with two cards there's nothing to  */}
+      {/* scroll, so no carousel.                                          */}
       {/* ---------------------------------------------------------------- */}
-      <TileCarousel
+      <section
         id="accessories"
-        title="Accessories"
-        control={
-          <Button href="/collections/accessories" size="sm" arrow>
-            View All
-          </Button>
-        }
+        className="mx-auto max-w-[1400px] px-5 pb-4 pt-16 sm:px-8"
       >
-        <div className="w-[78%] shrink-0 snap-start sm:w-[48%] lg:w-[32%]">
+        <Reveal x={-30} y={0} duration={0.9}>
+          <h2 className="mb-[26px] mt-0 text-[clamp(26px,4vw,46px)] font-semibold tracking-[-0.01em]">
+            Accessories
+          </h2>
+        </Reveal>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Reveal>
             <ActivityTile
               name="Caps"
@@ -249,8 +243,6 @@ export default async function HomePage() {
               bg="#d9d6d2"
             />
           </Reveal>
-        </div>
-        <div className="w-[78%] shrink-0 snap-start sm:w-[48%] lg:w-[32%]">
           <Reveal delay={0.1}>
             <ActivityTile
               name="Perfume"
@@ -261,18 +253,8 @@ export default async function HomePage() {
             />
           </Reveal>
         </div>
-        <div className="w-[78%] shrink-0 snap-start sm:w-[48%] lg:w-[32%]">
-          <Reveal delay={0.2}>
-            <ActivityTile
-              name="Bottles"
-              href="/collections/bottles"
-              image="/accessory-bottle.webp"
-              imageClassName="object-cover object-center"
-              bg="#3a7bd5"
-            />
-          </Reveal>
-        </div>
-      </TileCarousel>
+        <ViewAll href="/collections/accessories" />
+      </section>
 
       {/* ---------------------------------------------------------------- */}
       {/* Campaign banner — closing CTA above the footer                   */}
@@ -355,7 +337,9 @@ function CategoryTile({
   textDelay?: number;
 }) {
   const captionColor = dark ? "rgba(255,255,255,0.32)" : "rgba(0,0,0,0.3)";
-  const resolvedNameColor = nameColor ?? (dark ? "#fff" : "#0c0c0d");
+  // A light tile's label is theme-aware: ink in light mode, white in dark
+  // (over the shade below). See --photo-label in globals.css.
+  const resolvedNameColor = nameColor ?? (dark ? "#fff" : "var(--photo-label)");
   return (
     <Link
       href={href}
@@ -379,10 +363,14 @@ function CategoryTile({
           />
         </div>
       )}
-      {image && nameTop && overlay && (
+      {image && nameTop && (
+        // Top shade behind the label. Always on with `overlay`; without it
+        // (light photo, dark label) it only appears in dark mode, where the
+        // label turns white: --photo-shade is 0 in light, 1 in dark.
         <div
           aria-hidden
           className="absolute inset-x-0 top-0 z-[5] h-1/2 bg-gradient-to-b from-black/55 via-black/15 to-transparent"
+          style={overlay ? undefined : { opacity: "var(--photo-shade)" }}
         />
       )}
       {nameTop ? (
@@ -395,8 +383,9 @@ function CategoryTile({
         >
           <span
             className={`block text-[10px] font-semibold uppercase tracking-[0.14em] sm:text-[12px] ${
-              dark ? "text-white/85" : "text-black/55"
+              dark ? "text-white/85" : ""
             }`}
+            style={dark ? undefined : { color: "var(--photo-label-soft)" }}
           >
             {caption}
           </span>
@@ -579,7 +568,7 @@ function ActivityTile({
   return (
     <Link
       href={href}
-      className="tile-texture-dark group relative block aspect-[4/5] w-full overflow-hidden no-underline"
+      className="tile-texture-dark group relative block aspect-[4/3] w-full overflow-hidden no-underline"
       style={{ background: bg }}
     >
       {image && (
@@ -589,7 +578,7 @@ function ActivityTile({
             alt=""
             fill
             quality={100}
-            sizes="(max-width: 1024px) 78vw, 460px"
+            sizes="(max-width: 640px) 100vw, (max-width: 1400px) 48vw, 660px"
             className={imageClassName}
           />
         </div>

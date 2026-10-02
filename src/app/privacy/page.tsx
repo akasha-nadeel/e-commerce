@@ -12,7 +12,7 @@ const UPDATED = "1 July 2026";
 
 export default function PrivacyPolicyPage() {
   return (
-    <div className="w-full bg-white">
+    <div className="w-full bg-canvas">
       <div className="mx-auto max-w-[820px] px-5 pt-5 sm:px-8">
         <BackButton fallbackHref="/" />
       </div>
@@ -21,13 +21,13 @@ export default function PrivacyPolicyPage() {
         <h1 className="display-tight m-0 text-[clamp(34px,5vw,56px)] font-semibold leading-[0.95]">
           Privacy Policy
         </h1>
-        <p className="mt-3 text-[14px] text-[#8a8a8e]">
+        <p className="mt-3 text-[14px] text-muted">
           Last updated: {UPDATED}
         </p>
       </section>
 
       <section className="mx-auto max-w-[820px] px-5 pb-24 sm:px-8">
-        <div className="rich-text text-[15px] leading-[1.75] text-[#4a4a4e]">
+        <div className="rich-text text-[15px] leading-[1.75] text-fg-2">
           <p>
             This Privacy Policy explains how <strong>Golden Eagle</strong>
             (&ldquo;we&rdquo;, &ldquo;us&rdquo;, &ldquo;our&rdquo;) collects,
@@ -151,7 +151,7 @@ function Section({
 }) {
   return (
     <>
-      <h2 className="mt-10 text-[20px] font-semibold text-[#0c0c0d]">{title}</h2>
+      <h2 className="mt-10 text-[20px] font-semibold text-fg">{title}</h2>
       {children}
     </>
   );

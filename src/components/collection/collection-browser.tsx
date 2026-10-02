@@ -55,11 +55,11 @@ export function CollectionBrowser({
   return (
     <div>
       {/* Toolbar: Show filters (left) · Sort by (right) */}
-      <div className="mb-8 flex items-center justify-between gap-4 border-y border-[#e7e6e9] py-4">
+      <div className="mb-8 flex items-center justify-between gap-4 border-y border-line py-4">
         <button
           type="button"
           onClick={() => setDrawerOpen(true)}
-          className="flex cursor-pointer items-center gap-2.5 border border-[#0c0c0d] px-5 py-3 text-[13px] font-medium tracking-[0.02em] text-[#0c0c0d] transition-colors hover:bg-[#0c0c0d] hover:text-white"
+          className="flex cursor-pointer items-center gap-2.5 border border-fg px-5 py-3 text-[13px] font-medium tracking-[0.02em] text-fg transition-colors hover:bg-fg hover:text-canvas"
         >
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
             <line x1="4" y1="7" x2="20" y2="7" />
@@ -70,11 +70,11 @@ export function CollectionBrowser({
         </button>
 
         <label className="flex items-center gap-3">
-          <span className="hidden text-[13px] text-[#8a8a8e] sm:inline">Sort by:</span>
+          <span className="hidden text-[13px] text-muted sm:inline">Sort by:</span>
           <select
             value={filters.sort}
             onChange={(e) => apply({ ...filters, sort: e.target.value as FilterState["sort"] })}
-            className="cursor-pointer border border-[#d7d6d9] bg-white px-4 py-3 text-[13px] font-medium outline-none focus:border-[#0c0c0d]"
+            className="cursor-pointer border border-line-strong bg-canvas px-4 py-3 text-[13px] font-medium outline-none focus:border-fg"
             aria-label="Sort products"
           >
             {SORT_OPTIONS.map((o) => (
@@ -101,13 +101,13 @@ export function CollectionBrowser({
       ) : (
         <div className="flex flex-col items-center justify-center gap-4 py-24 text-center">
           <p className="m-0 text-[18px] font-bold">No products match those filters.</p>
-          <p className="m-0 max-w-[360px] text-[14px] text-[#8a8a8e]">
+          <p className="m-0 max-w-[360px] text-[14px] text-muted">
             Try removing a filter or two to see more of the collection.
           </p>
           <button
             type="button"
             onClick={clearAll}
-            className="mt-2 cursor-pointer rounded-none bg-[#0c0c0d] px-8 py-3.5 text-[13px] font-semibold text-white transition-colors hover:bg-[#eec449] hover:text-[#0c0c0d]"
+            className="mt-2 cursor-pointer rounded-none bg-fg px-8 py-3.5 text-[13px] font-semibold text-canvas transition-colors hover:bg-[#eec449] hover:text-ink"
           >
             Clear Filters
           </button>

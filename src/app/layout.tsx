@@ -9,6 +9,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { ChromeGate } from "@/components/chrome-gate";
 import { JsonLd } from "@/components/json-ld";
+import { THEME_INIT_SCRIPT } from "@/lib/theme";
 import {
   SITE_DESCRIPTION,
   SITE_NAME,
@@ -87,15 +88,25 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // `data-theme` is rewritten by the inline script before first paint when the
+  // visitor chose dark, so `suppressHydrationWarning` lets React accept the
+  // DOM's value (it applies to <html>'s own attributes only, not its subtree).
   return (
-    <html lang="en-LK" className={`${inter.variable} h-full`}>
+    <html
+      lang="en-LK"
+      data-theme="light"
+      suppressHydrationWarning
+      className={`${inter.variable} h-full`}
+    >
       <head>
+        {/* Theme: must stay first in <head> so it runs before anything paints. */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
         {/* Product photography streams from the Shopify CDN — warming the
             connection early protects LCP, which is itself a ranking signal. */}
         <link rel="preconnect" href="https://cdn.shopify.com" />
         <link rel="dns-prefetch" href="https://cdn.shopify.com" />
       </head>
-      <body className="min-h-full flex flex-col overflow-x-clip bg-white">
+      <body className="min-h-full flex flex-col overflow-x-clip bg-canvas">
         {/* Site-wide entity graph. Page-level structured data references these
             nodes by @id rather than redeclaring the brand on every page. */}
         <JsonLd data={jsonLdGraph(organizationNode, websiteNode)} />

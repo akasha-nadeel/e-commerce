@@ -121,12 +121,12 @@ export function CheckoutClient() {
           <h1 className="m-0 text-[clamp(28px,4vw,44px)] font-semibold">
             Your bag is empty
           </h1>
-          <p className="mt-3 text-[15px] text-[#8a8a8e]">
+          <p className="mt-3 text-[15px] text-muted">
             Add a few pieces before checking out.
           </p>
           <Link
             href="/collections/all"
-            className="mt-7 inline-block rounded-none bg-[#0c0c0d] px-9 py-4 text-[13px] font-semibold text-white no-underline transition-colors hover:bg-[#eec449] hover:text-[#0c0c0d]"
+            className="mt-7 inline-block rounded-none bg-fg px-9 py-4 text-[13px] font-semibold text-canvas no-underline transition-colors hover:bg-[#eec449] hover:text-ink"
           >
             Continue Shopping
           </Link>
@@ -147,7 +147,7 @@ export function CheckoutClient() {
           <h1 className="m-0 text-[clamp(28px,4vw,44px)] font-semibold">
             Order Confirmed
           </h1>
-          <p className="mx-auto mt-3 max-w-[460px] text-[15px] text-[#8a8a8e]">
+          <p className="mx-auto mt-3 max-w-[460px] text-[15px] text-muted">
             Thanks for shopping Golden Eagle. A confirmation is on its way and our
             warehouse has been notified to pack your order
             {effectivePayment === "cod" ? " for cash on delivery" : ""}.
@@ -155,14 +155,14 @@ export function CheckoutClient() {
 
           {backorderLines.length > 0 && (
             <div className="mt-8 border border-[#eec449]/45 bg-[#eec449]/10 p-5 text-left">
-              <div className="flex items-center gap-2 text-[13px] font-bold uppercase tracking-[0.08em] text-[#9a7322]">
+              <div className="flex items-center gap-2 text-[13px] font-bold uppercase tracking-[0.08em] text-gold-deep">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                   <circle cx="12" cy="12" r="9" />
                   <path d="M12 7v5l3 2" />
                 </svg>
                 On Backorder
               </div>
-              <p className="mt-2 text-[13px] leading-[1.6] text-[#3a3a3e]">
+              <p className="mt-2 text-[13px] leading-[1.6] text-fg-1">
                 These items ship separately as soon as they&apos;re back in stock.
                 We&apos;ll email you at each step — no action needed.
               </p>
@@ -172,11 +172,11 @@ export function CheckoutClient() {
                     key={l.id}
                     className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-[13px]"
                   >
-                    <span className="text-[#0c0c0d]">
+                    <span className="text-fg">
                       {l.name}
                       {l.size !== "OS" ? ` · ${l.size}` : ""}
                     </span>
-                    <span className="shrink-0 font-semibold text-[#9a7322]">
+                    <span className="shrink-0 font-semibold text-gold-deep">
                       You&apos;re #{l.queuePosition} in the queue
                     </span>
                   </li>
@@ -187,7 +187,7 @@ export function CheckoutClient() {
 
           <Link
             href="/"
-            className="mt-7 inline-block rounded-none bg-[#0c0c0d] px-9 py-4 text-[13px] font-semibold text-white no-underline transition-colors hover:bg-[#eec449] hover:text-[#0c0c0d]"
+            className="mt-7 inline-block rounded-none bg-fg px-9 py-4 text-[13px] font-semibold text-canvas no-underline transition-colors hover:bg-[#eec449] hover:text-ink"
           >
             Back To Home
           </Link>
@@ -200,14 +200,14 @@ export function CheckoutClient() {
   return (
     <Shell>
       {/* Mobile order-summary accordion */}
-      <div className="border-b border-[#e7e6e9] bg-[#fafafa] lg:hidden">
+      <div className="border-b border-line bg-surface lg:hidden">
         <button
           type="button"
           onClick={() => setSummaryOpen((o) => !o)}
           aria-expanded={summaryOpen}
           className="mx-auto flex w-full max-w-[1100px] items-center justify-between px-5 py-3.5"
         >
-          <span className="flex items-center gap-2 text-[14px] font-medium text-[#0c0c0d]">
+          <span className="flex items-center gap-2 text-[14px] font-medium text-fg">
             <BagIcon />
             {summaryOpen ? "Hide order summary" : "Show order summary"}
             <ChevronIcon open={summaryOpen} />
@@ -226,7 +226,7 @@ export function CheckoutClient() {
         <div className="lg:pr-2">
           <Step n={1} title="Contact">
             <div className="mb-1 flex items-center justify-between">
-              <span className="text-[13px] text-[#8a8a8e]">
+              <span className="text-[13px] text-muted">
                 Have an account?
               </span>
               <Link
@@ -291,13 +291,13 @@ export function CheckoutClient() {
           </Step>
 
           <Step n={4} title="Payment" last>
-            <div className="mb-1 flex items-center gap-2 text-[13px] text-[#8a8a8e]">
+            <div className="mb-1 flex items-center gap-2 text-[13px] text-muted">
               <LockIcon />
               All transactions are secure and encrypted.
             </div>
 
             {!codAllowed && (
-              <p className="text-[13px] text-[#8a8a8e]">
+              <p className="text-[13px] text-muted">
                 Cash on Delivery is available for Sri Lankan addresses only.
               </p>
             )}
@@ -370,7 +370,7 @@ export function CheckoutClient() {
           <button
             type="button"
             onClick={() => setPlaced(true)}
-            className="mt-2 flex w-full items-center justify-center gap-2.5 rounded-none bg-[#0c0c0d] px-5 py-[19px] text-[15px] font-semibold text-white transition-colors hover:bg-[#eec449] hover:text-[#0c0c0d]"
+            className="mt-2 flex w-full items-center justify-center gap-2.5 rounded-none bg-fg px-5 py-[19px] text-[15px] font-semibold text-canvas transition-colors hover:bg-[#eec449] hover:text-ink"
           >
             <LockIcon />
             {effectivePayment === "cod"
@@ -380,7 +380,7 @@ export function CheckoutClient() {
 
           <div className="mt-5 flex flex-col items-center gap-3">
             <AcceptedPayments />
-            <p className="text-center text-[12px] text-[#8a8a8e]">
+            <p className="text-center text-[12px] text-muted">
               Demo checkout — production hands off to the gateway’s secure hosted
               page. Your card details are never stored on our servers.
             </p>
@@ -404,12 +404,12 @@ export function CheckoutClient() {
 /* ================================================================== */
 function Shell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-white">
-      <header className="border-b border-[#e7e6e9]">
+    <div className="min-h-screen bg-canvas">
+      <header className="border-b border-line">
         <div className="mx-auto grid max-w-[1100px] grid-cols-3 items-center px-5 py-4 sm:px-8">
           <Link
             href="/"
-            className="flex items-center gap-1.5 justify-self-start text-[13px] font-medium text-[#8a8a8e] no-underline transition-colors hover:text-[#0c0c0d]"
+            className="flex items-center gap-1.5 justify-self-start text-[13px] font-medium text-muted no-underline transition-colors hover:text-fg"
           >
             <span aria-hidden>←</span>
             <span className="hidden sm:inline">Back to store</span>
@@ -418,7 +418,7 @@ function Shell({ children }: { children: React.ReactNode }) {
           <div className="justify-self-center">
             <Logo variant="onLight" showText markHeight={26} size={12} />
           </div>
-          <span className="hidden items-center gap-1.5 justify-self-end text-[12px] font-semibold uppercase tracking-[0.14em] text-[#8a8a8e] sm:flex">
+          <span className="hidden items-center gap-1.5 justify-self-end text-[12px] font-semibold uppercase tracking-[0.14em] text-muted sm:flex">
             <LockIcon />
             Secure Checkout
           </span>
@@ -460,11 +460,11 @@ function OrderSummary({
   onRemoveCode,
 }: SummaryProps) {
   return (
-    <div className="rounded-2xl border border-[#e7e6e9] bg-[#fafafa] p-6">
+    <div className="rounded-2xl border border-line bg-surface p-6">
       <div className="flex flex-col gap-4">
         {lines.map((l) => (
           <div key={l.id} className="flex gap-3.5">
-            <div className="relative aspect-[3/4] w-[58px] shrink-0 overflow-hidden rounded-lg bg-[#eeedef]">
+            <div className="relative aspect-[3/4] w-[58px] shrink-0 overflow-hidden rounded-lg bg-surface-2">
               {l.image && (
                 <Image
                   src={l.image}
@@ -474,7 +474,7 @@ function OrderSummary({
                   className="object-cover"
                 />
               )}
-              <span className="absolute -right-2 -top-2 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#0c0c0d] px-1 text-[11px] font-semibold text-white">
+              <span className="absolute -right-2 -top-2 flex h-5 min-w-5 items-center justify-center rounded-full bg-fg px-1 text-[11px] font-semibold text-canvas">
                 {l.qty}
               </span>
             </div>
@@ -482,12 +482,12 @@ function OrderSummary({
               <span className="text-[13px] font-semibold leading-snug">
                 {l.name}
               </span>
-              <span className="text-[12px] text-[#8a8a8e]">
+              <span className="text-[12px] text-muted">
                 {l.colorName}
                 {l.size !== "OS" ? ` · ${l.size}` : ""}
               </span>
               {l.backorder && (
-                <span className="mt-1 w-fit bg-[#eec449]/15 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-[#9a7322]">
+                <span className="mt-1 w-fit bg-[#eec449]/15 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-gold-deep">
                   Backorder
                 </span>
               )}
@@ -500,17 +500,17 @@ function OrderSummary({
       </div>
 
       {/* Discount code */}
-      <div className="mt-5 border-t border-[#e7e6e9] pt-5">
+      <div className="mt-5 border-t border-line pt-5">
         {applied ? (
           <div className="flex items-center justify-between rounded-lg border border-dashed border-[#eec449] bg-[#eec449]/10 px-3 py-2.5">
-            <span className="flex items-center gap-2 text-[13px] font-semibold text-[#0c0c0d]">
+            <span className="flex items-center gap-2 text-[13px] font-semibold text-fg">
               <TagIcon />
               {applied}
             </span>
             <button
               type="button"
               onClick={onRemoveCode}
-              className="text-[12px] font-medium text-[#8a8a8e] underline hover:text-[#0c0c0d]"
+              className="text-[12px] font-medium text-muted underline hover:text-fg"
             >
               Remove
             </button>
@@ -524,25 +524,25 @@ function OrderSummary({
                 onKeyDown={(e) => e.key === "Enter" && onApplyCode()}
                 placeholder="Discount code"
                 aria-label="Discount code"
-                className="w-full rounded-xl border border-[#d7d6d9] bg-white px-4 py-3 text-[14px] outline-none transition-colors placeholder:text-[#a3a3a8] focus:border-[#0c0c0d]"
+                className="w-full rounded-xl border border-line-strong bg-canvas px-4 py-3 text-[14px] outline-none transition-colors placeholder:text-faint focus:border-fg"
               />
               <button
                 type="button"
                 onClick={onApplyCode}
-                className="shrink-0 rounded-none border border-[#0c0c0d] px-5 text-[13px] font-semibold transition-colors hover:bg-[#0c0c0d] hover:text-white"
+                className="shrink-0 rounded-none border border-fg px-5 text-[13px] font-semibold transition-colors hover:bg-fg hover:text-canvas"
               >
                 Apply
               </button>
             </div>
             {codeError && (
-              <p className="mt-1.5 text-[12px] text-[#d23b3b]">{codeError}</p>
+              <p className="mt-1.5 text-[12px] text-danger">{codeError}</p>
             )}
           </>
         )}
       </div>
 
       {/* Totals */}
-      <div className="mt-5 flex flex-col gap-2.5 border-t border-[#e7e6e9] pt-5 text-[14px]">
+      <div className="mt-5 flex flex-col gap-2.5 border-t border-line pt-5 text-[14px]">
         <Row label="Subtotal" value={formatLKR(subtotal)} />
         {discount > 0 && (
           <Row
@@ -555,10 +555,10 @@ function OrderSummary({
           label="Shipping"
           value={shipping === 0 ? "Free" : formatLKR(shipping)}
         />
-        <div className="mt-2 flex items-end justify-between border-t border-[#e7e6e9] pt-3">
+        <div className="mt-2 flex items-end justify-between border-t border-line pt-3">
           <span className="text-[17px] font-semibold">Total</span>
           <span className="flex items-baseline gap-1.5">
-            <span className="text-[12px] text-[#8a8a8e]">LKR</span>
+            <span className="text-[12px] text-muted">LKR</span>
             <span className="text-[20px] font-semibold tracking-tight">
               {formatLKR(total).replace("LKR ", "")}
             </span>
@@ -571,7 +571,7 @@ function OrderSummary({
 
 function TrustRow() {
   return (
-    <div className="mt-4 flex flex-col gap-2.5 px-1 text-[13px] text-[#6a6a6e]">
+    <div className="mt-4 flex flex-col gap-2.5 px-1 text-[13px] text-fg-3">
       <span className="flex items-center gap-2.5">
         <ShieldIcon />
         Secure SSL-encrypted payment
@@ -601,7 +601,7 @@ function Step({
   return (
     <section className={last ? "mb-7" : "mb-9"}>
       <div className="mb-4 flex items-center gap-3">
-        <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#0c0c0d] text-[13px] font-semibold text-white">
+        <span className="flex h-7 w-7 items-center justify-center rounded-full bg-fg text-[13px] font-semibold text-canvas">
           {n}
         </span>
         <h2 className="m-0 text-[17px] font-semibold tracking-[-0.01em]">
@@ -614,7 +614,7 @@ function Step({
 }
 
 const fieldBase =
-  "w-full rounded-xl border border-[#d7d6d9] bg-white px-4 py-3 text-[15px] text-[#0c0c0d] outline-none transition-colors placeholder:text-[#a3a3a8] focus:border-[#0c0c0d]";
+  "w-full rounded-xl border border-line-strong bg-canvas px-4 py-3 text-[15px] text-fg outline-none transition-colors placeholder:text-faint focus:border-fg";
 
 function Field({
   label,
@@ -631,9 +631,9 @@ function Field({
 }) {
   return (
     <label className="flex flex-col gap-1.5">
-      <span className="text-[13px] font-medium text-[#0c0c0d]">
+      <span className="text-[13px] font-medium text-fg">
         {label}
-        {optional && <span className="text-[#a3a3a8]"> (optional)</span>}
+        {optional && <span className="text-faint"> (optional)</span>}
       </span>
       <input
         type={type}
@@ -658,7 +658,7 @@ function SelectField({
 }) {
   return (
     <label className="flex flex-col gap-1.5">
-      <span className="text-[13px] font-medium text-[#0c0c0d]">{label}</span>
+      <span className="text-[13px] font-medium text-fg">{label}</span>
       <div className="relative">
         <select
           value={value}
@@ -669,7 +669,7 @@ function SelectField({
             <option key={o}>{o}</option>
           ))}
         </select>
-        <span className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-[#8a8a8e]">
+        <span className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-muted">
           <ChevronIcon open={false} />
         </span>
       </div>
@@ -685,11 +685,11 @@ function Checkbox({
   defaultChecked?: boolean;
 }) {
   return (
-    <label className="flex cursor-pointer select-none items-center gap-2.5 text-[13px] text-[#6a6a6e]">
+    <label className="flex cursor-pointer select-none items-center gap-2.5 text-[13px] text-fg-3">
       <input
         type="checkbox"
         defaultChecked={defaultChecked}
-        className="size-4 shrink-0 cursor-pointer accent-[#0c0c0d]"
+        className="size-4 shrink-0 cursor-pointer accent-fg"
       />
       {children}
     </label>
@@ -712,18 +712,18 @@ function ShipOption({
   return (
     <label
       className="flex cursor-pointer items-center gap-3 rounded-xl border p-4 transition-colors"
-      style={{ borderColor: checked ? "#0c0c0d" : "#d7d6d9" }}
+      style={{ borderColor: checked ? "var(--fg)" : "var(--line-strong)" }}
     >
       <input
         type="radio"
         name="shipping"
         checked={checked}
         onChange={onSelect}
-        className="size-4 accent-[#0c0c0d]"
+        className="size-4 accent-fg"
       />
       <span className="flex flex-1 flex-col">
         <span className="text-[14px] font-semibold">{title}</span>
-        <span className="text-[12px] text-[#8a8a8e]">{sub}</span>
+        <span className="text-[12px] text-muted">{sub}</span>
       </span>
       <span className="text-[14px] font-semibold">{price}</span>
     </label>
@@ -750,7 +750,7 @@ function PayOption({
   return (
     <div
       className="overflow-hidden rounded-xl border transition-colors"
-      style={{ borderColor: checked ? "#0c0c0d" : "#d7d6d9" }}
+      style={{ borderColor: checked ? "var(--fg)" : "var(--line-strong)" }}
     >
       <label
         htmlFor={`pay-${id}`}
@@ -762,11 +762,11 @@ function PayOption({
           name="payment"
           checked={checked}
           onChange={onSelect}
-          className="size-4 shrink-0 accent-[#0c0c0d]"
+          className="size-4 shrink-0 accent-fg"
         />
         <span className="flex flex-1 flex-col">
           <span className="text-[14px] font-semibold">{title}</span>
-          <span className="text-[12px] text-[#8a8a8e]">{sub}</span>
+          <span className="text-[12px] text-muted">{sub}</span>
         </span>
         {badge && <span className="shrink-0">{badge}</span>}
       </label>
@@ -777,7 +777,7 @@ function PayOption({
 
 function PanelNote({ children }: { children: React.ReactNode }) {
   return (
-    <div className="border-t border-[#e7e6e9] bg-[#fafafa] px-4 py-3 text-[13px] leading-relaxed text-[#6a6a6e]">
+    <div className="border-t border-line bg-surface px-4 py-3 text-[13px] leading-relaxed text-fg-3">
       {children}
     </div>
   );
@@ -794,7 +794,7 @@ function Row({
 }) {
   return (
     <div className="flex items-center justify-between">
-      <span className="text-[#6a6a6e]">{label}</span>
+      <span className="text-fg-3">{label}</span>
       <span className={`font-semibold ${accent ? "text-[#eec449]" : ""}`}>
         {value}
       </span>
@@ -869,8 +869,9 @@ function CheckIcon() {
       height="30"
       viewBox="0 0 24 24"
       fill="none"
-      stroke="#0c0c0d"
+      stroke="currentColor"
       strokeWidth={2.5}
+      className="text-fg"
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
@@ -882,7 +883,7 @@ function CheckIcon() {
 
 function CashIcon() {
   return (
-    <span className="flex h-6 items-center text-[#1a8a4a]">
+    <span className="flex h-6 items-center text-success">
       <svg
         width="22"
         height="22"
@@ -928,7 +929,8 @@ function ShieldIcon() {
       height="17"
       viewBox="0 0 24 24"
       fill="none"
-      stroke="#1a8a4a"
+      stroke="currentColor"
+      className="text-success"
       strokeWidth={2}
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -947,7 +949,8 @@ function ReturnIcon() {
       height="17"
       viewBox="0 0 24 24"
       fill="none"
-      stroke="#1a8a4a"
+      stroke="currentColor"
+      className="text-success"
       strokeWidth={2}
       strokeLinecap="round"
       strokeLinejoin="round"

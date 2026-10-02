@@ -15,14 +15,14 @@ import { Logo } from "@/components/logo";
 
 export function AuthShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex min-h-screen w-full bg-white text-[#0c0c0d]">
+    <div className="flex min-h-screen w-full bg-canvas text-fg">
       {/* LEFT — form column */}
       <div className="flex min-h-screen w-full flex-col px-6 py-7 sm:px-10 lg:w-1/2 lg:px-14 xl:px-20">
         <header className="flex items-center justify-between">
           <Logo variant="onLight" showText={false} markHeight={44} />
           <Link
             href="/"
-            className="text-[13px] font-medium text-[#8a8a8e] no-underline transition-colors hover:text-[#0c0c0d]"
+            className="text-[13px] font-medium text-muted no-underline transition-colors hover:text-fg"
           >
             ← Back to store
           </Link>
@@ -48,7 +48,7 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
 /* ------------------------------------------------------------------ */
 function Showcase() {
   return (
-    <div className="relative h-full w-full overflow-hidden rounded-[28px] bg-[#ededee]">
+    <div className="relative h-full w-full overflow-hidden rounded-[28px] bg-surface-2">
       <Image
         src="/auth-showcase.webp"
         alt="Golden Eagle model in a yellow summer dress holding a sunflower"
@@ -93,7 +93,7 @@ export function AuthHeading({
       <h1 className="display-tight m-0 text-[30px] font-semibold leading-tight sm:text-[34px]">
         {title}
       </h1>
-      <p className="mt-2 text-[15px] text-[#8a8a8e]">{subtitle}</p>
+      <p className="mt-2 text-[15px] text-muted">{subtitle}</p>
     </div>
   );
 }
@@ -111,7 +111,7 @@ function SocialButton({
     <button
       type="button"
       onClick={onClick}
-      className="flex w-full cursor-pointer items-center justify-center gap-2.5 rounded-xl border border-[#e2e1e4] bg-white px-4 py-3 text-[14px] font-semibold text-[#0c0c0d] transition-colors hover:border-[#0c0c0d] hover:bg-[#fafafa]"
+      className="flex w-full cursor-pointer items-center justify-center gap-2.5 rounded-xl border border-line bg-canvas px-4 py-3 text-[14px] font-semibold text-fg transition-colors hover:border-fg hover:bg-surface"
     >
       {icon}
       {label}
@@ -142,17 +142,17 @@ export function FacebookButton({
 export function OrDivider({ label = "or" }: { label?: string }) {
   return (
     <div className="flex items-center gap-4 py-1">
-      <span className="h-px flex-1 bg-[#e7e6e9]" />
-      <span className="whitespace-nowrap text-[12px] font-medium text-[#a3a3a8]">
+      <span className="h-px flex-1 bg-line" />
+      <span className="whitespace-nowrap text-[12px] font-medium text-faint">
         {label}
       </span>
-      <span className="h-px flex-1 bg-[#e7e6e9]" />
+      <span className="h-px flex-1 bg-line" />
     </div>
   );
 }
 
 const inputBase =
-  "w-full rounded-xl border bg-[#f7f7f8] px-4 py-3 text-[15px] text-[#0c0c0d] outline-none transition-colors placeholder:text-[#a3a3a8] focus:bg-white";
+  "w-full rounded-xl border bg-surface px-4 py-3 text-[15px] text-fg outline-none transition-colors placeholder:text-faint focus:bg-canvas";
 
 export function TextField({
   id,
@@ -183,14 +183,14 @@ export function TextField({
     <div className="flex flex-col gap-1.5">
       <label
         htmlFor={id}
-        className={hideLabel ? "sr-only" : "text-[13px] font-semibold text-[#0c0c0d]"}
+        className={hideLabel ? "sr-only" : "text-[13px] font-semibold text-fg"}
       >
         {label}
         {required && !hideLabel && <span className="text-[#eec449]"> *</span>}
       </label>
       <div className="relative">
         {icon && (
-          <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#8a8a8e]">
+          <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted">
             {icon}
           </span>
         )}
@@ -204,12 +204,12 @@ export function TextField({
           aria-describedby={error ? `${id}-error` : undefined}
           onChange={(e) => onChange(e.target.value)}
           className={`${inputBase} ${icon ? "pl-11" : ""} ${
-            error ? "border-[#d23b3b]" : "border-transparent focus:border-[#0c0c0d]"
+            error ? "border-danger" : "border-transparent focus:border-fg"
           }`}
         />
       </div>
       {error && (
-        <span id={`${id}-error`} className="text-[12px] text-[#d23b3b]">
+        <span id={`${id}-error`} className="text-[12px] text-danger">
           {error}
         </span>
       )}
@@ -245,14 +245,14 @@ export function PasswordField({
     <div className="flex flex-col gap-1.5">
       <label
         htmlFor={id}
-        className={hideLabel ? "sr-only" : "text-[13px] font-semibold text-[#0c0c0d]"}
+        className={hideLabel ? "sr-only" : "text-[13px] font-semibold text-fg"}
       >
         {label}
         {required && !hideLabel && <span className="text-[#eec449]"> *</span>}
       </label>
       <div className="relative">
         {icon && (
-          <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#8a8a8e]">
+          <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted">
             {icon}
           </span>
         )}
@@ -267,21 +267,21 @@ export function PasswordField({
           onChange={(e) => onChange(e.target.value)}
           className={`${inputBase} pr-12 ${icon ? "pl-11" : ""} ${
             error
-              ? "border-[#d23b3b]"
-              : "border-transparent focus:border-[#0c0c0d]"
+              ? "border-danger"
+              : "border-transparent focus:border-fg"
           }`}
         />
         <button
           type="button"
           onClick={() => setShow((s) => !s)}
           aria-label={show ? "Hide password" : "Show password"}
-          className="absolute right-1.5 top-1/2 flex h-9 w-9 -translate-y-1/2 cursor-pointer items-center justify-center rounded-lg text-[#8a8a8e] transition-colors hover:text-[#0c0c0d]"
+          className="absolute right-1.5 top-1/2 flex h-9 w-9 -translate-y-1/2 cursor-pointer items-center justify-center rounded-lg text-muted transition-colors hover:text-fg"
         >
           {show ? <EyeOffIcon /> : <EyeIcon />}
         </button>
       </div>
       {error && (
-        <span id={`${id}-error`} className="text-[12px] text-[#d23b3b]">
+        <span id={`${id}-error`} className="text-[12px] text-danger">
           {error}
         </span>
       )}
@@ -306,18 +306,18 @@ export function AuthCheckbox({
     <div className="flex flex-col gap-1">
       <label
         htmlFor={id}
-        className="flex cursor-pointer select-none items-start gap-2.5 text-[13px] leading-relaxed text-[#6a6a6e]"
+        className="flex cursor-pointer select-none items-start gap-2.5 text-[13px] leading-relaxed text-fg-3"
       >
         <input
           id={id}
           type="checkbox"
           checked={checked}
           onChange={(e) => onChange(e.target.checked)}
-          className="mt-0.5 size-4 shrink-0 cursor-pointer accent-[#0c0c0d]"
+          className="mt-0.5 size-4 shrink-0 cursor-pointer accent-fg"
         />
         <span>{children}</span>
       </label>
-      {error && <span className="text-[12px] text-[#d23b3b]">{error}</span>}
+      {error && <span className="text-[12px] text-danger">{error}</span>}
     </div>
   );
 }
@@ -326,7 +326,7 @@ export function AuthSubmit({ children }: { children: React.ReactNode }) {
   return (
     <button
       type="submit"
-      className="mt-1 w-full cursor-pointer rounded-xl bg-[#0c0c0d] px-5 py-4 text-[14px] font-semibold text-white transition-colors hover:bg-[#eec449] hover:text-[#0c0c0d]"
+      className="mt-1 w-full cursor-pointer rounded-xl bg-fg px-5 py-4 text-[14px] font-semibold text-canvas transition-colors hover:bg-[#eec449] hover:text-ink"
     >
       {children}
     </button>
@@ -343,7 +343,7 @@ export function AuthAltLink({
   cta: string;
 }) {
   return (
-    <p className="mt-1 text-center text-[14px] text-[#6a6a6e]">
+    <p className="mt-1 text-center text-[14px] text-fg-3">
       {prompt}{" "}
       <Link
         href={href}
@@ -364,16 +364,16 @@ export function AuthSuccess({
 }) {
   return (
     <div className="flex flex-col items-center text-center">
-      <div className="mb-5 flex size-14 items-center justify-center rounded-full bg-[#0c0c0d] text-white">
+      <div className="mb-5 flex size-14 items-center justify-center rounded-full bg-fg text-canvas">
         <CheckIcon size={26} />
       </div>
       <h1 className="display-tight m-0 text-[26px] font-semibold">{title}</h1>
-      <p className="mt-2.5 max-w-[320px] text-[14px] leading-relaxed text-[#8a8a8e]">
+      <p className="mt-2.5 max-w-[320px] text-[14px] leading-relaxed text-muted">
         {body}
       </p>
       <Link
         href="/"
-        className="mt-7 rounded-none bg-[#0c0c0d] px-8 py-3.5 text-[13px] font-semibold text-white no-underline transition-colors hover:bg-[#eec449] hover:text-[#0c0c0d]"
+        className="mt-7 rounded-none bg-fg px-8 py-3.5 text-[13px] font-semibold text-canvas no-underline transition-colors hover:bg-[#eec449] hover:text-ink"
       >
         Continue Shopping
       </Link>

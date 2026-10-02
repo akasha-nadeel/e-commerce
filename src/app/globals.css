@@ -1,16 +1,51 @@
 @import "tailwindcss";
 
+/* Used ONLY by the theme toggle's sun/moon swap. Everything else expresses
+   theme differences through the CSS variables below — variables re-scope
+   inside a nested `[data-theme="light"]` island (the Studio), whereas a
+   `dark:` selector would still match there and half-darken it. */
+@custom-variant dark (&:where([data-theme="dark"] *));
+
 /* ------------------------------------------------------------------ */
 /* Golden Eagle design tokens — Carnage-style premium athleisure        */
+/*                                                                      */
+/* Colours are theme-aware: each utility (`bg-canvas`, `text-fg`, …)    */
+/* reads a variable that the light/dark blocks below define. Use these  */
+/* for anything that sits on the page canvas. Literal colours are only  */
+/* for content that looks the same in both themes: text on photos,      */
+/* permanently dark sections (footer, hero, promo), gold fills and      */
+/* third-party brand marks.                                             */
 /* ------------------------------------------------------------------ */
 @theme inline {
-  --color-ink: #0c0c0d; /* near-black brand base   */
-  --color-gold: #eec449; /* signature gold accent  */
+  /* Fixed brand colours — identical in both themes. */
+  --color-ink: #0c0c0d; /* near-black brand base; text on gold */
+  --color-gold: #eec449; /* signature gold accent */
   --color-bone: #f3f1ea;
-  --color-muted: #8a8a8e; /* secondary text         */
-  --color-line: #e7e6e9; /* hairline borders       */
-  --color-line-strong: #d7d6d9;
-  --color-surface: #f5f5f6; /* light info panels      */
+
+  /* Theme-aware roles. */
+  --color-canvas: var(--canvas); /* page background */
+  --color-elevated: var(--elevated); /* drawers, sheets, popovers, modals */
+  --color-surface: var(--surface); /* info panels, input fills */
+  --color-surface-2: var(--surface-2); /* chips, skeletons, pressed fills */
+  --color-fg: var(--fg); /* primary text; inverted CTAs use bg-fg text-canvas */
+  /* Primary emphasis fill (View All, nav highlight): ink in light, gold in dark. */
+  --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-fg-1: var(--fg-1); /* near-primary text (labels, selected values) */
+  --color-fg-2: var(--fg-2); /* strong secondary text */
+  --color-fg-3: var(--fg-3); /* body-secondary text */
+  --color-muted: var(--muted); /* captions, meta */
+  --color-muted-soft: var(--muted-soft); /* struck-through prices, unavailable */
+  --color-faint: var(--faint); /* placeholders, disabled */
+  --color-faint-soft: var(--faint-soft);
+  --color-line: var(--line); /* hairline borders */
+  --color-line-soft: var(--line-soft); /* faint row rules inside lists/tables */
+  --color-line-strong: var(--line-strong); /* input borders, dividers */
+  --color-gold-deep: var(--gold-deep); /* gold text that must read on canvas */
+  --color-success: var(--success);
+  --color-danger: var(--danger);
+  --color-danger-deep: var(--danger-deep);
 
   /* Apple typography — San Francisco (SF Pro) on Apple devices, Inter as the
      cross-platform fallback, then Helvetica/Arial. Matches apple.com's stack. */
@@ -28,6 +63,96 @@
   --nav-h: 52px;
 }
 
+/* Light is the default for every visitor; dark is opt-in via the header
+   toggle (`lib/theme.ts`), applied before first paint by the inline script in
+   `layout.tsx`. `[data-theme="light"]` is also matched on a nested element,
+   which is how the Studio stays light while the storefront is dark. */
+:root,
+[data-theme="light"] {
+  --scheme: light; /* applied below, not here; see the scrollbar note */
+  --canvas: #ffffff;
+  --elevated: #ffffff;
+  --surface: #f7f7f8;
+  --surface-2: #eeedef;
+  --fg: #0c0c0d;
+  --fg-1: #3a3a3e;
+  --fg-2: #4a4a4e;
+  --fg-3: #6a6a6e;
+  --muted: #8a8a8e;
+  --muted-soft: #9a9a9e;
+  --faint: #a3a3a8;
+  --faint-soft: #b4b4b8;
+  --line: #e7e6e9;
+  --line-soft: #efeef0;
+  --line-strong: #d7d6d9;
+  --gold-deep: #9a7322;
+  --accent: #0c0c0d;
+  --on-accent: #ffffff;
+  --accent-hover: #eec449;
+  --success: #1a8a4a;
+  --danger: #d23b3b;
+  --danger-deep: #a82c2c;
+  /* Payment-brand marks (logo-marquee.tsx) use their real colours here:
+     `initial` makes `var(--mark-reverse, <brand hex>)` fall back to the hex. */
+  --mark-reverse: initial;
+  --mark-edge: initial;
+  /* The canvas-logo is the black eagle; dark mode inverts it to white. */
+  --logo-on-canvas: none;
+  /* Labels on light photos (Shop By Category): dark ink, no shade. Dark mode
+     turns them white over the tile's top shade. Values are the originals. */
+  --photo-label: #0c0c0d;
+  --photo-label-soft: rgba(0, 0, 0, 0.55);
+  --photo-shade: 0;
+}
+
+/* Must come after the light block: <html> matches both `:root` and this. */
+[data-theme="dark"] {
+  --scheme: dark;
+  --canvas: #000000;
+  --elevated: #121214;
+  --surface: #111113;
+  --surface-2: #1c1c1e;
+  --fg: #f5f5f7;
+  --fg-1: #d1d1d6;
+  --fg-2: #c7c7cc;
+  --fg-3: #a1a1a6;
+  --muted: #8e8e93;
+  --muted-soft: #7c7c80;
+  --faint: #636366;
+  --faint-soft: #545458;
+  --line: #232326;
+  --line-soft: #1a1a1c;
+  --line-strong: #3a3a3c;
+  --gold-deep: #eec449;
+  --accent: #eec449;
+  --on-accent: #0c0c0d;
+  --accent-hover: #b3863a;
+  --success: #30d158;
+  --danger: #ff5c5c;
+  --danger-deep: #ff8a8a;
+  /* Brands' reversed treatment: navy ink turns white; black pills get an edge. */
+  --mark-reverse: #ffffff;
+  --mark-edge: rgba(255, 255, 255, 0.2);
+  --logo-on-canvas: invert(1);
+  --photo-label: #ffffff;
+  --photo-label-soft: rgba(255, 255, 255, 0.85);
+  --photo-shade: 1;
+}
+
+/* Scrollbars. The page's own (viewport) scrollbar is dark in BOTH themes, at
+   the client's request. Browsers draw it from the ROOT element's
+   color-scheme, so <html> is pinned dark. Everything from <body> down (inner
+   scroll areas, native inputs and selects) follows the theme via --scheme, and
+   a nested data-theme island (the Studio) re-scopes it. That split is why the
+   theme blocks above set --scheme rather than color-scheme. */
+:root {
+  color-scheme: dark;
+}
+body,
+:root [data-theme] {
+  color-scheme: var(--scheme);
+}
+
 * {
   box-sizing: border-box;
 }
@@ -40,8 +165,8 @@ body {
 
 body {
   font-family: var(--font-sans);
-  background: #ffffff;
-  color: #0c0c0d;
+  background: var(--canvas);
+  color: var(--fg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -180,7 +305,7 @@ h3 {
 .rich-text h4 {
   margin: 1.2em 0 0.5em;
   font-weight: 600;
-  color: #0c0c0d;
+  color: var(--fg);
   font-size: 15px;
 }
 .rich-text ul,
@@ -200,10 +325,10 @@ h3 {
 .rich-text strong,
 .rich-text b {
   font-weight: 600;
-  color: #0c0c0d;
+  color: var(--fg);
 }
 .rich-text a {
-  color: #0c0c0d;
+  color: var(--fg);
   text-decoration: underline;
   text-underline-offset: 2px;
 }

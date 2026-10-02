@@ -22,7 +22,7 @@ const LINKS = [
 
 export default function NotFound() {
   return (
-    <div className="flex w-full items-center justify-center bg-white px-5 py-28 sm:px-8">
+    <div className="flex w-full items-center justify-center bg-canvas px-5 py-28 sm:px-8">
       <div className="w-full max-w-[560px] text-center">
         <div className="text-[12px] font-semibold uppercase tracking-[0.3em] text-[#c79a4b]">
           Error 404
@@ -30,7 +30,7 @@ export default function NotFound() {
         <h1 className="display-tight mt-4 text-[clamp(38px,6vw,72px)] font-semibold leading-[0.95]">
           Page Not Found
         </h1>
-        <p className="mx-auto mt-4 max-w-[420px] text-[15px] leading-[1.7] text-[#8a8a8e]">
+        <p className="mx-auto mt-4 max-w-[420px] text-[15px] leading-[1.7] text-muted">
           The page you&rsquo;re looking for doesn&rsquo;t exist or has moved.
           Pick up where you left off below.
         </p>
@@ -46,7 +46,7 @@ export default function NotFound() {
             <Link
               key={l.href}
               href={l.href}
-              className="text-[14px] font-medium text-[#4a4a4e] underline-offset-4 transition-colors hover:text-[#0c0c0d] hover:underline"
+              className="text-[14px] font-medium text-fg-2 underline-offset-4 transition-colors hover:text-fg hover:underline"
             >
               {l.label}
             </Link>

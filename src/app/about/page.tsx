@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <div className="w-full bg-white">
+    <div className="w-full bg-canvas">
       {/* Hero */}
       <section
         className="tile-texture-dark relative flex min-h-[56vh] items-end overflow-hidden"
@@ -35,7 +35,7 @@ export default function AboutPage() {
           Golden Eagle is a premium label for men and women — built from the ground
           up for people who show up, train hard and live in what they wear.
         </p>
-        <div className="mt-8 flex flex-col gap-5 text-[16px] leading-[1.7] text-[#4a4a4e]">
+        <div className="mt-8 flex flex-col gap-5 text-[16px] leading-[1.7] text-fg-2">
           <p className="m-0">
             We started with one obsession: the perfect heavyweight tee. No
             shortcuts — dense knits that hold their shape, considered fits that
@@ -57,7 +57,7 @@ export default function AboutPage() {
 
       {/* Values */}
       <section className="mx-auto max-w-[1400px] px-5 pb-8 sm:px-8">
-        <div className="grid grid-cols-1 gap-7 border-y border-[#e7e6e9] py-12 sm:grid-cols-3">
+        <div className="grid grid-cols-1 gap-7 border-y border-line py-12 sm:grid-cols-3">
           <Value title="Built to Last" copy="Heavyweight fabrics and honest construction, engineered to outlive the trend cycle." />
           <Value title="Designed In-House" copy="Every fit, print and trim is developed by our own team — never off the shelf." />
           <Value title="Made for Everyday" copy="Premium pieces priced to actually wear, not save for a special occasion." />
@@ -69,12 +69,12 @@ export default function AboutPage() {
         <h2 className="display-tight m-0 text-[clamp(28px,4vw,52px)] font-semibold leading-[0.95]">
           Built From The Ground Up
         </h2>
-        <p className="mx-auto mt-4 max-w-[440px] text-[15px] text-[#8a8a8e]">
+        <p className="mx-auto mt-4 max-w-[440px] text-[15px] text-muted">
           Explore the collection and find your everyday uniform.
         </p>
         <Link
           href="/collections/all"
-          className="mt-7 inline-block rounded-none bg-[#0c0c0d] px-10 py-[18px] text-[13px] font-semibold text-white no-underline transition-colors hover:bg-[#eec449] hover:text-[#0c0c0d]"
+          className="mt-7 inline-block rounded-none bg-fg px-10 py-[18px] text-[13px] font-semibold text-canvas no-underline transition-colors hover:bg-[#eec449] hover:text-ink"
         >
           Shop All
         </Link>
@@ -87,7 +87,7 @@ function Value({ title, copy }: { title: string; copy: string }) {
   return (
     <div className="text-center">
       <div className="mb-2 text-[20px] font-semibold">{title}</div>
-      <div className="mx-auto max-w-[300px] text-[14px] leading-[1.6] text-[#8a8a8e]">
+      <div className="mx-auto max-w-[300px] text-[14px] leading-[1.6] text-muted">
         {copy}
       </div>
     </div>

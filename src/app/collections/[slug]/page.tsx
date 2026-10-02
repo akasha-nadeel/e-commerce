@@ -106,7 +106,7 @@ export default async function CollectionPage({
   ]);
 
   return (
-    <div className="w-full bg-white">
+    <div className="w-full bg-canvas">
       <JsonLd data={jsonLdGraph(collectionNode, breadcrumbs)} />
       <PageTransition>
         <div className="mx-auto max-w-[1400px] px-5 pt-5 sm:px-8">
@@ -117,7 +117,7 @@ export default async function CollectionPage({
           <h1 className="display-tight m-0 text-[clamp(34px,5vw,64px)] font-semibold leading-[0.95]">
             {c.title}
           </h1>
-          <p className="mt-3 max-w-[520px] text-[15px] text-[#8a8a8e]">
+          <p className="mt-3 max-w-[520px] text-[15px] text-muted">
             {c.tagline}
           </p>
         </section>
@@ -140,9 +140,9 @@ function GridSkeleton({ count }: { count: number }) {
     <div className="grid grid-cols-2 gap-x-1 gap-y-8 sm:grid-cols-3 lg:grid-cols-4">
       {Array.from({ length: count }).map((_, i) => (
         <div key={i}>
-          <div className="aspect-[3/4] w-full animate-pulse bg-[#eeedef]" />
-          <div className="mt-3 h-3 w-2/3 animate-pulse bg-[#eeedef]" />
-          <div className="mt-2 h-3 w-1/3 animate-pulse bg-[#eeedef]" />
+          <div className="aspect-[3/4] w-full animate-pulse bg-surface-2" />
+          <div className="mt-3 h-3 w-2/3 animate-pulse bg-surface-2" />
+          <div className="mt-2 h-3 w-1/3 animate-pulse bg-surface-2" />
         </div>
       ))}
     </div>

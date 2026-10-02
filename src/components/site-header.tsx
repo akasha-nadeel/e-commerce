@@ -11,6 +11,7 @@ import { Logo } from "./logo";
 import { useCart } from "./cart-provider";
 import { SearchPanel } from "./search/search-panel";
 import { SlidingNumber } from "./ui/sliding-number";
+import { ThemeToggle } from "./theme-toggle";
 import { useSheetDrag } from "@/lib/use-sheet-drag";
 
 const NAV = [
@@ -159,24 +160,25 @@ export function SiteHeader() {
   const lightText = mounted ? atTopHero : true;
   const solidBg = mounted ? !atTopHero : false;
 
-  // Nav links highlight with a solid ink box on hover; the active route keeps it.
+  // Nav links highlight with a solid box on hover, and the active route keeps
+  // it: ink in light mode, gold in dark (`accent`, see globals.css).
   const navLinkBase =
-    "whitespace-nowrap rounded-none px-3 py-2 text-[13px] font-medium tracking-[0.03em] no-underline transition-colors hover:bg-[#0c0c0d] hover:text-white";
+    "whitespace-nowrap rounded-none px-3 py-2 text-[13px] font-medium tracking-[0.03em] no-underline transition-colors hover:bg-accent hover:text-on-accent";
   const iconCls = `cursor-pointer transition-colors hover:text-[#eec449] ${
-    lightText ? "text-white" : "text-[#0c0c0d]"
+    lightText ? "text-white" : "text-fg"
   }`;
 
   return (
     <header
       onMouseLeave={() => setMegaItem(null)}
-      className="sticky top-0 z-50 text-[#0c0c0d]"
+      className="sticky top-0 z-50 text-fg"
     >
       {/* Top bar — full-width so its background spans the viewport. On mobile it
           rolls up out of view on scroll-down (revealing the bottom tab bar) and
           drops back in on scroll-up; desktop (lg+) always stays put. */}
       <div
         className={`transition-[transform,background-color] duration-300 ${
-          solidBg ? "bg-white" : "bg-transparent"
+          solidBg ? "bg-canvas" : "bg-transparent"
         } ${hideTop ? "-translate-y-full lg:translate-y-0" : "translate-y-0"}`}
       >
         <div className="relative mx-auto flex h-[var(--nav-h)] max-w-[1400px] items-center justify-between gap-4 px-5 sm:px-8">
@@ -238,10 +240,10 @@ export function SiteHeader() {
                 onMouseEnter={() => setMegaItem(item.mega ? item.label : null)}
                 className={`${navLinkBase} ${
                   active && !lightText
-                    ? "bg-[#0c0c0d] text-white"
+                    ? "bg-accent text-on-accent"
                     : lightText
                       ? "text-white"
-                      : "text-[#0c0c0d]"
+                      : "text-fg"
                 }`}
               >
                 {item.label}
@@ -253,6 +255,7 @@ export function SiteHeader() {
         {/* Right: utility icons (search only shows here at lg+; on mobile it
             sits in the left cluster next to the hamburger). */}
         <div className="flex items-center gap-5 sm:gap-[22px]">
+          <ThemeToggle className={iconCls} />
           <button
             type="button"
             onClick={() => setSearchOpen(true)}
@@ -298,11 +301,11 @@ export function SiteHeader() {
                   aria-hidden
                   onClick={() => setAccountOpen(false)}
                 />
-                <div className="absolute right-0 top-full z-[60] mt-3 w-52 border border-[#e7e6e9] bg-white py-2 text-[#0c0c0d] shadow-[0_18px_40px_rgba(0,0,0,0.16)]">
+                <div className="absolute right-0 top-full z-[60] mt-3 w-52 border border-line bg-elevated py-2 text-fg shadow-[0_18px_40px_rgba(0,0,0,0.16)]">
                   {auth.firstName && (
-                    <div className="border-b border-[#f0eff1] px-4 py-2.5 text-[13px] text-[#8a8a8e]">
+                    <div className="border-b border-line-soft px-4 py-2.5 text-[13px] text-muted">
                       Hi,{" "}
-                      <span className="font-semibold text-[#0c0c0d]">
+                      <span className="font-semibold text-fg">
                         {auth.firstName}
                       </span>
                     </div>
@@ -310,13 +313,13 @@ export function SiteHeader() {
                   <Link
                     href="/account"
                     onClick={() => setAccountOpen(false)}
-                    className="block px-4 py-2.5 text-[14px] no-underline transition-colors hover:bg-[#f7f7f8]"
+                    className="block px-4 py-2.5 text-[14px] no-underline transition-colors hover:bg-surface"
                   >
                     My Account
                   </Link>
                   <a
                     href="/api/auth/logout"
-                    className="block px-4 py-2.5 text-[14px] no-underline transition-colors hover:bg-[#f7f7f8]"
+                    className="block px-4 py-2.5 text-[14px] no-underline transition-colors hover:bg-surface"
                   >
                     Log out
                   </a>
@@ -344,7 +347,7 @@ export function SiteHeader() {
               <circle cx="18" cy="20.5" r="1.6" />
               <path d="M2.5 3.5h2.3l2.5 12.2a1.8 1.8 0 0 0 1.77 1.45h8a1.8 1.8 0 0 0 1.76-1.42L20.6 7H5.4" />
             </svg>
-            <span className="absolute -right-[9px] -top-2 flex h-[17px] min-w-[17px] items-center justify-center rounded-[9px] bg-[#eec449] px-1 text-[10px] font-semibold text-[#0c0c0d]">
+            <span className="absolute -right-[9px] -top-2 flex h-[17px] min-w-[17px] items-center justify-center rounded-[9px] bg-[#eec449] px-1 text-[10px] font-semibold text-ink">
               <SlidingNumber value={count} />
             </span>
           </button>
@@ -366,7 +369,7 @@ export function SiteHeader() {
           animate={{ height: "auto" }}
           exit={reduce ? {} : { height: 0 }}
           transition={{ duration: 0.4, ease: EASE }}
-          className="absolute left-0 top-full hidden w-full overflow-hidden border-t border-[#efeff0] bg-white text-[#0c0c0d] shadow-[0_28px_50px_rgba(0,0,0,0.22)] lg:block"
+          className="absolute left-0 top-full hidden w-full overflow-hidden border-t border-line-soft bg-elevated text-fg shadow-[0_28px_50px_rgba(0,0,0,0.22)] lg:block"
         >
           <div
             key={megaItem}
@@ -389,7 +392,7 @@ export function SiteHeader() {
                     <Link
                       href={c.href}
                       onClick={() => setMegaItem(null)}
-                      className="justify-self-start text-[19px] font-bold tracking-[-0.01em] text-[#0c0c0d] no-underline transition-colors hover:text-[#eec449]"
+                      className="justify-self-start text-[19px] font-bold tracking-[-0.01em] text-fg no-underline transition-colors hover:text-[#eec449]"
                     >
                       {c.label}
                     </Link>
@@ -399,7 +402,7 @@ export function SiteHeader() {
               <div className="mt-auto">
                 {/* 2. The line above the title — grows in from the left */}
                 <motion.div
-                  className="h-px w-full origin-left bg-[#0c0c0d]/15"
+                  className="h-px w-full origin-left bg-fg/15"
                   initial={reduce ? false : { scaleX: 0 }}
                   animate={{ scaleX: 1 }}
                   transition={{ duration: 0.32, delay: reduce ? 0 : 0.86, ease: EASE }}
@@ -414,7 +417,7 @@ export function SiteHeader() {
                   <Link
                     href={MEGA_DEPT[megaItem].allHref}
                     onClick={() => setMegaItem(null)}
-                    className="group/all flex items-center justify-between text-[21px] font-bold text-[#0c0c0d] no-underline transition-colors hover:text-[#eec449]"
+                    className="group/all flex items-center justify-between text-[21px] font-bold text-fg no-underline transition-colors hover:text-[#eec449]"
                   >
                     {MEGA_DEPT[megaItem].label} All Product
                     <svg
@@ -475,12 +478,12 @@ export function SiteHeader() {
         aria-hidden={!mobileOpen}
         style={menuDragStyle}
         {...menuHandlers}
-        className={`fixed inset-x-0 bottom-0 z-[70] flex h-[72vh] flex-col rounded-t-[22px] bg-white text-[#0c0c0d] shadow-[0_-10px_40px_rgba(0,0,0,0.22)] transition-transform duration-300 lg:hidden ${
-          mobileOpen ? "translate-y-0" : "translate-y-full"
+        className={`fixed inset-x-0 bottom-0 z-[70] flex h-[72vh] flex-col rounded-t-[22px] bg-elevated text-fg shadow-[0_-10px_40px_rgba(0,0,0,0.22)] transition-[transform,visibility] duration-300 lg:hidden ${
+          mobileOpen ? "translate-y-0" : "invisible translate-y-full"
         }`}
       >
         <div className="shrink-0 pb-1 pt-3">
-          <div className="mx-auto h-1 w-10 rounded-full bg-[#d7d6d9]" />
+          <div className="mx-auto h-1 w-10 rounded-full bg-line-strong" />
         </div>
         <div ref={menuScrollRef} className="flex-1 overflow-y-auto overscroll-contain px-6 pb-2 pt-3">
           <nav className="flex flex-col">
@@ -502,11 +505,11 @@ export function SiteHeader() {
                 <Link
                   href={item.href}
                   onClick={() => setMobileOpen(false)}
-                  className="flex items-center justify-between border-b border-[#f0eff1] py-[15px] text-[17px] font-semibold tracking-[0.02em] text-[#0c0c0d] no-underline"
+                  className="flex items-center justify-between border-b border-line-soft py-[15px] text-[17px] font-semibold tracking-[0.02em] text-fg no-underline"
                 >
                   {item.label}
                   {item.mega && (
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0c0c0d" strokeWidth={2}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                       <path d="M9 6l6 6-6 6" />
                     </svg>
                   )}
@@ -515,13 +518,13 @@ export function SiteHeader() {
             ))}
           </nav>
         </div>
-        <div className="flex items-center justify-between border-t border-[#e7e6e9] px-6 py-4">
+        <div className="flex items-center justify-between border-t border-line px-6 py-4">
           {auth.loggedIn ? (
             <div className="flex items-center gap-4">
               <Link
                 href="/account"
                 onClick={() => setMobileOpen(false)}
-                className="flex items-center gap-2 text-[14px] font-semibold text-[#0c0c0d] no-underline transition-colors hover:text-[#eec449]"
+                className="flex items-center gap-2 text-[14px] font-semibold text-fg no-underline transition-colors hover:text-[#eec449]"
               >
                 <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                   <circle cx="12" cy="8" r="4" />
@@ -531,7 +534,7 @@ export function SiteHeader() {
               </Link>
               <a
                 href="/api/auth/logout"
-                className="text-[13px] font-semibold text-[#8a8a8e] no-underline transition-colors hover:text-[#0c0c0d]"
+                className="text-[13px] font-semibold text-muted no-underline transition-colors hover:text-fg"
               >
                 Log out
               </a>
@@ -540,7 +543,7 @@ export function SiteHeader() {
             <Link
               href="/login"
               onClick={() => setMobileOpen(false)}
-              className="flex items-center gap-2 text-[14px] font-semibold text-[#0c0c0d] no-underline transition-colors hover:text-[#eec449]"
+              className="flex items-center gap-2 text-[14px] font-semibold text-fg no-underline transition-colors hover:text-[#eec449]"
             >
               <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                 <circle cx="12" cy="8" r="4" />
@@ -550,12 +553,12 @@ export function SiteHeader() {
             </Link>
           )}
           <div className="flex items-center gap-5">
-            <a href="#" aria-label="Facebook" className="text-[#0c0c0d] transition-colors hover:text-[#eec449]">
+            <a href="#" aria-label="Facebook" className="text-fg transition-colors hover:text-[#eec449]">
               <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M13 22v-8h2.7l.4-3H13V9c0-.86.24-1.45 1.5-1.45H16V4.86A20 20 0 0 0 13.7 4.7c-2.3 0-3.87 1.4-3.87 3.98V11H7.2v3h2.63v8H13Z" />
               </svg>
             </a>
-            <a href="#" aria-label="Instagram" className="text-[#0c0c0d] transition-colors hover:text-[#eec449]">
+            <a href="#" aria-label="Instagram" className="text-fg transition-colors hover:text-[#eec449]">
               <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                 <rect x="3" y="3" width="18" height="18" rx="5" />
                 <circle cx="12" cy="12" r="4" />
@@ -571,11 +574,11 @@ export function SiteHeader() {
           slides back down as the top bar returns on scroll-up. Mobile only. */}
       <nav
         aria-label="Quick navigation"
-        className={`fixed inset-x-0 bottom-0 z-40 text-[#0c0c0d] transition-transform duration-300 lg:hidden ${
-          hideTop ? "translate-y-0" : "translate-y-full"
+        className={`fixed inset-x-0 bottom-0 z-40 text-fg transition-[transform,visibility] duration-300 lg:hidden ${
+          hideTop ? "translate-y-0" : "invisible translate-y-full"
         }`}
       >
-        <div className="flex items-stretch justify-around gap-1 rounded-t-[18px] border-t border-[#ededed] bg-white px-2 pb-[max(10px,env(safe-area-inset-bottom))] pt-2.5 shadow-[0_-8px_28px_rgba(0,0,0,0.12)]">
+        <div className="flex items-stretch justify-around gap-1 rounded-t-[18px] border-t border-line-soft bg-elevated px-2 pb-[max(10px,env(safe-area-inset-bottom))] pt-2.5 shadow-[0_-8px_28px_rgba(0,0,0,0.12)]">
           <BottomTab
             label="Home"
             href="/"
@@ -654,13 +657,13 @@ function BottomTab({
           gold); inactive tabs are plain grey icons. */}
       <span
         className={`flex h-9 w-9 items-center justify-center rounded-full transition-colors ${
-          active ? "bg-[#eec449] text-[#0c0c0d]" : "text-[#48484c]"
+          active ? "bg-[#eec449] text-ink" : "text-fg-2"
         }`}
       >
         <span className="relative flex h-[22px] w-[22px] items-center justify-center">
           {icon}
           {badge != null && badge > 0 && (
-            <span className="absolute -right-2.5 -top-1.5 flex h-[15px] min-w-[15px] items-center justify-center rounded-full bg-[#eec449] px-[3px] text-[9px] font-semibold leading-none text-[#0c0c0d]">
+            <span className="absolute -right-2.5 -top-1.5 flex h-[15px] min-w-[15px] items-center justify-center rounded-full bg-[#eec449] px-[3px] text-[9px] font-semibold leading-none text-ink">
               {badge}
             </span>
           )}
@@ -668,7 +671,7 @@ function BottomTab({
       </span>
       <span
         className={`text-[10.5px] font-medium tracking-[0.01em] transition-colors ${
-          active ? "text-[#0c0c0d]" : "text-[#48484c]"
+          active ? "text-fg" : "text-fg-2"
         }`}
       >
         {label}

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-type Variant = "solid" | "outline";
+type Variant = "solid" | "outline" | "accent";
 type Size = "sm" | "md" | "lg";
 
 const SIZES: Record<Size, string> = {
@@ -11,10 +11,26 @@ const SIZES: Record<Size, string> = {
 };
 
 const VARIANTS: Record<Variant, string> = {
-  solid: "bg-[#0c0c0d] text-white hover:bg-[#eec449] hover:text-[#0c0c0d]",
+  solid: "bg-fg text-canvas hover:bg-[#eec449] hover:text-ink",
   outline:
-    "border border-[#0c0c0d] text-[#0c0c0d] hover:bg-[#0c0c0d] hover:text-white",
+    "border border-fg text-fg hover:bg-fg hover:text-canvas",
+  // Primary emphasis: identical to `solid` in light mode (ink → gold), but
+  // gold in dark mode rather than inverting to white. See `--accent`.
+  accent:
+    "bg-accent text-on-accent hover:bg-accent-hover hover:text-ink",
 };
+
+/** Bottom-centred "View All" under a product/tile row. One definition so every
+ *  section's View All looks the same in both themes. */
+export function ViewAll({ href }: { href: string }) {
+  return (
+    <div className="mt-9 flex justify-center">
+      <Button href={href} variant="accent" arrow>
+        View All
+      </Button>
+    </div>
+  );
+}
 
 /**
  * Canonical storefront button — sharp-cornered (no radius) solid ink with an

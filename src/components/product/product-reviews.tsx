@@ -42,7 +42,7 @@ function formatDate(iso: string): string {
 
 function StarIcon({ size, color }: { size: number; color: string }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill={color} style={{ display: "block" }}>
+    <svg width={size} height={size} viewBox="0 0 24 24" style={{ display: "block", fill: color }}>
       <path d="M12 2l3 6.5 7 .8-5.2 4.7L18.4 21 12 17.3 5.6 21 7.2 14 2 9.3l7-.8z" />
     </svg>
   );
@@ -55,7 +55,7 @@ function Stars({ value, size = 16 }: { value: number; size?: number }) {
         const fill = Math.max(0, Math.min(1, value - i));
         return (
           <span key={i} className="relative inline-block" style={{ width: size, height: size }}>
-            <StarIcon size={size} color="#d7d6d9" />
+            <StarIcon size={size} color="var(--line-strong)" />
             {fill > 0 && (
               <span className="absolute left-0 top-0 overflow-hidden" style={{ width: `${fill * 100}%`, height: size }}>
                 <StarIcon size={size} color="#eec449" />
@@ -165,25 +165,25 @@ export function ProductReviews({
   }
 
   return (
-    <section className="border-t border-[#e7e6e9] bg-white">
+    <section className="border-t border-line bg-canvas">
       <div className="mx-auto max-w-[1000px] px-5 py-14 sm:px-8">
         <h2 className="text-[clamp(22px,3vw,30px)] font-semibold tracking-[-0.01em]">
           Ratings &amp; Reviews
         </h2>
 
         {/* Summary */}
-        <div className="mt-8 grid grid-cols-1 gap-8 border-b border-[#e7e6e9] pb-10 sm:grid-cols-[auto_1fr] sm:gap-12">
+        <div className="mt-8 grid grid-cols-1 gap-8 border-b border-line pb-10 sm:grid-cols-[auto_1fr] sm:gap-12">
           <div className="flex flex-col items-start">
             <div className="flex items-end gap-1">
               <span className="text-[52px] font-bold leading-none tracking-[-0.02em]">
                 {hasReviews ? summary.average.toFixed(1) : "0.0"}
               </span>
-              <span className="mb-1 text-[18px] text-[#9a9a9e]">/5</span>
+              <span className="mb-1 text-[18px] text-muted-soft">/5</span>
             </div>
             <div className="mt-3">
               <Stars value={summary.average} size={22} />
             </div>
-            <div className="mt-2 text-[13px] text-[#8a8a8e]">
+            <div className="mt-2 text-[13px] text-muted">
               {summary.count} {summary.count === 1 ? "Rating" : "Ratings"}
             </div>
           </div>
@@ -193,17 +193,17 @@ export function ProductReviews({
               const star = 5 - idx;
               return (
                 <div key={star} className="flex items-center gap-3">
-                  <span className="flex w-7 items-center gap-0.5 text-[13px] text-[#6a6a6e]">
+                  <span className="flex w-7 items-center gap-0.5 text-[13px] text-fg-3">
                     {star}
                     <StarIcon size={12} color="#eec449" />
                   </span>
-                  <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-[#eeedef]">
+                  <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-surface-2">
                     <div
                       className="h-full rounded-full bg-[#eec449] transition-[width] duration-700"
                       style={{ width: `${pct}%` }}
                     />
                   </div>
-                  <span className="w-8 text-right text-[13px] text-[#8a8a8e]">
+                  <span className="w-8 text-right text-[13px] text-muted">
                     {counts[idx]}
                   </span>
                 </div>
@@ -216,11 +216,11 @@ export function ProductReviews({
         <div className="flex flex-wrap items-center justify-between gap-4 py-6">
           <div>
             <h3 className="text-[17px] font-semibold">Write your Experience</h3>
-            <p className="mt-1 max-w-[520px] text-[14px] leading-[1.6] text-[#8a8a8e]">
+            <p className="mt-1 max-w-[520px] text-[14px] leading-[1.6] text-muted">
               Share your feedback on the {productTitle} and help other shoppers.
             </p>
             {done && (
-              <p className="mt-2 text-[14px] font-medium text-[#0c0c0d]">
+              <p className="mt-2 text-[14px] font-medium text-fg">
                 Thanks! Your review was submitted and will appear once approved.
               </p>
             )}
@@ -230,7 +230,7 @@ export function ProductReviews({
 
         {/* Write-a-review form */}
         {open && (
-          <form ref={formRef} onSubmit={submit} className="mb-8 border border-[#e7e6e9] p-6 sm:p-8">
+          <form ref={formRef} onSubmit={submit} className="mb-8 border border-line p-6 sm:p-8">
             <h3 className="text-[18px] font-semibold">Write a Review</h3>
 
             <div className="mt-4 flex items-center gap-1">
@@ -243,7 +243,7 @@ export function ProductReviews({
                   onClick={() => setStars(i + 1)}
                   className="cursor-pointer p-0.5"
                 >
-                  <StarIcon size={26} color={i < stars ? "#eec449" : "#d7d6d9"} />
+                  <StarIcon size={26} color={i < stars ? "#eec449" : "var(--line-strong)"} />
                 </button>
               ))}
             </div>
@@ -253,14 +253,14 @@ export function ProductReviews({
               onChange={(e) => setName(e.target.value)}
               placeholder="Your name"
               aria-label="Your name"
-              className="mt-4 w-full max-w-[360px] border border-[#d7d6d9] px-4 py-3 text-[15px] outline-none transition-colors focus:border-[#0c0c0d]"
+              className="mt-4 w-full max-w-[360px] border border-line-strong px-4 py-3 text-[15px] outline-none transition-colors focus:border-fg"
             />
             <input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Review title (optional)"
               aria-label="Review title"
-              className="mt-4 w-full max-w-[360px] border border-[#d7d6d9] px-4 py-3 text-[15px] outline-none transition-colors focus:border-[#0c0c0d]"
+              className="mt-4 w-full max-w-[360px] border border-line-strong px-4 py-3 text-[15px] outline-none transition-colors focus:border-fg"
             />
             <textarea
               value={text}
@@ -268,7 +268,7 @@ export function ProductReviews({
               placeholder="Share the details of your experience with this product…"
               aria-label="Your review"
               rows={4}
-              className="mt-4 w-full resize-none border border-[#d7d6d9] px-4 py-3 text-[15px] outline-none transition-colors focus:border-[#0c0c0d]"
+              className="mt-4 w-full resize-none border border-line-strong px-4 py-3 text-[15px] outline-none transition-colors focus:border-fg"
             />
 
             {/* Photos */}
@@ -277,7 +277,7 @@ export function ProductReviews({
                 {previews.map((src, i) => (
                   <div
                     key={src}
-                    className="relative h-[72px] w-[72px] overflow-hidden border border-[#e2e1e4]"
+                    className="relative h-[72px] w-[72px] overflow-hidden border border-line"
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={src} alt="" className="h-full w-full object-cover" />
@@ -295,7 +295,7 @@ export function ProductReviews({
                   </div>
                 ))}
                 {photos.length < MAX_PHOTOS && (
-                  <label className="flex h-[72px] w-[72px] cursor-pointer flex-col items-center justify-center gap-1 border border-dashed border-[#c7c6ca] text-[#8a8a8e] transition-colors hover:border-[#0c0c0d] hover:text-[#0c0c0d]">
+                  <label className="flex h-[72px] w-[72px] cursor-pointer flex-col items-center justify-center gap-1 border border-dashed border-line-strong text-muted transition-colors hover:border-fg hover:text-fg">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
                       <rect x="3" y="5" width="18" height="14" rx="2" />
                       <circle cx="9" cy="10" r="1.5" />
@@ -312,12 +312,12 @@ export function ProductReviews({
                   </label>
                 )}
               </div>
-              <p className="mt-2 text-[12px] text-[#a3a3a8]">
+              <p className="mt-2 text-[12px] text-faint">
                 Add up to {MAX_PHOTOS} photos (optional).
               </p>
             </div>
 
-            {error && <p className="mt-3 text-[13px] text-[#d23b3b]">{error}</p>}
+            {error && <p className="mt-3 text-[13px] text-danger">{error}</p>}
 
             <div className="mt-4 flex items-center gap-3">
               <Button type="submit" disabled={!valid || busy}>
@@ -326,7 +326,7 @@ export function ProductReviews({
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                className="cursor-pointer px-4 py-2 text-[13px] font-semibold text-[#6a6a6e] transition-colors hover:text-[#0c0c0d]"
+                className="cursor-pointer px-4 py-2 text-[13px] font-semibold text-fg-3 transition-colors hover:text-fg"
               >
                 Cancel
               </button>
@@ -337,26 +337,26 @@ export function ProductReviews({
         {/* Review list */}
         {hasReviews ? (
           <>
-            <h3 className="border-b border-[#e7e6e9] pb-4 text-[16px] font-semibold">
+            <h3 className="border-b border-line pb-4 text-[16px] font-semibold">
               Product Reviews
             </h3>
-            <div className="divide-y divide-[#f0eff1]">
+            <div className="divide-y divide-line-soft">
               {reviews.map((r) => (
                 <article key={r.id} className="py-6">
                   <div className="flex items-start justify-between gap-4">
                     <Stars value={r.rating} size={16} />
                     {r.createdAt && (
-                      <span className="shrink-0 text-[13px] text-[#a3a3a8]">
+                      <span className="shrink-0 text-[13px] text-faint">
                         {formatDate(r.createdAt)}
                       </span>
                     )}
                   </div>
                   {r.title && (
-                    <div className="mt-2.5 text-[15px] font-semibold text-[#0c0c0d]">
+                    <div className="mt-2.5 text-[15px] font-semibold text-fg">
                       {r.title}
                     </div>
                   )}
-                  <p className="mt-1.5 text-[14px] leading-[1.7] text-[#4a4a4e]">
+                  <p className="mt-1.5 text-[14px] leading-[1.7] text-fg-2">
                     {r.body}
                   </p>
                   {r.photos.length > 0 && (
@@ -366,7 +366,7 @@ export function ProductReviews({
                           key={src}
                           type="button"
                           onClick={() => setLightbox(src)}
-                          className="relative h-[84px] w-[84px] cursor-pointer overflow-hidden border border-[#e7e6e9]"
+                          className="relative h-[84px] w-[84px] cursor-pointer overflow-hidden border border-line"
                           aria-label="View review photo"
                         >
                           <Image
@@ -380,16 +380,16 @@ export function ProductReviews({
                       ))}
                     </div>
                   )}
-                  <div className="mt-3 text-[13px] text-[#8a8a8e]">
-                    by <span className="font-medium text-[#0c0c0d]">{r.author}</span>
+                  <div className="mt-3 text-[13px] text-muted">
+                    by <span className="font-medium text-fg">{r.author}</span>
                   </div>
                 </article>
               ))}
             </div>
           </>
         ) : (
-          <div className="border-t border-[#e7e6e9] py-10 text-center">
-            <p className="m-0 text-[15px] text-[#8a8a8e]">
+          <div className="border-t border-line py-10 text-center">
+            <p className="m-0 text-[15px] text-muted">
               No reviews yet — be the first to review the {productTitle}.
             </p>
           </div>

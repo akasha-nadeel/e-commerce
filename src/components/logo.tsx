@@ -8,6 +8,12 @@ import Link from "next/link";
  * on light surfaces we swap to the black master (the client asked for a black
  * logo on white backgrounds). The nav uses the eagle alone; the footer keeps
  * the full wordmark.
+ *
+ * `onLight` really means "on the page canvas", which is black in dark mode.
+ * There the black master is inverted to white through `--logo-on-canvas`
+ * (globals.css), mirroring light mode's black-on-white with no second image
+ * and no flash. Inside the Studio's light island the variable resolves to
+ * `none`, so it stays black.
  */
 export function Logo({
   variant = "onDark",
@@ -40,7 +46,7 @@ export function Logo({
       href={href}
       aria-label="Golden Eagle — home"
       className="flex items-center gap-2.5 no-underline"
-      style={{ color: isGold ? "#eec449" : onDark ? "#fff" : "#0c0c0d" }}
+      style={{ color: isGold ? "#eec449" : onDark ? "#fff" : "var(--fg)" }}
     >
       <Image
         src={mark}
@@ -48,7 +54,12 @@ export function Logo({
         width={Math.round(h * (590 / 360))}
         height={h}
         priority
-        style={{ height: h, width: "auto", display: "block" }}
+        style={{
+          height: h,
+          width: "auto",
+          display: "block",
+          filter: isGold || onDark ? undefined : "var(--logo-on-canvas)",
+        }}
       />
       {showText && (
         <span

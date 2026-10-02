@@ -60,7 +60,7 @@ export function SignupForm() {
 
       <AuthSubmit>{busy ? "Redirecting…" : "Continue"}</AuthSubmit>
 
-      <p className="mt-1 text-center text-[14px] text-[#6a6a6e]">
+      <p className="mt-1 text-center text-[14px] text-fg-3">
         Already have an account?{" "}
         <button
           type="button"
@@ -71,7 +71,7 @@ export function SignupForm() {
         </button>
       </p>
 
-      <p className="mt-1 text-center text-[12px] leading-relaxed text-[#8a8a8e]">
+      <p className="mt-1 text-center text-[12px] leading-relaxed text-muted">
         Secure passwordless sign-up — Shopify emails you a one-time code.
       </p>
     </form>

@@ -35,11 +35,22 @@ export default async function StudioLayout({
 
   const signedIn = await hasStudioSession();
 
+  // The Studio is always light, even when the visitor has the storefront in
+  // dark mode. `data-theme="light"` re-declares the theme variables for this
+  // subtree (globals.css), so shared components like `AuthShell` and `Logo`
+  // resolve to their light values here. Studio's own components use literal
+  // colours and aren't theme-aware at all.
+
   // Signed out: no chrome, so `/studio/login` can render the brand split-screen.
-  if (!signedIn) return <>{children}</>;
+  if (!signedIn)
+    return (
+      <div data-theme="light" className="min-h-dvh bg-white">
+        {children}
+      </div>
+    );
 
   return (
-    <div className="min-h-dvh bg-white text-[#0c0c0d]">
+    <div data-theme="light" className="min-h-dvh bg-white text-[#0c0c0d]">
       <header className="sticky top-0 z-50 border-b border-[#e7e6e9] bg-white/95 backdrop-blur">
         <div className="mx-auto flex max-w-[1100px] items-center justify-between gap-2 px-4 py-3 sm:gap-4 sm:px-8">
           {/* `Logo` renders its own <Link>, so it takes the href directly — do

@@ -31,7 +31,9 @@ export function PromoBanner() {
 
   return (
     <section className="mx-auto my-12 max-w-[1400px] px-5 sm:px-8">
-      <div className="relative overflow-hidden bg-black">
+      {/* `isolate` makes Safari clip the rounded corners while the Reveal'd
+          photo is mid-animation (overflow-hidden + radius alone doesn't). */}
+      <div className="relative isolate overflow-hidden rounded-xl bg-black sm:rounded-2xl">
         {/* Lifestyle photo — models on the right; copy over the empty black
             left. No overlay: the photo's own black keeps the white copy legible.
             The crop leans left on mobile so the text always sits over black,

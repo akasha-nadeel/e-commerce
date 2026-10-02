@@ -55,20 +55,20 @@ export function ProductCard({
 
       <Link
         href={href}
-        className="mt-3.5 block text-[15px] font-semibold uppercase leading-tight tracking-[0.01em] text-[#0c0c0d] no-underline transition-colors hover:text-[#eec449]"
+        className="mt-3.5 block text-[15px] font-semibold uppercase leading-tight tracking-[0.01em] text-fg no-underline transition-colors hover:text-[#eec449]"
       >
         {product.name}
       </Link>
 
-      <div className="mt-1 text-[13px] text-[#8a8a8e]">{product.colorName}</div>
+      <div className="mt-1 text-[13px] text-muted">{product.colorName}</div>
 
       <div className="mt-1.5 flex items-baseline gap-2 text-[14px]">
         {onSale && (
-          <span className="text-[#8a8a8e] line-through">
+          <span className="text-muted line-through">
             {formatLKR(product.compareAtLKR!)}
           </span>
         )}
-        <span className="font-medium text-[#0c0c0d]">
+        <span className="font-medium text-fg">
           <CountUpPrice value={product.priceLKR} />
         </span>
       </div>
@@ -80,7 +80,7 @@ export function ProductCard({
               key={c.name}
               title={c.name}
               className={`relative block h-[38px] w-[31px] overflow-hidden rounded-[4px] border transition-colors ${
-                i === 0 ? "border-[#0c0c0d]" : "border-black/10"
+                i === 0 ? "border-fg" : "border-fg/10"
               }`}
               style={c.image ? undefined : { background: c.swatch }}
             >

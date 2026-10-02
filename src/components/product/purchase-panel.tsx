@@ -94,7 +94,7 @@ export function PurchasePanel({
     <>
       <div className="text-[14px]">
         <span className="font-semibold">Color:</span>{" "}
-        <span className="text-[#3a3a3e]">{product.colors[colorIdx].name}</span>
+        <span className="text-fg-1">{product.colors[colorIdx].name}</span>
       </div>
       <div className="mt-3 flex flex-wrap gap-3">
         {product.colors.map((c, i) => {
@@ -108,7 +108,7 @@ export function PurchasePanel({
               title={c.name}
               onClick={() => onColorChange(i)}
               className={`relative h-[68px] w-[56px] shrink-0 overflow-hidden rounded-[6px] border transition-colors ${
-                sel ? "border-[#0c0c0d]" : "border-[#e2e1e4] hover:border-[#0c0c0d]/40"
+                sel ? "border-fg" : "border-line hover:border-fg/40"
               }`}
               style={c.image ? undefined : { background: c.swatch }}
             >
@@ -125,7 +125,7 @@ export function PurchasePanel({
               {sel && (
                 <span
                   aria-hidden
-                  className="pointer-events-none absolute inset-0 rounded-[6px] ring-2 ring-inset ring-[#0c0c0d]"
+                  className="pointer-events-none absolute inset-0 rounded-[6px] ring-2 ring-inset ring-fg"
                 />
               )}
             </button>
@@ -142,7 +142,7 @@ export function PurchasePanel({
 
       {/* Badge */}
       {product.badge && (
-        <span className="mb-4 inline-block rounded-full bg-[#f1f1f3] px-3 py-1 text-[12px] font-semibold text-[#3a3a3e]">
+        <span className="mb-4 inline-block rounded-full bg-surface px-3 py-1 text-[12px] font-semibold text-fg-1">
           {product.badge}
         </span>
       )}
@@ -156,7 +156,7 @@ export function PurchasePanel({
       {reviews > 0 && (
         <div className="mt-3 flex items-center gap-2">
           <Stars value={rating} />
-          <span className="text-[14px] text-[#6a6a6e]">
+          <span className="text-[14px] text-fg-3">
             {rating.toFixed(1)} ({reviews} {reviews === 1 ? "review" : "reviews"})
           </span>
         </div>
@@ -169,10 +169,10 @@ export function PurchasePanel({
         </span>
         {onSale && (
           <>
-            <span className="text-[18px] text-[#9a9a9e] line-through">
+            <span className="text-[18px] text-muted-soft line-through">
               {formatLKR(product.compareAtLKR!)}
             </span>
-            <span className="rounded-md bg-[#0c0c0d] px-2 py-1 text-[12px] font-bold text-white">
+            <span className="rounded-md bg-fg px-2 py-1 text-[12px] font-bold text-canvas">
               {discountPercent(product.priceLKR, product.compareAtLKR!)}% OFF
             </span>
           </>
@@ -181,7 +181,7 @@ export function PurchasePanel({
 
       {/* Color — desktop keeps it in place, after the price */}
       <div className="hidden lg:block">
-        <hr className="my-6 border-0 border-t border-[#e7e6e9]" />
+        <hr className="my-6 border-0 border-t border-line" />
         {colorSelector}
       </div>
 
@@ -191,11 +191,11 @@ export function PurchasePanel({
           <div className="mt-6 flex items-center justify-between">
             <div className="text-[14px]">
               <span className="font-semibold">Size:</span>{" "}
-              <span className="text-[#3a3a3e]">{size}</span>
+              <span className="text-fg-1">{size}</span>
             </div>
             <Link
               href="/size-guide"
-              className="flex items-center gap-1.5 text-[13px] font-medium text-[#0c0c0d] no-underline hover:text-[#eec449]"
+              className="flex items-center gap-1.5 text-[13px] font-medium text-fg no-underline hover:text-[#eec449]"
             >
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
                 <path d="M3 7l4-4 14 14-4 4z" />
@@ -217,9 +217,9 @@ export function PurchasePanel({
                   onClick={() => setSize(s.label)}
                   className="relative cursor-pointer rounded-none border py-3 text-[14px] font-semibold transition-colors"
                   style={{
-                    background: sel ? "#0c0c0d" : "#fff",
-                    color: sel ? "#fff" : oos ? "#9a9a9e" : "#0c0c0d",
-                    borderColor: sel ? "#0c0c0d" : "#e2e1e4",
+                    background: sel ? "var(--fg)" : "var(--canvas)",
+                    color: sel ? "var(--canvas)" : oos ? "var(--muted-soft)" : "var(--fg)",
+                    borderColor: sel ? "var(--fg)" : "var(--line)",
                   }}
                 >
                   {s.label}
@@ -238,7 +238,7 @@ export function PurchasePanel({
 
       {/* Backorder notice */}
       {backorder && (
-        <div className="mt-6 flex items-start gap-2.5 border border-[#eec449]/45 bg-[#eec449]/10 px-3.5 py-3 text-[13px] leading-snug text-[#0c0c0d]">
+        <div className="mt-6 flex items-start gap-2.5 border border-[#eec449]/45 bg-[#eec449]/10 px-3.5 py-3 text-[13px] leading-snug text-fg">
           <svg
             width="17"
             height="17"
@@ -265,7 +265,7 @@ export function PurchasePanel({
         type="button"
         onClick={buyNow}
         disabled={buying}
-        className="mt-6 flex w-full cursor-pointer items-center justify-center rounded-none border-2 border-[#0c0c0d] bg-white px-6 py-[16px] text-[15px] font-semibold text-[#0c0c0d] transition-colors hover:bg-[#0c0c0d] hover:text-white disabled:cursor-default disabled:opacity-70"
+        className="mt-6 flex w-full cursor-pointer items-center justify-center rounded-none border-2 border-fg bg-canvas px-6 py-[16px] text-[15px] font-semibold text-fg transition-colors hover:bg-fg hover:text-canvas disabled:cursor-default disabled:opacity-70"
       >
         {buying ? "Redirecting…" : "Buy Now"}
       </button>
@@ -276,8 +276,8 @@ export function PurchasePanel({
         onClick={addToCart}
         className={`mt-3 flex w-full cursor-pointer items-center justify-center gap-2.5 rounded-none px-6 py-[18px] text-[15px] font-semibold transition-colors ${
           backorder
-            ? "bg-[#eec449] text-[#0c0c0d] hover:bg-[#b3863a] hover:text-white"
-            : "bg-[#0c0c0d] text-white hover:bg-[#eec449] hover:text-[#0c0c0d]"
+            ? "bg-[#eec449] text-ink hover:bg-[#b3863a] hover:text-white"
+            : "bg-fg text-canvas hover:bg-[#eec449] hover:text-ink"
         }`}
       >
         {backorder ? (
@@ -301,7 +301,7 @@ export function PurchasePanel({
       </button>
 
       {/* Trust badges */}
-      <div className="mt-7 grid grid-cols-3 gap-3 border-t border-[#e7e6e9] pt-6">
+      <div className="mt-7 grid grid-cols-3 gap-3 border-t border-line pt-6">
         <Trust
           title="Free Shipping"
           sub="On orders over LKR 20,000"
@@ -337,17 +337,17 @@ export function PurchasePanel({
       </div>
 
       {/* Description */}
-      <div className="mt-6 border-t border-[#e7e6e9] pt-6">
-        <h2 className="mb-4 text-[16px] font-semibold text-[#0c0c0d]">
+      <div className="mt-6 border-t border-line pt-6">
+        <h2 className="mb-4 text-[16px] font-semibold text-fg">
           Description
         </h2>
         {product.descriptionHtml ? (
           <div
-            className="rich-text text-[14px] leading-[1.7] text-[#6a6a6e]"
+            className="rich-text text-[14px] leading-[1.7] text-fg-3"
             dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
           />
         ) : (
-          <p className="m-0 text-[14px] leading-[1.7] text-[#6a6a6e]">
+          <p className="m-0 text-[14px] leading-[1.7] text-fg-3">
             {product.description}
           </p>
         )}
@@ -361,7 +361,7 @@ function Stars({ value }: { value: number }) {
   return (
     <span className="flex items-center gap-0.5" aria-label={`${value} out of 5 stars`}>
       {Array.from({ length: 5 }).map((_, i) => (
-        <svg key={i} width="16" height="16" viewBox="0 0 24 24" fill={i < full ? "#0c0c0d" : "#d7d6d9"}>
+        <svg key={i} width="16" height="16" viewBox="0 0 24 24" className={i < full ? "fill-fg" : "fill-line-strong"}>
           <path d="M12 2l3 6.5 7 .8-5.2 4.7L18.4 21 12 17.3 5.6 21 7.2 14 2 9.3l7-.8z" />
         </svg>
       ))}
@@ -380,12 +380,12 @@ function Trust({
 }) {
   return (
     <div className="flex flex-col items-start gap-2">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0c0c0d" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} className="text-fg" strokeLinecap="round" strokeLinejoin="round">
         {icon}
       </svg>
       <div>
         <div className="text-[12px] font-semibold leading-tight">{title}</div>
-        <div className="mt-0.5 text-[11px] leading-tight text-[#8a8a8e]">{sub}</div>
+        <div className="mt-0.5 text-[11px] leading-tight text-muted">{sub}</div>
       </div>
     </div>
   );

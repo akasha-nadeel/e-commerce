@@ -4,8 +4,15 @@ import type { ReactNode } from "react";
  * Moving "Pay Your Way" partner strip below the hero — the real payment & BNPL
  * providers this store is built around (see the headless checkout design doc:
  * PayHere core + PayPal + cards, with local installment providers). Brand-accurate
- * inline SVG/wordmarks on a clean light strip; pure-CSS infinite marquee that
- * pauses on hover and respects reduced motion.
+ * inline SVG/wordmarks; pure-CSS infinite marquee that pauses on hover and
+ * respects reduced motion.
+ *
+ * Dark mode uses each brand's own reversed (on-dark) treatment rather than
+ * putting the marks on light chips. Navy ink reads as
+ * `var(--mark-reverse, <brand hex>)`: the variable is unset in light mode, so
+ * the real brand colour applies, and it's white in dark mode. Accent colours
+ * (PayPal's light blue, PayHere's orange, mintpay green, Mastercard) already
+ * read on black and stay as they are.
  */
 
 const BRANDS: { name: string; node: ReactNode }[] = [
@@ -18,7 +25,7 @@ const BRANDS: { name: string; node: ReactNode }[] = [
           fontStyle: "italic",
           fontWeight: 800,
           fontSize: 28,
-          color: "#1434CB",
+          color: "var(--mark-reverse, #1434CB)",
           letterSpacing: "0.01em",
         }}
       >
@@ -65,7 +72,7 @@ const BRANDS: { name: string; node: ReactNode }[] = [
           fontSize: 24,
         }}
       >
-        <span style={{ color: "#003087" }}>Pay</span>
+        <span style={{ color: "var(--mark-reverse, #003087)" }}>Pay</span>
         <span style={{ color: "#009CDE" }}>Pal</span>
       </span>
     ),
@@ -81,7 +88,7 @@ const BRANDS: { name: string; node: ReactNode }[] = [
           letterSpacing: "-0.02em",
         }}
       >
-        <span style={{ color: "#2B50D6" }}>Pay</span>
+        <span style={{ color: "var(--mark-reverse, #2B50D6)" }}>Pay</span>
         <span style={{ color: "#F5A623" }}>Here</span>
       </span>
     ),
@@ -98,6 +105,8 @@ const BRANDS: { name: string; node: ReactNode }[] = [
           letterSpacing: "0.02em",
           padding: "5px 11px",
           borderRadius: 5,
+          // Black pill on a black page: outline it in dark mode only.
+          boxShadow: "inset 0 0 0 1px var(--mark-edge, transparent)",
         }}
       >
         koko
@@ -116,15 +125,15 @@ const BRANDS: { name: string; node: ReactNode }[] = [
 
 export function LogoMarquee() {
   return (
-    <section aria-label="Accepted payment partners" className="border-y border-[#ececee] bg-white py-9">
-      <p className="mb-7 text-center text-[12px] font-semibold uppercase tracking-[0.28em] text-[#8a8a8e]">
+    <section aria-label="Accepted payment partners" className="border-y border-line-soft bg-canvas py-9">
+      <p className="mb-7 text-center text-[12px] font-semibold uppercase tracking-[0.28em] text-muted">
         Pay Your Way · Secure Checkout
       </p>
 
       <div className="relative overflow-hidden">
         {/* Edge fades */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-white to-transparent sm:w-28" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-white to-transparent sm:w-28" />
+        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-canvas to-transparent sm:w-28" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-canvas to-transparent sm:w-28" />
 
         <div className="flex w-max animate-marquee items-center [animation-play-state:running] hover:[animation-play-state:paused]">
           {[0, 1].map((half) => (

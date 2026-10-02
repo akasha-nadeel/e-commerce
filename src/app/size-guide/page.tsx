@@ -95,7 +95,7 @@ export default function SizeGuidePage() {
   );
 
   return (
-    <div className="w-full bg-white">
+    <div className="w-full bg-canvas">
       <JsonLd data={jsonLd} />
 
       <div className="mx-auto max-w-[820px] px-5 pt-5 sm:px-8">
@@ -106,14 +106,14 @@ export default function SizeGuidePage() {
         <h1 className="display-tight m-0 text-[clamp(34px,5vw,56px)] font-semibold leading-[0.95]">
           Size Guide
         </h1>
-        <p className="mt-3 max-w-[560px] text-[15px] leading-[1.7] text-[#8a8a8e]">
+        <p className="mt-3 max-w-[560px] text-[15px] leading-[1.7] text-muted">
           Get the fit right first time. Here&rsquo;s how to measure, and how our
           cuts run.
         </p>
       </section>
 
       <section className="mx-auto max-w-[820px] px-5 pb-24 sm:px-8">
-        <div className="rich-text text-[15px] leading-[1.75] text-[#4a4a4e]">
+        <div className="rich-text text-[15px] leading-[1.75] text-fg-2">
           <h2>How to measure</h2>
           <p>
             Use a soft measuring tape and measure over light clothing, or
@@ -125,12 +125,12 @@ export default function SizeGuidePage() {
             {MEASUREMENTS.map((m) => (
               <div
                 key={m.name}
-                className="border border-[#e5e4e6] p-5"
+                className="border border-line p-5"
               >
                 <div className="text-[12px] font-semibold uppercase tracking-[0.18em] text-[#c79a4b]">
                   {m.name}
                 </div>
-                <p className="m-0 mt-2 text-[14px] leading-[1.65] text-[#4a4a4e]">
+                <p className="m-0 mt-2 text-[14px] leading-[1.65] text-fg-2">
                   {m.how}
                 </p>
               </div>
@@ -164,12 +164,12 @@ export default function SizeGuidePage() {
               <div className="my-6 overflow-x-auto">
                 <table className="w-full min-w-[520px] border-collapse text-left text-[14px]">
                   <thead>
-                    <tr className="border-b border-[#e5e4e6]">
+                    <tr className="border-b border-line">
                       {["Size", "Chest", "Waist", "Shoulder", "Length"].map(
                         (h) => (
                           <th
                             key={h}
-                            className="py-2 pr-4 text-[12px] font-semibold uppercase tracking-[0.12em] text-[#8a8a8e]"
+                            className="py-2 pr-4 text-[12px] font-semibold uppercase tracking-[0.12em] text-muted"
                           >
                             {h}
                             {h !== "Size" && ` (${SIZE_UNIT})`}
@@ -180,8 +180,8 @@ export default function SizeGuidePage() {
                   </thead>
                   <tbody>
                     {SIZE_CHART.map((r) => (
-                      <tr key={r.size} className="border-b border-[#efeef0]">
-                        <td className="py-3 pr-4 font-medium text-[#0c0c0d]">
+                      <tr key={r.size} className="border-b border-line-soft">
+                        <td className="py-3 pr-4 font-medium text-fg">
                           {r.size}
                         </td>
                         <td className="py-3 pr-4">{r.chest}</td>

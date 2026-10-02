@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function CheckoutPage() {
   return (
-    <div className="w-full bg-white">
+    <div className="w-full bg-canvas">
       <CheckoutClient />
     </div>
   );

@@ -88,7 +88,7 @@ export function ProductGallery({
             <div className="transition-transform duration-500 ease-out group-hover:scale-[1.03]">
               <MediaTile src={img.src} label={img.label} alt={name} aspect="4/5" priority={i === 0} />
             </div>
-            <span className="pointer-events-none absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-[#0c0c0d] opacity-0 shadow-md backdrop-blur transition-opacity duration-200 group-hover:opacity-100">
+            <span className="pointer-events-none absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-ink opacity-0 shadow-md backdrop-blur transition-opacity duration-200 group-hover:opacity-100">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                 <circle cx="11" cy="11" r="7" />
                 <line x1="16.5" y1="16.5" x2="21" y2="21" />
@@ -109,11 +109,11 @@ export function ProductGallery({
             role="dialog"
             aria-label={`${name} enlarged`}
             onClick={() => setZoom(null)}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-white p-4 sm:p-8"
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-canvas p-4 sm:p-8"
           >
             {/* Counter */}
             {count > 1 && (
-              <span className="absolute left-5 top-5 rounded-full border border-[#e2e1e4] px-5 py-2.5 text-[15px] font-medium text-[#0c0c0d]">
+              <span className="absolute left-5 top-5 rounded-full border border-line px-5 py-2.5 text-[15px] font-medium text-fg">
                 {zoom + 1} / {count}
               </span>
             )}
@@ -123,7 +123,7 @@ export function ProductGallery({
               type="button"
               aria-label="Close"
               onClick={() => setZoom(null)}
-              className="absolute right-5 top-5 flex h-12 w-12 items-center justify-center rounded-full border border-[#e2e1e4] text-[#0c0c0d] transition-colors hover:border-[#0c0c0d]"
+              className="absolute right-5 top-5 flex h-12 w-12 items-center justify-center rounded-full border border-line text-fg transition-colors hover:border-fg"
             >
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
                 <line x1="6" y1="6" x2="18" y2="18" />
@@ -140,7 +140,7 @@ export function ProductGallery({
                     e.stopPropagation();
                     setZoom((z) => (z === null ? z : (z - 1 + count) % count));
                   }}
-                  className="absolute left-5 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-[#e2e1e4] text-[#0c0c0d] transition-colors hover:border-[#0c0c0d]"
+                  className="absolute left-5 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-line text-fg transition-colors hover:border-fg"
                 >
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
                     <path d="M15 6l-6 6 6 6" />
@@ -153,7 +153,7 @@ export function ProductGallery({
                     e.stopPropagation();
                     setZoom((z) => (z === null ? z : (z + 1) % count));
                   }}
-                  className="absolute right-5 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-[#e2e1e4] text-[#0c0c0d] transition-colors hover:border-[#0c0c0d]"
+                  className="absolute right-5 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-line text-fg transition-colors hover:border-fg"
                 >
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
                     <path d="M9 6l6 6-6 6" />
